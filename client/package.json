@@ -9,11 +9,13 @@
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.27.2",
+    "blob-to-base64": "^1.0.2",
     "dotenv": "^16.0.1",
     "openai": "^3.0.0",
     "react": "^18.2.0",
     "react-audio-player": "^0.17.0",
     "react-dom": "^18.2.0",
+    "react-mic": "^12.4.6",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },

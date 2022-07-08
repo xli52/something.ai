@@ -11,7 +11,7 @@ export default function ChatBox() {
     console.log("axios outgoing request");
     return axios({
       method: "POST",
-      url: "/api/openai",
+      url: "/api/openai/textToSpeech",
       data: JSON.stringify({ input }),
       headers: {
         "Content-Type": "application/json",

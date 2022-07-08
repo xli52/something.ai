@@ -7,14 +7,22 @@ interface IgoogleSpeech {
   name: string;
 }
 
+//helper function to trim input received from client side
+function generatePrompt(input: string): string {
+  const capitalizedInput =
+    input[0].toUpperCase() + input.slice(1).toLowerCase();
+  return capitalizedInput;
+}
+
 // Creates a client
 const client = new textToSpeech.TextToSpeechClient();
+
 const GoogleTTS = (text: string): Promise<[]> => {
   // Construct the request
   const request = {
     input: { text },
     // Select the language and SSML voice gender (optional)
-    voice: <IgoogleSpeech> {
+    voice: <IgoogleSpeech>{
       languageCode: "en-US",
       ssmlGender: "FEMALE",
       name: "en-US-Wavenet-F",
@@ -27,4 +35,4 @@ const GoogleTTS = (text: string): Promise<[]> => {
   return client.synthesizeSpeech(request);
 };
 
-export default GoogleTTS;
+export { generatePrompt, GoogleTTS };
