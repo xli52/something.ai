@@ -4,7 +4,7 @@ import axios from "axios";
 import { ReactMic } from "react-mic";
 import blobToBase64 from "blob-to-base64";
 
-export default function FC(props) {
+export default function SpeechToText(props) {
   const [record, setRecord] = useState(false);
   const [recognizedText, setRecognizedText] = useState("");
   const [audio, setAudio] = useState("");

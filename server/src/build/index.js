@@ -14,6 +14,7 @@ app.use(express_1.default.urlencoded({ extended: false }));
 app.use(express_1.default.json());
 // router to text to speach
 app.use("/api/openai", (0, openaiRoute_1.default)());
+app.use(express_1.default.static("./src/audio"));
 app.listen(8080, () => {
     console.log("backend listening on port 8080");
 });

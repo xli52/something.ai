@@ -38,7 +38,7 @@ export default function ChatBox() {
         />
         <input type="submit" value="Get a response" />
       </form>
-      <ReactAudioPlayer src={audio} controls />
+      <ReactAudioPlayer src={audio} autoPlay={true} controls />
     </>
   );
 }
