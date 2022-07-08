@@ -1,0 +1,52 @@
+@font-face {
+  font-family: "Open Sans", sans-serif;
+  src: url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+}
+
+header {
+  width: 100%;
+
+  .container {
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1em auto;
+
+    .logo {
+      display: flex;
+      flex-direction: column;
+
+      .main {
+        margin: 0;
+      }
+
+      .sub {
+        align-self: end;
+        margin-right: 2em;
+      }
+    }
+
+    nav {
+      .btn {
+        font-size: 1.1em;
+        font-weight: bolder;
+        padding: 0.7em 1.5em;
+        color: white;
+        margin-left: 2em;
+        background: #be6cff;
+        border-radius: 3em;
+        border: none;
+      }
+
+      .btn2 {
+        background: rgba(101, 49, 142, 0.25);
+      }
+    }
+  }
+}
