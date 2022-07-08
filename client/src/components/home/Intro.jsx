@@ -10,6 +10,7 @@ export default function Intro() {
       <h2>You have a secert cannot tell anyone ?</h2>
       <h2>or, you get no friend</h2>
       <h2>No worry, We got it !</h2>
+      <button className="btn">Let's have a talk</button>
     </div>
   );
 }

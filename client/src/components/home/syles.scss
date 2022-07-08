@@ -1,4 +1,11 @@
 .mainBody {
   display: flex;
   flex-direction: row;
+
+  .introBody {
+    .line {
+      height: 3px;
+      background: #be6cff;
+    }
+  }
 }
