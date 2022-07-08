@@ -3,7 +3,6 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { PerspectiveCamera } from "three";
 import Avatar from '../../avatars/Avatar';
-import './ChatScene.scss';
 
 export default function ChatScene(props) {
   function CameraHelper() {
