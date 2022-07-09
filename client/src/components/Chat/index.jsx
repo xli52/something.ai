@@ -10,7 +10,9 @@ export default function Chat(props) {
       <div className="chat-scene-container">
         <ChatScene />
       </div>
-      <ChatBox />
+      <div className="chat-box-container">
+        <ChatBox />
+      </div>
     </div>
   );
 }
