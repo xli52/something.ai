@@ -42,10 +42,16 @@ header {
         background: #be6cff;
         border-radius: 3em;
         border: none;
+        transition: 0.5s;
       }
 
       .btn2 {
         background: rgba(101, 49, 142, 0.25);
+      }
+
+      .btn:hover {
+        background-color: #d5a7fb;
+        color: #ffffff;
       }
     }
   }
