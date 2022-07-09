@@ -4,14 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-// import cookieSession from "cookie-session";
 const router = express_1.default.Router();
-// router.use(
-//   cookieSession({
-//     name: "session",
-//     keys: ["key1", "key2", "key3"],
-//   })
-// );
 // to repeatly write audio file when AI talks
 const fs_1 = __importDefault(require("fs"));
 const util_1 = __importDefault(require("util"));

@@ -1,13 +1,6 @@
 import express from "express";
-// import cookieSession from "cookie-session";
 
 const router = express.Router();
-// router.use(
-//   cookieSession({
-//     name: "session",
-//     keys: ["key1", "key2", "key3"],
-//   })
-// );
 
 // to repeatly write audio file when AI talks
 import fs from "fs";
@@ -17,6 +10,7 @@ const writeFile = util.promisify(fs.writeFile);
 // impoort APIs
 import { generatePrompt, GoogleTTS } from "../helpers/gTTS";
 import { config, GoogleSTT } from "../helpers/gSTT";
+import { GoogleNLA } from "../helpers/gNLA";
 import { Configuration, OpenAIApi } from "openai";
 import { request } from "http";
 
