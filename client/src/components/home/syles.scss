@@ -43,13 +43,18 @@
     .btn {
       font-size: 1.2em;
       color: #be6cff;
-      background: #ffffff;
+      background: none;
       border: none;
       box-shadow: 12px 0px 41px 4px rgba(101, 49, 142, 0.25);
       border-radius: 2em;
       padding: 0.7em 1em;
       margin: 2em auto;
       width: 70%;
+      transition: 0.5s;
+    }
+    .btn:hover {
+      background-color: #d5a7fb;
+      color: #ffffff;
     }
   }
 }
