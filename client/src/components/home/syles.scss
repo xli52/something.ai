@@ -1,11 +1,53 @@
 .mainBody {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 
   .introBody {
+    display: flex;
+    flex-direction: column;
+    margin: 2em;
+    margin-top: 9em;
+
+    h1 {
+      margin: 2em;
+      padding-right: 2em;
+    }
+
+    h2 {
+      margin: 1em 2em;
+    }
+
     .line {
-      height: 3px;
+      margin: 1em 2em;
+      height: 2px;
       background: #be6cff;
+      width: 40%;
+    }
+
+    .left {
+      align-self: start;
+    }
+
+    .right {
+      align-self: end;
+    }
+
+    .center {
+      align-self: center;
+    }
+
+    .btn {
+      font-size: 1.2em;
+      color: #be6cff;
+      background: #ffffff;
+      border: none;
+      box-shadow: 12px 0px 41px 4px rgba(101, 49, 142, 0.25);
+      border-radius: 2em;
+      padding: 0.7em 1em;
+      margin: 2em auto;
+      width: 70%;
     }
   }
 }
