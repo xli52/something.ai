@@ -7,13 +7,6 @@ interface IgoogleSpeech {
   name: string;
 }
 
-//helper function to trim input received from client side
-function generatePrompt(input: string): string {
-  const capitalizedInput =
-    input[0].toUpperCase() + input.slice(1).toLowerCase();
-  return capitalizedInput;
-}
-
 // Creates a client
 const client = new textToSpeech.TextToSpeechClient();
 
@@ -35,4 +28,4 @@ const GoogleTTS = (text: string): Promise<[]> => {
   return client.synthesizeSpeech(request);
 };
 
-export { generatePrompt, GoogleTTS };
+export { GoogleTTS };

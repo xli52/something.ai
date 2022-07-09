@@ -8,30 +8,15 @@ import util from "util";
 const writeFile = util.promisify(fs.writeFile);
 
 // impoort APIs
-import { generatePrompt, GoogleTTS } from "../helpers/gTTS";
+import { GoogleTTS } from "../helpers/gTTS";
 import { config, GoogleSTT } from "../helpers/gSTT";
 import { GoogleNLA } from "../helpers/gNLA";
-import { Configuration, OpenAIApi } from "openai";
-import { request } from "http";
-
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
-
-interface IOpenaiPrompt {
-  model: string;
-  prompt: string;
-  temperature: number;
-  max_tokens: number;
-}
-
-const gpt3Prompt: IOpenaiPrompt = {
-  model: "text-davinci-002",
-  prompt: "",
-  temperature: 0.6,
-  max_tokens: 2000,
-};
+import {
+  openai,
+  generatePrompt,
+  gpt3Prompt,
+  completion,
+} from "../helpers/openai";
 
 const openaiRouter = (): any => {
   ////////////////////////////////
@@ -73,13 +58,19 @@ const openaiRouter = (): any => {
     console.log("TextToSpeech endpoint received request");
     console.log("req.session.recognizedText: ", req.session.recognizedText);
 
-    req.session.recognizedText
-      ? (gpt3Prompt.prompt = generatePrompt(req.session.recognizedText))
-      : (gpt3Prompt.prompt = generatePrompt(req.body.input));
+    let requestedText = req.session.recognizedText
+      ? req.session.recognizedText
+      : req.body.input;
 
-    // first, send off the text to openai
-    return openai
-      .createCompletion(gpt3Prompt)
+    gpt3Prompt.prompt = generatePrompt(requestedText);
+
+    // first send the text off to Google NLA
+    return GoogleNLA(requestedText)
+      .then((res) => {
+        console.log("Google NLA results: ", res);
+        // first, send off the text to openai, need to configure the sentiment and the completion prompt
+        return openai.createCompletion(gpt3Prompt);
+      })
       .then((response: any) => {
         // once the response from openai is back, we pass it to GoogleTTS API
         console.log("OPEN AI: ", response.data);
