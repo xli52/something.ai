@@ -7,8 +7,13 @@ body {
   font-family: "Open Sans", sans-serif;
 }
 
+/*
+ * Navigation bar layout
+*/
+
 header {
   width: 100%;
+  z-index: 99;
 
   .container {
     width: 90%;

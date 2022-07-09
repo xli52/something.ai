@@ -1,9 +1,7 @@
 import "./App.scss";
-
 import React, { useState } from "react";
-
-import Chat from "./Chat";
 import Nav from "./Nav";
+import Chat from "./Chat";
 import Home from "./Home";
 
 const HOME = "HOME";
