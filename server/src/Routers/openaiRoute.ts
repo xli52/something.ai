@@ -10,7 +10,7 @@ const writeFile = util.promisify(fs.writeFile);
 // impoort APIs
 import { GoogleTTS } from "../helpers/gTTS";
 import { config, GoogleSTT } from "../helpers/gSTT";
-import { GoogleNLA } from "../helpers/gNLA";
+import { GoogleNLA, sentimentScore } from "../helpers/gNLA";
 import {
   openai,
   generatePrompt,
@@ -18,21 +18,19 @@ import {
   completion,
 } from "../helpers/openai";
 
-const openaiRouter = (): any => {
+const openaiRouter = () => {
   ////////////////////////////////
   // Speech to Text Route
   ////////////////////////////////
   router.post("/speechToText", (req: any, res: any) => {
     console.log("SpeechToText endpoint received request");
     const base64: string = req.body.base64.substring(23);
-    const audio: {} = {
-      content: base64,
-    };
 
     const request: {} = {
-      audio,
+      audio: { content: base64 },
       config,
     };
+
     console.log("firing to Google STT api");
     return GoogleSTT(request).then(([response]) => {
       console.log(
@@ -66,8 +64,10 @@ const openaiRouter = (): any => {
 
     // first send the text off to Google NLA
     return GoogleNLA(requestedText)
-      .then((res) => {
-        console.log("Google NLA results: ", res);
+      .then((response: any) => {
+        console.log("Google NLA results: ", response);
+
+        req.session.requestedSentiment = response.documentSentiment.score;
         // first, send off the text to openai, need to configure the sentiment and the completion prompt
         return openai.createCompletion(gpt3Prompt);
       })
@@ -76,7 +76,13 @@ const openaiRouter = (): any => {
         console.log("OPEN AI: ", response.data);
         console.log("AI responded, moving onto Google TTS api");
         req.session.audioID = response.data.id;
-        return GoogleTTS(response.data.choices[0].text.trim());
+        req.session.responsedText = response.data.choices[0].text.trim();
+
+        return GoogleNLA(req.session.responsedText);
+      })
+      .then((response: any) => {
+        req.session.responsedSentiment = response.documentSentiment.score;
+        return GoogleTTS(req.session.responsedText);
       })
       .then(([response]: any[]) => {
         // Base64 encoding is done, time to write file
@@ -93,9 +99,15 @@ const openaiRouter = (): any => {
         let object = {
           audioID: req.session.audioID,
           recognizedText: req.session.recognizedText,
+          sentiment: req.session.responsedSentiment,
         };
+
+        // clean up
         req.session.audioID = null;
         req.session.recognizedText = null;
+        req.session.requestedSentiment = null;
+        req.session.requestedText = null;
+        req.session.responsedSentiment = null;
 
         res.status(200).json(object);
       });

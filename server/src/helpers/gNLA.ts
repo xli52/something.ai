@@ -11,4 +11,8 @@ const GoogleNLA = (text: string) => {
   return client.analyzeSentiment({ document });
 };
 
-export { GoogleNLA };
+const sentimentScore = (score: number) => {
+  return 1;
+};
+
+export { GoogleNLA, sentimentScore };
