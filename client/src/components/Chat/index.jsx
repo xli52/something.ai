@@ -1,6 +1,7 @@
 import React from "react";
 import ChatScene from "./ChatScene";
 import ChatBox from "./ChatBox";
+import AudioChat from "./AudioChat";
 
 import './styles.scss';
 
@@ -11,6 +12,7 @@ export default function Chat(props) {
         <ChatScene />
       </div>
       <ChatBox />
+      <AudioChat />
     </div>
   );
 }
