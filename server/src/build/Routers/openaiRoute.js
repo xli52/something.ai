@@ -19,7 +19,7 @@ const cleanup = (session) => {
     session.audioID = null;
     session.requestedSentiment = null;
     session.requestedText = null;
-    session.responsedSentiment = null;
+    session.respondedSentiment = null;
 };
 const openaiRouter = () => {
     ////////////////////////////////
@@ -68,14 +68,14 @@ const openaiRouter = () => {
             console.log("OPEN AI: ", response.data);
             console.log("AI responded, moving onto Google TTS api");
             req.session.audioID = response.data.id;
-            req.session.responsedText = response.data.choices[0].text.trim();
-            return (0, gNLA_1.GoogleNLA)(req.session.responsedText);
+            req.session.respondedText = response.data.choices[0].text.trim();
+            return (0, gNLA_1.GoogleNLA)(req.session.respondedText);
         })
             .then((response) => {
-            req.session.responsedSentiment = (0, gNLA_1.checkSentiment)(response[0].documentSentiment.score);
-            console.log("responsed sentiment score: ", response[0].documentSentiment.score, typeof response[0].documentSentiment.score);
-            console.log("responded sentiment is", req.session.responsedSentiment);
-            return (0, gTTS_1.GoogleTTS)(req.session.responsedText);
+            req.session.respondedSentiment = (0, gNLA_1.checkSentiment)(response[0].documentSentiment.score);
+            console.log("responded sentiment score: ", response[0].documentSentiment.score, typeof response[0].documentSentiment.score);
+            console.log("responded sentiment is", req.session.respondedSentiment);
+            return (0, gTTS_1.GoogleTTS)(req.session.respondedText);
         })
             .then(([response]) => {
             // Base64 encoding is done, time to write file
@@ -88,7 +88,7 @@ const openaiRouter = () => {
             let object = {
                 audioID: req.session.audioID,
                 recognizedText: req.session.recognizedText,
-                aiSentiment: req.session.responsedSentiment,
+                aiSentiment: req.session.respondedSentiment,
             };
             // clean up api related data
             cleanup(req.session);
