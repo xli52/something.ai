@@ -1,6 +1,8 @@
 import React from "react";
 
-export default function Intro() {
+const SETUP = "SETUP";
+
+export default function Intro(props) {
   return (
     <div className="introBody">
       <h1 className="center">What to chat ?</h1>
@@ -10,7 +12,14 @@ export default function Intro() {
       <h2 className="left">You have a secert cannot tell anyone ?</h2>
       <h2 className="right">or, you get no friend ....</h2>
       <h2 className="center">No worry, We get it !</h2>
-      <button className="btn">Let's have a talk</button>
+      <button
+        className="btn"
+        onClick={() => {
+          props.setPage(SETUP);
+        }}
+      >
+        Let's have a talk
+      </button>
     </div>
   );
 }

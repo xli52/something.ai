@@ -1,10 +1,17 @@
 import React from "react";
 
-export default function Nav() {
+const HOME = "HOME";
+
+export default function Nav(props) {
   return (
     <header>
       <div className="container">
-        <div className="logo">
+        <div
+          className="logo"
+          onClick={() => {
+            props.setPage(HOME);
+          }}
+        >
           <h1 className="main">something</h1>
           <span className="sub">.AI</span>
         </div>

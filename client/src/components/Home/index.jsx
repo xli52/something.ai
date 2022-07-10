@@ -4,10 +4,10 @@ import ModelDisplay from "./ModelDisplay";
 
 import "./styles.scss";
 
-export default function Home() {
+export default function Home(props) {
   return (
     <div className="mainBody">
-      <Intro />
+      <Intro setPage={props.setPage} />
       <ModelDisplay />
     </div>
   );
