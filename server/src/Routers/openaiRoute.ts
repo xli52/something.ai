@@ -96,7 +96,8 @@ const openaiRouter = () => {
         );
         console.log(
           "responsed sentiment score: ",
-          response[0].documentSentiment.score
+          response[0].documentSentiment.score,
+          typeof response[0].documentSentiment.score
         );
         console.log("responded sentiment is", req.session.responsedSentiment);
         return GoogleTTS(req.session.responsedText);

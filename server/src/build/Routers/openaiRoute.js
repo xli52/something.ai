@@ -73,7 +73,7 @@ const openaiRouter = () => {
         })
             .then((response) => {
             req.session.responsedSentiment = (0, gNLA_1.checkSentiment)(response[0].documentSentiment.score);
-            console.log("responsed sentiment score: ", response[0].documentSentiment.score);
+            console.log("responsed sentiment score: ", response[0].documentSentiment.score, typeof response[0].documentSentiment.score);
             console.log("responded sentiment is", req.session.responsedSentiment);
             return (0, gTTS_1.GoogleTTS)(req.session.responsedText);
         })

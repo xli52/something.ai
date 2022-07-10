@@ -23,7 +23,6 @@ const GoogleTTS = (text: string): Promise<[]> => {
     // select the type of audio encoding
     audioConfig: { audioEncoding: "MP3" },
   };
-  console.log("Google TTS conversion stage");
   // Performs the text-to-speech request
   return client.synthesizeSpeech(request);
 };
