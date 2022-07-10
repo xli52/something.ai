@@ -18,6 +18,22 @@ Then, run:
 npm start
 ```
 
+## Create a postgres database
+
+This project utilizes PostgreSQL as a default database. Before running any sequelize commands, you have to create a new database "final_development" with the development password. Default port for PostgresQL is 5432.
+
+Run the following command in CLI:
+
+```sh
+psql -U development
+```
+
+After connecting to psql, run
+
+```sh
+CREATE DATABASE final_development;
+```
+
 ## API KEYS
 
 This backend requires API keys from OPENAI and Google.

@@ -1,7 +1,9 @@
-require("dotenv").config();
+import dotenv from "dotenv";
 import express from "express";
 import morgan from "morgan";
 import cookieSession from "cookie-session";
+
+dotenv.config();
 
 // import Routers
 import openaiRouter from "./Routers/openaiRoute";
