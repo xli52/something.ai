@@ -13,7 +13,7 @@ export default function ModelDisplay(props) {
       <ambientLight intensity={1.25} />
       <directionalLight intensity={0.4} />
       <Suspense fallback={null}>
-        <Avatar />
+        <Avatar y={0} />
       </Suspense>
       <OrbitControls />
     </Canvas>

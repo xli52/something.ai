@@ -10,8 +10,8 @@ export default function Setup() {
 
   return (
     <div className={mainBodyClass}>
-      <SetupBox setBgColor={setBgColor} setAv={setAva} />
       <ModelDisplay />
+      <SetupBox setBgColor={setBgColor} setAv={setAva} />
     </div>
   );
 }

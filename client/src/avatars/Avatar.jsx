@@ -1,16 +1,19 @@
-import React from 'react';
-import { useLoader } from '@react-three/fiber';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import Stats from 'three/examples/jsm/libs/stats.module';
-import * as THREE from 'three';
+import React from "react";
+import { useLoader } from "@react-three/fiber";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import Stats from "three/examples/jsm/libs/stats.module";
+import * as THREE from "three";
 
 export default function Model({ ...props }) {
-
   // Create scene, load and setup 3D model
   const scene = new THREE.Scene();
-  const gltf = useLoader(GLTFLoader, '/avatar.glb');
+  const gltf = useLoader(GLTFLoader, "/avatar.glb");
   const model = gltf.scene;
-  model.traverse(function (obj) { obj.frustumCulled = false; });
+  // Position of the model
+  model.translateY(props.y);
+  model.traverse(function (obj) {
+    obj.frustumCulled = false;
+  });
   scene.add(model);
 
   // Configure animation control
@@ -35,7 +38,5 @@ export default function Model({ ...props }) {
   //Run the animation loop
   animate();
 
-  return (
-    <primitive object={scene} />
-  )
+  return <primitive object={scene} />;
 }

@@ -7,13 +7,13 @@ export default function ModelDisplay(props) {
   return (
     <Canvas
       className="chat-scene-canvas"
-      camera={{ fov: 20, near: 0.02, far: 1000, position: [0.1, 0.1, 3.5] }}
-      style={{ width: "40%", margin: "auto" }}
+      camera={{ fov: 20, near: 0.02, far: 1000, position: [0, 0, 9] }}
+      style={{ width: "100%", height: "100%", margin: "auto" }}
     >
       <ambientLight intensity={1.25} />
       <directionalLight intensity={0.4} />
       <Suspense fallback={null}>
-        <Avatar />
+        <Avatar y={0.6} />
       </Suspense>
       <OrbitControls />
     </Canvas>

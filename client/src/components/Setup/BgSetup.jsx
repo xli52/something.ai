@@ -4,10 +4,10 @@ import "./styles.scss";
 
 export default function BgSetup(props) {
   return (
-    <div>
+    <>
       <Circle bg="bg1" setBgColor={props.setBgColor} />
       <Circle bg="bg2" setBgColor={props.setBgColor} />
       <Circle bg="bg3" setBgColor={props.setBgColor} />
-    </div>
+    </>
   );
 }

@@ -1,55 +1,50 @@
 .setupMainBody {
   display: flex;
+  flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  max-width: 2000px;
+
   height: 100vh;
   width: 100vw;
   margin: auto;
 
   .setupBox {
-    background: rgba(204, 204, 204, 0.3);
-    border-radius: 23px;
-    max-width: 1050px;
-    width: 60vw;
-    height: 60vh;
-    margin-left: 5em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 10vh;
+    margin: 5em;
+    // move the box to the front //
+    position: fixed;
+    bottom: 0%;
+    z-index: 88;
 
-    .container {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-evenly;
-      margin: 1em auto;
-      width: 80%;
-      height: 100%;
+    .btn {
+      font-size: 1.1em;
+      font-weight: bolder;
+      padding: 0.7em 1.5em;
 
-      .btn {
-        font-size: 1.1em;
-        font-weight: bolder;
-        padding: 0.7em 1.5em;
-        margin: auto;
-        width: 30%;
-        color: white;
-        background: #d5a7fb;
-        border-radius: 3em;
-        border: none;
-        transition: 0.5s;
-      }
+      width: 30%;
+      color: white;
+      background: #d5a7fb;
+      border-radius: 3em;
+      border: none;
+      transition: 0.5s;
+    }
 
-      .btn:hover {
-        background-color: #be6cff;
-        box-shadow: 12px 0px 41px 4px rgba(101, 49, 142, 0.25);
-        color: #ffffff;
-      }
+    .btn:hover {
+      background-color: #be6cff;
+      box-shadow: 12px 0px 41px 4px rgba(101, 49, 142, 0.25);
+      color: #ffffff;
     }
   }
 
   .circleBtn {
-    height: 6em;
-    width: 6em;
+    height: 5em;
+    width: 5em;
     border: none;
     border-radius: 50%;
-    margin-left: 5em;
+    margin: 0 5em;
     transition: 0.5s;
   }
 
