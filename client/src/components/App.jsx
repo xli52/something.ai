@@ -10,7 +10,7 @@ const CHAT = "CHAT";
 const SETUP = "SETUP";
 
 function App() {
-  const [page, setPage] = useState(HOME);
+  const [page, setPage] = useState(SETUP);
 
   return (
     <>

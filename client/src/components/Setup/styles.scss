@@ -1,1 +1,16 @@
+.setupMainBody {
+  background: linear-gradient(104deg, #ffffff 28.72%, #daabff7d 101.32%);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
 
+  .setupBox {
+    background: rgba(204, 204, 204, 0.3);
+    border-radius: 23px;
+    width: 60vw;
+    height: 70vh;
+    margin-left: 5em;
+  }
+}
