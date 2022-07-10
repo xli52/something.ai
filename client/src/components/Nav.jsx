@@ -17,7 +17,7 @@ export default function Nav(props) {
         </div>
         <nav>
           <button className="btn">Login</button>
-          <button className="btn btn2">Start Chat</button>
+          <button className="btn btn2">Sign Up</button>
         </nav>
       </div>
     </header>

@@ -30,12 +30,18 @@ header {
 
       .main {
         margin: 0;
+        transition: 1.2s;
       }
 
       .sub {
         align-self: end;
         margin-right: 2em;
+        transition: 0.2s;
       }
+    }
+
+    .logo:hover {
+      color: #be6cff;
     }
 
     nav {

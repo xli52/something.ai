@@ -5,11 +5,12 @@ import "./styles.scss";
 
 export default function Setup() {
   const [bgColor, setBgColor] = useState("bg1");
+  const [aVa, setAva] = useState();
   const mainBodyClass = `setupMainBody ${bgColor}`;
 
   return (
     <div className={mainBodyClass}>
-      <SetupBox setBgColor={setBgColor} />
+      <SetupBox setBgColor={setBgColor} setAv={setAva} />
       <ModelDisplay />
     </div>
   );

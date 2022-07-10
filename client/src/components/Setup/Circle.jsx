@@ -2,13 +2,18 @@ import React from "react";
 import "./styles.scss";
 
 export default function Circle(props) {
-  const buttonClass = `circleBtn  ${props.bg}`;
-  console.log(props);
+  const buttonClass = `circleBtn ${props.bg} ${props.img}`;
+  // console.log(props);
   return (
     <button
       className={buttonClass}
       onClick={() => {
-        props.setBgColor(props.bg);
+        if (props.setAva) {
+          props.setAva();
+        }
+        if (props.setBgColor(props.bg)) {
+          props.setBgColor(props.bg);
+        }
       }}
     ></button>
   );
