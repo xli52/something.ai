@@ -8,7 +8,7 @@ export default function ModelDisplay(props) {
     <Canvas
       className="chat-scene-canvas"
       camera={{ fov: 20, near: 0.02, far: 1000, position: [0.1, 0.1, 3.5] }}
-      style={{ width: "70%", margin: "auto" }}
+      style={{ width: "60%", margin: "auto" }}
     >
       <ambientLight intensity={1.25} />
       <directionalLight intensity={0.4} />
