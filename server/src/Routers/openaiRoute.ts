@@ -1,12 +1,9 @@
+// router setup
 import express from "express";
-
 const router = express.Router();
 
 // import node modules and helpers
-import { cleanup } from "../helpers/helpers";
-import fs from "fs";
-import util from "util";
-const writeFile = util.promisify(fs.writeFile);
+import { cleanup, writeFile } from "../helpers/helpers";
 
 // impoort APIs
 import { GoogleTTS } from "../helpers/gTTS";
@@ -22,9 +19,8 @@ const openaiRouter = () => {
     console.log("SpeechToText endpoint received request");
 
     // frontend converted the audio blob into a base64 string, then we send it to Google STT api
-    const base64: string = req.body.base64.substring(23);
     const request: {} = {
-      audio: { content: base64 },
+      audio: { content: req.body.base64.substring(23) },
       config,
     };
 
@@ -61,24 +57,24 @@ const openaiRouter = () => {
     // first send the text off to Google NLA
     return GoogleNLA(requestedText)
       .then((response: any) => {
-        console.log("Google NLA results: ", response);
         req.session.requestedSentiment = checkSentiment(
           response[0].documentSentiment.score
         );
         console.log(
-          "Google says the speaker's sentiment is ",
-          req.session.requestedSentiment
+          "Google NLA says the speaker's sentiment is ",
+          req.session.requestedSentiment,
+          response[0].documentSentiment.score
         );
 
         let prompt = chatPrompt(requestedText, req.session.requestedSentiment);
 
-        // first, send off the text to openai, need to configure the sentiment and the completion prompt
+        // then, send off the text to openai
         return openai.createCompletion(prompt);
       })
       .then((response: any) => {
-        // once the response from openai is back, we pass it to GoogleTTS API
+        // once the response from openai is back, we pass it to NLA again
         console.log("OPEN AI: ", response.data);
-        console.log("AI responded, moving onto Google TTS api");
+        // save the audioID for saving and retrieving the file
         req.session.audioID = response.data.id;
         req.session.respondedText = response.data.choices[0].text.trim();
 
@@ -89,11 +85,10 @@ const openaiRouter = () => {
           response[0].documentSentiment.score
         );
         console.log(
-          "responded sentiment score: ",
-          response[0].documentSentiment.score,
-          typeof response[0].documentSentiment.score
+          "responded sentiment is",
+          req.session.respondedSentiment,
+          response[0].documentSentiment.score
         );
-        console.log("responded sentiment is", req.session.respondedSentiment);
         return GoogleTTS(req.session.respondedText);
       })
       .then(([response]: any[]) => {
@@ -106,11 +101,11 @@ const openaiRouter = () => {
           "binary"
         );
       })
-      .then((response: any) => {
-        // this is will send response back to frontend, which react will update it's dom to retrieve new audio file
+      .then(() => {
+        // this is will send response back to frontend, which react will update it's dom to retrieve new audio file and initiate character animation
         let apiResponse = {
           audioID: req.session.audioID,
-          recognizedText: req.session.recognizedText,
+          recognizedText: req.session.recognizedText, // once front-end starts working on chat history state, we won't need this to be in the object. Still need to keep the recognizedText though.
           aiSentiment: req.session.respondedSentiment,
         };
 

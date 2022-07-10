@@ -1,7 +1,15 @@
 "use strict";
-// general helper functions here
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cleanup = void 0;
+exports.writeFile = exports.cleanup = void 0;
+// general helper functions here
+const fs_1 = __importDefault(require("fs"));
+const util_1 = __importDefault(require("util"));
+// a function to write audio files (base64 encoded string will be sent from Google TTS api)
+const writeFile = util_1.default.promisify(fs_1.default.writeFile);
+exports.writeFile = writeFile;
 // session clean up for each request
 const cleanup = (session) => {
     session.audioID = null;

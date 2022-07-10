@@ -3,13 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// router setup
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 // import node modules and helpers
 const helpers_1 = require("../helpers/helpers");
-const fs_1 = __importDefault(require("fs"));
-const util_1 = __importDefault(require("util"));
-const writeFile = util_1.default.promisify(fs_1.default.writeFile);
 // impoort APIs
 const gTTS_1 = require("../helpers/gTTS");
 const gSTT_1 = require("../helpers/gSTT");
@@ -22,9 +20,8 @@ const openaiRouter = () => {
     router.post("/speechToText", (req, res) => {
         console.log("SpeechToText endpoint received request");
         // frontend converted the audio blob into a base64 string, then we send it to Google STT api
-        const base64 = req.body.base64.substring(23);
         const request = {
-            audio: { content: base64 },
+            audio: { content: req.body.base64.substring(23) },
             config: gSTT_1.config,
         };
         console.log("firing to Google STT api");
@@ -51,35 +48,33 @@ const openaiRouter = () => {
         // first send the text off to Google NLA
         return (0, gNLA_1.GoogleNLA)(requestedText)
             .then((response) => {
-            console.log("Google NLA results: ", response);
             req.session.requestedSentiment = (0, gNLA_1.checkSentiment)(response[0].documentSentiment.score);
-            console.log("Google says the speaker's sentiment is ", req.session.requestedSentiment);
+            console.log("Google NLA says the speaker's sentiment is ", req.session.requestedSentiment, response[0].documentSentiment.score);
             let prompt = (0, openai_1.chatPrompt)(requestedText, req.session.requestedSentiment);
-            // first, send off the text to openai, need to configure the sentiment and the completion prompt
+            // then, send off the text to openai
             return openai_1.openai.createCompletion(prompt);
         })
             .then((response) => {
-            // once the response from openai is back, we pass it to GoogleTTS API
+            // once the response from openai is back, we pass it to NLA again
             console.log("OPEN AI: ", response.data);
-            console.log("AI responded, moving onto Google TTS api");
+            // save the audioID for saving and retrieving the file
             req.session.audioID = response.data.id;
             req.session.respondedText = response.data.choices[0].text.trim();
             return (0, gNLA_1.GoogleNLA)(req.session.respondedText);
         })
             .then((response) => {
             req.session.respondedSentiment = (0, gNLA_1.checkSentiment)(response[0].documentSentiment.score);
-            console.log("responded sentiment score: ", response[0].documentSentiment.score, typeof response[0].documentSentiment.score);
-            console.log("responded sentiment is", req.session.respondedSentiment);
+            console.log("responded sentiment is", req.session.respondedSentiment, response[0].documentSentiment.score);
             return (0, gTTS_1.GoogleTTS)(req.session.respondedText);
         })
             .then(([response]) => {
             // Base64 encoding is done, time to write file
             console.log("decoded stage finished: ", response.audioContent);
             // stretch: write a cron job script to periodically clean up the audio files
-            return writeFile(`./src/audio/${req.session.audioID}.mp3`, response.audioContent, "binary");
+            return (0, helpers_1.writeFile)(`./src/audio/${req.session.audioID}.mp3`, response.audioContent, "binary");
         })
-            .then((response) => {
-            // this is will send response back to frontend, which react will update it's dom to retrieve new audio file
+            .then(() => {
+            // this is will send response back to frontend, which react will update it's dom to retrieve new audio file and initiate character animation
             let apiResponse = {
                 audioID: req.session.audioID,
                 recognizedText: req.session.recognizedText,
