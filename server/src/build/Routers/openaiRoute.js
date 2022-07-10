@@ -14,12 +14,20 @@ const gTTS_1 = require("../helpers/gTTS");
 const gSTT_1 = require("../helpers/gSTT");
 const gNLA_1 = require("../helpers/gNLA");
 const openai_1 = require("../helpers/openai");
+// session helper
+const cleanup = (session) => {
+    session.audioID = null;
+    session.requestedSentiment = null;
+    session.requestedText = null;
+    session.responsedSentiment = null;
+};
 const openaiRouter = () => {
     ////////////////////////////////
     // Speech to Text Route
     ////////////////////////////////
     router.post("/speechToText", (req, res) => {
         console.log("SpeechToText endpoint received request");
+        // frontend converted the audio blob into a base64 string, then we send it to Google STT api
         const base64 = req.body.base64.substring(23);
         const request = {
             audio: { content: base64 },
@@ -39,20 +47,21 @@ const openaiRouter = () => {
     // Text to Speech Route
     ////////////////////////////////
     router.post("/textToSpeech", (req, res) => {
-        // we can adjust gpt3's setting here
+        cleanup(req.session);
         console.log("TextToSpeech endpoint received request");
         console.log("req.session.recognizedText: ", req.session.recognizedText);
         let requestedText = req.session.recognizedText
             ? req.session.recognizedText
             : req.body.input;
-        openai_1.gpt3Prompt.prompt = (0, openai_1.generatePrompt)(requestedText);
         // first send the text off to Google NLA
         return (0, gNLA_1.GoogleNLA)(requestedText)
             .then((response) => {
             console.log("Google NLA results: ", response);
-            req.session.requestedSentiment = response.documentSentiment.score;
+            req.session.requestedSentiment = (0, gNLA_1.checkSentiment)(response[0].documentSentiment.score);
+            console.log("Google says the speaker's sentiment is ", req.session.requestedSentiment);
+            let prompt = (0, openai_1.chatPrompt)(requestedText, req.session.requestedSentiment);
             // first, send off the text to openai, need to configure the sentiment and the completion prompt
-            return openai_1.openai.createCompletion(openai_1.gpt3Prompt);
+            return openai_1.openai.createCompletion(prompt);
         })
             .then((response) => {
             // once the response from openai is back, we pass it to GoogleTTS API
@@ -63,7 +72,9 @@ const openaiRouter = () => {
             return (0, gNLA_1.GoogleNLA)(req.session.responsedText);
         })
             .then((response) => {
-            req.session.responsedSentiment = response.documentSentiment.score;
+            req.session.responsedSentiment = (0, gNLA_1.checkSentiment)(response[0].documentSentiment.score);
+            console.log("responsed sentiment score: ", response[0].documentSentiment.score);
+            console.log("responded sentiment is", req.session.responsedSentiment);
             return (0, gTTS_1.GoogleTTS)(req.session.responsedText);
         })
             .then(([response]) => {
@@ -77,14 +88,11 @@ const openaiRouter = () => {
             let object = {
                 audioID: req.session.audioID,
                 recognizedText: req.session.recognizedText,
-                sentiment: req.session.responsedSentiment,
+                aiSentiment: req.session.responsedSentiment,
             };
-            // clean up
-            req.session.audioID = null;
+            // clean up api related data
+            cleanup(req.session);
             req.session.recognizedText = null;
-            req.session.requestedSentiment = null;
-            req.session.requestedText = null;
-            req.session.responsedSentiment = null;
             res.status(200).json(object);
         });
     });
