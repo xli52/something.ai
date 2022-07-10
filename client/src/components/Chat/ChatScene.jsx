@@ -17,9 +17,6 @@ export default function ChatScene(props) {
 
   return (
     <>
-      <button onClick={() => { setAction('Waving') }}>Wave</button>
-      <button onClick={() => { setAction('StandingIdle') }}>StandingIdle</button>
-      <button onClick={() => { setAction('Idle') }}>Idle</button>
       <Canvas
         className='chat-scene-canvas'
         camera={{ fov: 20, near: 0.01, far: 1000, position: [0, 0, 2] }}
@@ -33,6 +30,9 @@ export default function ChatScene(props) {
         <OrbitControls />
         {/* <CameraHelper /> */}
       </Canvas>
+      <button onClick={() => { setAction('Waving') }}>Wave</button>
+      <button onClick={() => { setAction('StandingIdle') }}>StandingIdle</button>
+      <button onClick={() => { setAction('Idle') }}>Idle</button>
     </>
   );
 
