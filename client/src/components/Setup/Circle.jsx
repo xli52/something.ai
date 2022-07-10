@@ -2,7 +2,9 @@ import React from "react";
 import "./styles.scss";
 
 export default function Circle(props) {
-  const buttonClass = `circleBtn ${props.bg} ${props.img}`;
+  const buttonClass = `circleBtn ${props.bg ? props.bg : ""} ${
+    props.img ? props.img : ""
+  }`;
   // console.log(props);
   return (
     <button
@@ -11,7 +13,7 @@ export default function Circle(props) {
         if (props.setAva) {
           props.setAva();
         }
-        if (props.setBgColor(props.bg)) {
+        if (props.setBgColor) {
           props.setBgColor(props.bg);
         }
       }}
