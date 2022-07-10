@@ -10,8 +10,14 @@ const dbName = process.env.PGDATABASE;
 const dbUser = process.env.PGUSER;
 const dbPass = process.env.PGPASSWORD;
 const dbHost = process.env.PGHOST;
-const dbDialect = process.env.PGNAME;
 const sequelize = new sequelize_1.Sequelize(dbName, dbUser, dbPass, {
     host: dbHost,
-    dialect: dbDialect,
+    dialect: "postgres",
 });
+sequelize
+    .authenticate()
+    .then((res) => {
+    console.log("Connection has been established successfully.");
+})
+    .then((res) => sequelize.close())
+    .catch((err) => console.error("Unable to connect to the database: ", err));
