@@ -10,7 +10,7 @@ export default function Model({ ...props }) {
   const gltf = useLoader(GLTFLoader, "/avatar.glb");
   const model = gltf.scene;
   // Position of the model
-  model.translateY(props.y);
+
   model.traverse(function (obj) {
     obj.frustumCulled = false;
   });

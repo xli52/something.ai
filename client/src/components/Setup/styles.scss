@@ -8,6 +8,20 @@
   width: 100vw;
   margin: auto;
 
+  .mdSetup {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+
+    .leftArrow,
+    .rightArrow {
+      font-size: 3em;
+      color: #a4a4a4;
+    }
+  }
+
   .setupBox {
     display: flex;
     flex-direction: row;
@@ -15,9 +29,9 @@
     height: 10vh;
     margin: 5em;
     // move the box to the front //
-    position: fixed;
-    bottom: 0%;
-    z-index: 88;
+    // position: fixed;
+    // bottom: 0%;
+    // z-index: 88;
 
     .btn {
       font-size: 1.1em;
@@ -68,4 +82,10 @@
 .img1 {
   background: url("../../../public/images/female.png") no-repeat center center;
   background-size: 6em 6em;
+}
+
+.arrow {
+  color: black;
+  height: 2em;
+  width: 2em;
 }

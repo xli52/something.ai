@@ -9,7 +9,8 @@ export default function Circle(props) {
   return (
     <button
       className={buttonClass}
-      onClick={() => {
+      onClick={(event) => {
+        event.preventDefault();
         if (props.setAva) {
           props.setAva();
         }
