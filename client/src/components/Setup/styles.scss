@@ -8,9 +8,28 @@
 
   .setupBox {
     background: rgba(204, 204, 204, 0.3);
+
     border-radius: 23px;
     width: 60vw;
     height: 70vh;
+    margin-left: 5em;
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      margin: auto;
+      width: 80%;
+      height: 80%;
+    }
+  }
+
+  .circleBtn {
+    height: 6em;
+    width: 6em;
+    background: linear-gradient(230.22deg, #c78ef3 28.72%, #34184a 101.32%);
+    border: none;
+    border-radius: 50%;
     margin-left: 5em;
   }
 }
