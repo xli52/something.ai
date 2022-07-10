@@ -2,7 +2,8 @@ import express from "express";
 
 const router = express.Router();
 
-// to repeatly write audio file when AI talks
+// import node modules and helpers
+import { cleanup } from "../helpers/helpers";
 import fs from "fs";
 import util from "util";
 const writeFile = util.promisify(fs.writeFile);
@@ -12,14 +13,6 @@ import { GoogleTTS } from "../helpers/gTTS";
 import { config, GoogleSTT } from "../helpers/gSTT";
 import { GoogleNLA, checkSentiment } from "../helpers/gNLA";
 import { openai, chatPrompt } from "../helpers/openai";
-
-// session helper
-const cleanup = (session: any): void => {
-  session.audioID = null;
-  session.requestedSentiment = null;
-  session.requestedText = null;
-  session.respondedSentiment = null;
-};
 
 const openaiRouter = () => {
   ////////////////////////////////
@@ -60,6 +53,7 @@ const openaiRouter = () => {
     console.log("TextToSpeech endpoint received request");
     console.log("req.session.recognizedText: ", req.session.recognizedText);
 
+    // to deterentiate where the request was from speech or text
     let requestedText = req.session.recognizedText
       ? req.session.recognizedText
       : req.body.input;
@@ -114,7 +108,7 @@ const openaiRouter = () => {
       })
       .then((response: any) => {
         // this is will send response back to frontend, which react will update it's dom to retrieve new audio file
-        let object = {
+        let apiResponse = {
           audioID: req.session.audioID,
           recognizedText: req.session.recognizedText,
           aiSentiment: req.session.respondedSentiment,
@@ -124,7 +118,7 @@ const openaiRouter = () => {
         cleanup(req.session);
         req.session.recognizedText = null;
 
-        res.status(200).json(object);
+        res.status(200).json(apiResponse);
       });
   });
   return router;

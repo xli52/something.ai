@@ -5,7 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
-// to repeatly write audio file when AI talks
+// import node modules and helpers
+const helpers_1 = require("../helpers/helpers");
 const fs_1 = __importDefault(require("fs"));
 const util_1 = __importDefault(require("util"));
 const writeFile = util_1.default.promisify(fs_1.default.writeFile);
@@ -14,13 +15,6 @@ const gTTS_1 = require("../helpers/gTTS");
 const gSTT_1 = require("../helpers/gSTT");
 const gNLA_1 = require("../helpers/gNLA");
 const openai_1 = require("../helpers/openai");
-// session helper
-const cleanup = (session) => {
-    session.audioID = null;
-    session.requestedSentiment = null;
-    session.requestedText = null;
-    session.respondedSentiment = null;
-};
 const openaiRouter = () => {
     ////////////////////////////////
     // Speech to Text Route
@@ -47,9 +41,10 @@ const openaiRouter = () => {
     // Text to Speech Route
     ////////////////////////////////
     router.post("/textToSpeech", (req, res) => {
-        cleanup(req.session);
+        (0, helpers_1.cleanup)(req.session);
         console.log("TextToSpeech endpoint received request");
         console.log("req.session.recognizedText: ", req.session.recognizedText);
+        // to deterentiate where the request was from speech or text
         let requestedText = req.session.recognizedText
             ? req.session.recognizedText
             : req.body.input;
@@ -85,15 +80,15 @@ const openaiRouter = () => {
         })
             .then((response) => {
             // this is will send response back to frontend, which react will update it's dom to retrieve new audio file
-            let object = {
+            let apiResponse = {
                 audioID: req.session.audioID,
                 recognizedText: req.session.recognizedText,
                 aiSentiment: req.session.respondedSentiment,
             };
             // clean up api related data
-            cleanup(req.session);
+            (0, helpers_1.cleanup)(req.session);
             req.session.recognizedText = null;
-            res.status(200).json(object);
+            res.status(200).json(apiResponse);
         });
     });
     return router;
