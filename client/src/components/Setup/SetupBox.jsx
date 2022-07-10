@@ -4,14 +4,14 @@ import BgSetup from "./BgSetup";
 import MdSetup from "./MdSetup";
 import "./styles.scss";
 
-export default function SetupBox(prop) {
+export default function SetupBox(props) {
   return (
     <div className="setupBox">
       <div className="container">
         <h2>Avatar :</h2>
         <MdSetup />
         <h2>Background :</h2>
-        <BgSetup setBgColor={prop.setBgColor} />
+        <BgSetup setBgColor={props.setBgColor} />
       </div>
     </div>
   );
