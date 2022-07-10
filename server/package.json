@@ -30,6 +30,7 @@
     "@types/morgan": "^1.9.3",
     "@types/node": "^18.0.3",
     "@types/pg": "^8.6.5",
+    "sequelize-cli": "^6.4.1",
     "ts-node": "^10.8.2"
   }
 }
