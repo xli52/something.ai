@@ -1,5 +1,4 @@
 .setupMainBody {
-  background: linear-gradient(104deg, #ffffff 28.72%, #daabff7d 101.32%);
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -30,9 +29,20 @@
   .circleBtn {
     height: 6em;
     width: 6em;
-    background: linear-gradient(230.22deg, #c78ef3 28.72%, #34184a 101.32%);
     border: none;
     border-radius: 50%;
     margin-left: 5em;
   }
+}
+
+.bg1 {
+  background: linear-gradient(104deg, #ffffff 28.72%, #daabff7d 101.32%);
+}
+
+.bg2 {
+  background: linear-gradient(230.22deg, #c78ef3 28.72%, #34184a 101.32%);
+}
+
+.bg3 {
+  background: black;
 }
