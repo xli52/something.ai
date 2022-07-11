@@ -6,7 +6,7 @@ import * as THREE from 'three';
 
 export default function Model(props) {
   const [scene] = useState(new THREE.Scene());
-  const [gltf] = useState(useLoader(GLTFLoader, `/${props.name}.glb`));
+  const [gltf] = useState(useLoader(GLTFLoader, `/models/${props.name}.glb`));
   const [clock] = useState(new THREE.Clock());
   const [renderer] = useState(new THREE.WebGLRenderer());
   const [camera] = useState(new THREE.PerspectiveCamera());

@@ -1,7 +1,7 @@
 import React, { useState, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import Character from '../../avatars/Character';
+import Character from '../Character/Character';
 // import { PerspectiveCamera } from "three";
 
 export default function ChatScene(props) {
@@ -14,7 +14,7 @@ export default function ChatScene(props) {
   //   );
   // }
   const [action, setAction] = useState('StandingIdle');
-  const [name, setName] = useState('joshua');
+  const [name, setName] = useState('jane');
 
   return (
     <>
