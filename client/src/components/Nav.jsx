@@ -16,7 +16,14 @@ export default function Nav(props) {
           <span className="sub">.AI</span>
         </div>
         <nav>
-          <button className="btn">Login</button>
+          <button
+            className="btn"
+            onClick={() => {
+              props.setShow("show");
+            }}
+          >
+            Login
+          </button>
           <button className="btn btn2">Sign Up</button>
         </nav>
       </div>

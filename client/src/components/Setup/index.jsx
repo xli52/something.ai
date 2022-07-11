@@ -4,14 +4,14 @@ import SetupBox from "./SetupBox";
 import "./styles.scss";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import { faCircleChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 const avatarList = ["jane", "joshua"];
 
 export default function Setup() {
   const [bgColor, setBgColor] = useState("bg1");
-  const [aVa, setAva] = useState("jane");
+  const [aVa, setAva] = useState("joshua");
   const mainBodyClass = `setupMainBody ${bgColor}`;
 
   const nextAva = function (aVa) {
@@ -36,7 +36,7 @@ export default function Setup() {
     <div className={mainBodyClass}>
       <div className="mdSetup">
         <FontAwesomeIcon
-          icon={faCircleChevronLeft}
+          icon={faArrowLeft}
           className="leftArrow"
           onClick={() => {
             lastAva(aVa);
@@ -45,7 +45,7 @@ export default function Setup() {
         />
         <ModelDisplay name={aVa} />
         <FontAwesomeIcon
-          icon={faCircleChevronRight}
+          icon={faArrowRight}
           className="rightArrow"
           onClick={() => {
             nextAva(aVa);

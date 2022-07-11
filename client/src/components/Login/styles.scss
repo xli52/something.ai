@@ -1,0 +1,52 @@
+.popModal {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 100vh;
+  width: 100vw;
+  background: rgba(178, 178, 178, 0.313);
+  z-index: 97;
+
+  .close {
+    height: 2em;
+    align-self: end;
+    margin: 1em;
+  }
+
+  h2 {
+    margin: 0;
+  }
+
+  .formGroup {
+    background: rgba(139, 134, 134, 0.671);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 50vh;
+    width: 40vw;
+    border-radius: 1em;
+    padding: 1em;
+
+    input {
+      width: 70%;
+      height: 3em;
+      margin: 1em;
+    }
+
+    .btn {
+      width: 8em;
+      height: 2.5em;
+      margin-bottom: 2em;
+    }
+  }
+}
+
+.show {
+  display: flex;
+}
+.noShow {
+  display: none;
+}

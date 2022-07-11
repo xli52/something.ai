@@ -1,7 +1,9 @@
 import React, { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import Character from "../Character/Character";
+// import Character from "../Character/Character";
+import Joshua from "../Character/joshua";
+import Jane from "../Character/jane";
 
 export default function ModelDisplay(props) {
   return (
@@ -13,7 +15,9 @@ export default function ModelDisplay(props) {
       <ambientLight intensity={1.25} />
       <directionalLight intensity={0.4} />
       <Suspense fallback={null}>
-        <Character name={props.name} action="StandingIdle" />
+        {/* <Character name={props.name} action="StandingIdle" /> */}
+        {props.name === "joshua" && <Joshua />}
+        {props.name === "jane" && <Jane action="StandingIdle" />}
       </Suspense>
       <OrbitControls />
     </Canvas>
