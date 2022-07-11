@@ -13,7 +13,7 @@ export default function ModelDisplay(props) {
       <ambientLight intensity={1.25} />
       <directionalLight intensity={0.4} />
       <Suspense fallback={null}>
-        <Character name="joshua" action="StandingIdle" />
+        <Character name={props.name} action="StandingIdle" />
       </Suspense>
       <OrbitControls />
     </Canvas>

@@ -11,12 +11,7 @@ export default function Circle(props) {
       className={buttonClass}
       onClick={(event) => {
         event.preventDefault();
-        if (props.setAva) {
-          props.setAva();
-        }
-        if (props.setBgColor) {
-          props.setBgColor(props.bg);
-        }
+        props.setBgColor(props.bg);
       }}
     ></button>
   );
