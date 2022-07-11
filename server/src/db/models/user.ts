@@ -29,6 +29,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       });
       user.belongsToMany(models.character, {
         through: "users_characters",
+        as: "characters",
         foreignKey: "user_id",
       });
     }

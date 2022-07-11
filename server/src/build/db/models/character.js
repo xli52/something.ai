@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
             character.belongsToMany(models.user, {
                 through: "users_characters",
+                as: "users",
                 foreignKey: "character_id",
             });
         }
