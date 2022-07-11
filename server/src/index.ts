@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import morgan from "morgan";
 import cookieSession from "cookie-session";
+import db from "../src/db/models";
 
 dotenv.config();
 
@@ -25,6 +26,8 @@ app.use("/api/openai", openaiRouter());
 
 app.use(express.static("./src/audio"));
 
-app.listen(8080, () => {
-  console.log("backend listening on port 8080");
+db.sequelize.sync().then(() => {
+  app.listen(8080, () => {
+    console.log("backend listening on port 8080");
+  });
 });

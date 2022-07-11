@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "./node_modules/.bin/nodemon -L ./src/index.ts",
     "start": "./node_modules/.bin/nodemon -L ./src/build/index.js"
   },
   "keywords": [],
