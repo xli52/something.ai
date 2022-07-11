@@ -10,19 +10,13 @@ module.exports = (sequelize, DataTypes) => {
                 onDelete: "CASCADE",
             });
             user.belongsToMany(models.character, {
-                through: "users_characters",
+                through: models.users_character,
                 as: "characters",
                 foreignKey: "user_id",
             });
         }
     }
     user.init({
-        id: {
-            type: DataTypes.UUID,
-            allowNull: false,
-            defaultValue: sequelize_1.UUIDV4,
-            primaryKey: true,
-        },
         first_name: { type: DataTypes.STRING, allowNull: false },
         last_name: { type: DataTypes.STRING, allowNull: false },
         password: { type: DataTypes.STRING, allowNull: false },

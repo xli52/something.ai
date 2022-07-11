@@ -9,6 +9,13 @@ const morgan_1 = __importDefault(require("morgan"));
 const cookie_session_1 = __importDefault(require("cookie-session"));
 const models_1 = __importDefault(require("../src/db/models"));
 dotenv_1.default.config();
+// insert db seeds
+// const createUsers = () => {
+//   users.map((user) => {
+//     db.user.create(user);
+//   });
+// };
+// createUsers();
 // import Routers
 const openaiRoute_1 = __importDefault(require("./Routers/openaiRoute"));
 const app = (0, express_1.default)();

@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     }
     conversation.init({
         user_id: {
-            type: DataTypes.UUID,
+            type: DataTypes.INTEGER,
             allowNull: false,
             references: { model: "users", key: "id" },
             onDelete: "CASCADE",

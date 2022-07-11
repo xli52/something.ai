@@ -3,8 +3,18 @@ import express from "express";
 import morgan from "morgan";
 import cookieSession from "cookie-session";
 import db from "../src/db/models";
+import { users } from "./db/seeders/users";
 
 dotenv.config();
+
+// insert db seeds
+// const createUsers = () => {
+//   users.map((user) => {
+//     db.user.create(user);
+//   });
+// };
+
+// createUsers();
 
 // import Routers
 import openaiRouter from "./Routers/openaiRoute";

@@ -1,8 +1,7 @@
 "use strict";
-import { Model, UUIDV4 } from "sequelize";
+import { Model } from "sequelize";
 
 interface UserAttributes {
-  id: string;
   first_name: string;
   last_name: string;
   password: string;
@@ -16,7 +15,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    id!: string;
     first_name!: string;
     last_name!: string;
     password!: string;
@@ -29,7 +27,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         onDelete: "CASCADE",
       });
       user.belongsToMany(models.character, {
-        through: "users_characters",
+        through: models.users_character,
         as: "characters",
         foreignKey: "user_id",
       });
@@ -37,12 +35,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
   }
   user.init(
     {
-      id: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        defaultValue: UUIDV4,
-        primaryKey: true,
-      },
       first_name: { type: DataTypes.STRING, allowNull: false },
       last_name: { type: DataTypes.STRING, allowNull: false },
       password: { type: DataTypes.STRING, allowNull: false },

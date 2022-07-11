@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("conversations", {
+    await queryInterface.createTable("users_characters", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -9,10 +9,18 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       user_id: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: { model: "users", key: "id" },
-        onDelete: "CASCADE",
+        type: Sequelize.NUMBER,
+        references: {
+          model: "users",
+          key: "id",
+        },
+      },
+      character_id: {
+        type: Sequelize.NUMBER,
+        references: {
+          model: "characters",
+          key: "id",
+        },
       },
       createdAt: {
         allowNull: false,
@@ -25,6 +33,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("conversations");
+    await queryInterface.dropTable("users_characters");
   },
 };
