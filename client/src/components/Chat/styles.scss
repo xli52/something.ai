@@ -1,7 +1,7 @@
 .chat-container {
-  z-index: -1;
+  z-index: -2;
   position: absolute;
-  top: 0px;
+  top: 80px;
   right: 0px;
   bottom: 0px;
   left: 0px;
@@ -10,7 +10,9 @@
   flex-direction: column;
 
   .chat-box-container {
+    z-index: -1;
     height: 20%;
+    border: 2px solid red;
   }
 
   .chat-scene-container {
