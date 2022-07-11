@@ -12,10 +12,10 @@ npm install
 
 Update .env file as indicated in .env.example file, also export Google API KEY to your .zshrc or .bashrc file (see below API KEYS section).
 
-Then, run:
+Then you can run the following command to start the server.
 
 ```sh
-npm start
+npm run dev
 ```
 
 ## Create a postgres database
@@ -32,6 +32,13 @@ After connecting to psql, run
 
 ```sh
 CREATE DATABASE final_development;
+```
+
+After this, you should write the following commands in your terminal to migrate tables and seed the mock data:
+
+```sh
+npx sequelize-cli db:migrate
+npx sequelize-cli db:seed:all
 ```
 
 ## API KEYS

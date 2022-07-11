@@ -20,7 +20,7 @@ module.exports = {
                 },
                 conversation_id: {
                     allowNull: false,
-                    type: Sequelize.NUMBER,
+                    type: Sequelize.INTEGER,
                     references: { model: "conversations", key: "id" },
                     onDelete: "CASCADE",
                 },

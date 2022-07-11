@@ -11,39 +11,40 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 module.exports = {
     up(queryInterface, Sequelize) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield queryInterface.createTable("users", {
-                id: {
-                    allowNull: false,
-                    autoIncrement: true,
-                    primaryKey: true,
-                    type: Sequelize.INTEGER,
+            /**
+             * Add seed commands here.
+             *
+             * Example:
+             * await queryInterface.bulkInsert('People', [{
+             *   name: 'John Doe',
+             *   isBetaMember: false
+             * }], {});
+             */
+            yield queryInterface.bulkInsert("users_characters", [
+                {
+                    user_id: 1,
+                    character_id: 2,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
                 },
-                username: {
-                    allowNull: false,
-                    type: Sequelize.STRING,
+                {
+                    user_id: 2,
+                    character_id: 1,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
                 },
-                password: {
-                    allowNull: false,
-                    type: Sequelize.STRING,
-                },
-                email: {
-                    allowNull: false,
-                    type: Sequelize.STRING,
-                },
-                createdAt: {
-                    allowNull: false,
-                    type: Sequelize.DATE,
-                },
-                updatedAt: {
-                    allowNull: false,
-                    type: Sequelize.DATE,
-                },
-            });
+            ], {});
         });
     },
     down(queryInterface, Sequelize) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield queryInterface.dropTable("users");
+            /**
+             * Add commands to revert seed here.
+             *
+             * Example:
+             * await queryInterface.bulkDelete('People', null, {});
+             */
+            yield queryInterface.bulkDelete("users_characters", null, {});
         });
     },
 };
