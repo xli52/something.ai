@@ -11,7 +11,7 @@ import { config, GoogleSTT } from "../helpers/gSTT";
 import { GoogleNLA, checkSentiment } from "../helpers/gNLA";
 import { openai, chatPrompt } from "../helpers/openai";
 
-const openaiRouter = () => {
+const openaiRouter = (db: any) => {
   ////////////////////////////////
   // Speech to Text Route
   ////////////////////////////////

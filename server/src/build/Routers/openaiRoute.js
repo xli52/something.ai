@@ -13,7 +13,7 @@ const gTTS_1 = require("../helpers/gTTS");
 const gSTT_1 = require("../helpers/gSTT");
 const gNLA_1 = require("../helpers/gNLA");
 const openai_1 = require("../helpers/openai");
-const openaiRouter = () => {
+const openaiRouter = (db) => {
     ////////////////////////////////
     // Speech to Text Route
     ////////////////////////////////
