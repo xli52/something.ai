@@ -5,11 +5,11 @@ import cookieSession from "cookie-session";
 import db from "../src/db/models";
 
 dotenv.config();
+const app = express();
 
 // import Routers
 import openaiRouter from "./Routers/openaiRoute";
-
-const app = express();
+import userRouter from "./Routers/userRoute";
 
 // Middlewares
 app.use(
@@ -23,6 +23,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use("/api/openai", openaiRouter(db));
+app.use("/user", userRouter(db));
 
 app.use(express.static("./src/audio"));
 
