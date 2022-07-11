@@ -4,6 +4,7 @@ import { Model } from "sequelize";
 interface MessageAttributes {
   conversation_id: number;
   content: string;
+  from_bot: boolean;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -15,6 +16,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
      */
     conversation_id!: number;
     content!: string;
+    from_bot!: boolean;
 
     static associate(models: any) {
       // define association here
@@ -33,6 +35,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
         onDelete: "CASCADE",
       },
       content: { type: DataTypes.STRING, allowNull: false },
+      from_bot: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
     },
     {
       sequelize,

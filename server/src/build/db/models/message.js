@@ -19,6 +19,11 @@ module.exports = (sequelize, DataTypes) => {
             onDelete: "CASCADE",
         },
         content: { type: DataTypes.STRING, allowNull: false },
+        from_bot: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
+        },
     }, {
         sequelize,
         modelName: "message",

@@ -2,7 +2,7 @@
 import { Model } from "sequelize";
 
 interface ConversationAttributes {
-  user_id: number;
+  user_id: string;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -15,7 +15,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    user_id!: number;
+    user_id!: string;
 
     static associate(models: any) {
       // define association here
@@ -32,7 +32,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
   conversation.init(
     {
       user_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: false,
         references: { model: "users", key: "id" },
         onDelete: "CASCADE",
