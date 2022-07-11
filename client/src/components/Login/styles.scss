@@ -10,12 +10,20 @@
   z-index: 97;
 
   .close {
+    color: white;
     height: 2em;
     align-self: end;
     margin: 1em;
+    transition: 0.3s;
+  }
+
+  .close:hover {
+    color: #8d2add;
   }
 
   h2 {
+    color: #8d2add;
+    font-size: 2em;
     margin: 0;
   }
 
@@ -34,12 +42,26 @@
       width: 70%;
       height: 3em;
       margin: 1em;
+      border: none;
+      border-radius: 3px;
     }
 
     .btn {
+      font-size: 1.1em;
+      font-weight: bolder;
+      color: white;
+      background: #d5a7fb;
       width: 8em;
       height: 2.5em;
       margin-bottom: 2em;
+      border: none;
+      border-radius: 3em;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #be6cff;
+      color: #ffffff;
     }
   }
 }
