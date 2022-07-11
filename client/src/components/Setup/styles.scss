@@ -17,7 +17,7 @@
 
     .leftArrow,
     .rightArrow {
-      font-size: 3em;
+      font-size: 5em;
       color: #a4a4a4;
     }
   }
@@ -25,13 +25,16 @@
   .setupBox {
     display: flex;
     flex-direction: row;
+    align-items: center;
     justify-content: space-between;
     height: 10vh;
-    margin: 5em;
+    margin: 4em;
+    background-color: rgba(148, 148, 148, 0.5);
+    border-radius: 23px;
     // move the box to the front //
-    // position: fixed;
-    // bottom: 0%;
-    // z-index: 88;
+    position: fixed;
+    bottom: 0%;
+    z-index: 88;
 
     .btn {
       font-size: 1.1em;
