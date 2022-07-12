@@ -1,10 +1,21 @@
 import React, { useState } from "react";
 import "./styles.scss";
 
-export default function Signup() {
+export default function SignUp() {
+  const [signUp, setSignUp] = useState({});
+  const submitSignUp = function () {
+    console.log(signUp);
+  };
+
   return (
     <div className={modalClass}>
-      <form className="formGroup" onSubmit={submitUser}>
+      <form
+        className="formGroup"
+        onSubmit={(e) => {
+          e.preventDefault();
+          submitSignUp();
+        }}
+      >
         <FontAwesomeIcon
           className="close"
           icon={faXmark}
@@ -12,7 +23,16 @@ export default function Signup() {
             props.setShow("noShow");
           }}
         ></FontAwesomeIcon>
-        <h2>LOGIN</h2>
+        <h2>Sign Up</h2>
+
+        <input
+          placeholder="Username"
+          type="text"
+          value={email}
+          onChange={(e) => {
+            setUsername(e.target.value);
+          }}
+        />
 
         <input
           placeholder="Email"

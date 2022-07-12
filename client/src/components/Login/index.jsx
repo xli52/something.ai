@@ -5,13 +5,17 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 export default function Login(props) {
   const [login, setLogin] = useState({ email: "", password: "" });
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   let modalClass = `popModal ${props.show}`;
 
-  const submitLogin = function () {
-    setLogin({ email: email, password: password });
+  // Use handleChange Function to onChange the setLogin
+  const handleChange = function (e) {
+    const { name, value } = e.target;
+    setLogin({ ...login, [name]: value });
+  };
+
+  // Need axios send to backend
+  const submitLogin = function (e) {
+    e.preventDefault();
     console.log(login);
   };
 
@@ -20,8 +24,7 @@ export default function Login(props) {
       <form
         className="formGroup"
         onSubmit={(e) => {
-          e.preventDefault();
-          submitLogin();
+          submitLogin(e);
         }}
       >
         <FontAwesomeIcon
@@ -36,19 +39,17 @@ export default function Login(props) {
         <input
           placeholder="Email"
           type="email"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
+          name="email"
+          value={login["email"]}
+          onChange={handleChange}
         />
 
         <input
           placeholder="Password"
           type="password"
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
+          name="password"
+          value={login["password"]}
+          onChange={handleChange}
         />
         <button className="btn" type="submit">
           Login
