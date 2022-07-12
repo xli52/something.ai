@@ -4,12 +4,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 export default function SignUp(props) {
+  const [confirmPass, setConfirmPass] = useState("");
   const [signUp, setSignUp] = useState({
     username: "",
     email: "",
     password: "",
   });
-  let modalClass = `popModal ${props.show}`;
 
   // Use handleChange Function to onChange the setLogin
   const handleChange = function (e) {
@@ -17,20 +17,38 @@ export default function SignUp(props) {
     setSignUp({ ...signUp, [name]: value });
   };
 
+  // Check password and confirm password same or not
+  const passwordCheck = function (signUp, confirmPass) {
+    let password = signUp["password"].trim();
+    let conPass = confirmPass.trim();
+    if (password === conPass) {
+      return true;
+    }
+    return false;
+  };
+
   // Need axios send to backend... /user/register
   const submitSignUp = function (e) {
     e.preventDefault();
+    if (!passwordCheck(signUp, confirmPass)) {
+      return alert("Password not same!!");
+    }
     console.log(signUp);
-    setSignUp({ email: "", password: "" });
+    setSignUp({
+      username: "",
+      email: "",
+      password: "",
+    });
   };
+
+  let modalClass = `signuppopModal ${props.show}`;
 
   return (
     <div className={modalClass}>
       <form
         className="formGroup"
         onSubmit={(e) => {
-          e.preventDefault();
-          submitSignUp();
+          submitSignUp(e);
         }}
       >
         <FontAwesomeIcon
@@ -74,8 +92,10 @@ export default function SignUp(props) {
           placeholder="Confirm Password"
           type="password"
           name="confirmPass"
-          value={signUp["confirmPass"]}
-          onChange={handleChange}
+          value={confirmPass}
+          onChange={(e) => {
+            setConfirmPass(e.target.value);
+          }}
           required
           min={3}
         />
