@@ -91,7 +91,7 @@ export default function UserLogin(props) {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <input type="submit" value="Login" />
+        <input type="submit" value="Register!" />
       </form>
       <p>{serverReply}</p>
     </div>
