@@ -7,10 +7,6 @@ import Setup from "./Setup";
 import Login from "./Login";
 import SignUp from "./Signup";
 
-import ChatBox from "./Chat/ChatBox";
-import AudioChat from "./Chat/AudioChat";
-import UserLogin from "./Login/UserLogin";
-
 const HOME = "HOME";
 const CHAT = "CHAT";
 const SETUP = "SETUP";
@@ -22,12 +18,11 @@ function App() {
 
   return (
     <>
-      {/* <Nav
+      <Nav
         setPage={setPage}
         setLogInShow={setLogInShow}
         setSignUpShow={setSignUpShow}
-      /> */}
-      <UserLogin />
+      />
 
       <main>
         <Login show={logInShow} setShow={setLogInShow} />
