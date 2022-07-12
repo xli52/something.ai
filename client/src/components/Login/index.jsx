@@ -11,6 +11,12 @@ export default function Login(props) {
 
   let modalClass = `popModal ${props.show}`;
 
+  const submitUser = function (e) {
+    e.preventDefault();
+    setLogin = { username, password };
+    console.log(login);
+  };
+
   return (
     <div
       className={modalClass}
@@ -18,7 +24,7 @@ export default function Login(props) {
         props.setShow("noShow");
       }}
     >
-      <form className="formGroup">
+      <form className="formGroup" onSubmit={submitUser}>
         <FontAwesomeIcon
           className="close"
           icon={faXmark}
@@ -29,9 +35,9 @@ export default function Login(props) {
         <h2>LOGIN</h2>
 
         <input
-          placeholder="Username"
+          placeholder="Email"
           type="text"
-          value={username}
+          value={email}
           onChange={(e) => {
             setUsername(e.target.value);
           }}
