@@ -13,11 +13,16 @@ export default function Login(props) {
     setLogin({ ...login, [name]: value });
   };
 
-  // Need axios send to backend
+  // Need axios send to backend.../user/login
+  // will get res.json(userID) for success
+
   const submitLogin = function (e) {
     e.preventDefault();
     console.log(login);
+    setLogin({ email: "", password: "" });
   };
+
+  // for logout /user/logout
 
   return (
     <div className={modalClass}>
@@ -42,6 +47,7 @@ export default function Login(props) {
           name="email"
           value={login["email"]}
           onChange={handleChange}
+          required
         />
 
         <input
@@ -50,6 +56,8 @@ export default function Login(props) {
           name="password"
           value={login["password"]}
           onChange={handleChange}
+          required
+          min={3}
         />
         <button className="btn" type="submit">
           Login

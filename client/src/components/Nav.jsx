@@ -19,12 +19,19 @@ export default function Nav(props) {
           <button
             className="btn"
             onClick={() => {
-              props.setShow("show");
+              props.setLogInShow("show");
             }}
           >
             Login
           </button>
-          <button className="btn btn2">Sign Up</button>
+          <button
+            className="btn btn2"
+            onClick={() => {
+              props.setSignUpShow("show");
+            }}
+          >
+            Sign Up
+          </button>
         </nav>
       </div>
     </header>
