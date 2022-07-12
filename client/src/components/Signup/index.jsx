@@ -1,29 +1,10 @@
 import React, { useState } from "react";
 import "./styles.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
-export default function Login(props) {
-  const [login, setLogin] = useState({ email: "", password: "" });
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  let modalClass = `popModal ${props.show}`;
-
-  const submitLogin = function () {
-    setLogin({ email: email, password: password });
-    console.log(login);
-  };
-
+export default function Signup() {
   return (
     <div className={modalClass}>
-      <form
-        className="formGroup"
-        onSubmit={(e) => {
-          e.preventDefault();
-          submitLogin();
-        }}
-      >
+      <form className="formGroup" onSubmit={submitUser}>
         <FontAwesomeIcon
           className="close"
           icon={faXmark}
