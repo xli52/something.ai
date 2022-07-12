@@ -9,6 +9,7 @@ import SignUp from "./Signup";
 
 import ChatBox from "./Chat/ChatBox";
 import AudioChat from "./Chat/AudioChat";
+import UserLogin from "./Login/UserLogin";
 
 const HOME = "HOME";
 const CHAT = "CHAT";
@@ -26,8 +27,7 @@ function App() {
         setLogInShow={setLogInShow}
         setSignUpShow={setSignUpShow}
       /> */}
-      <ChatBox />
-      <AudioChat />
+      <UserLogin />
 
       <main>
         <Login show={logInShow} setShow={setLogInShow} />

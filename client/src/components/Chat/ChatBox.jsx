@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import ReactAudioPlayer from "react-audio-player";
 
-export default function ChatBox() {
+export default function ChatBox(props) {
   const [input, setInput] = useState("");
   const [audio, setAudio] = useState("");
 
