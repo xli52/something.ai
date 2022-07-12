@@ -6,14 +6,14 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 export default function Login(props) {
   const [login, setLogin] = useState({});
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   let modalClass = `popModal ${props.show}`;
 
   const submitUser = function (e) {
     e.preventDefault();
-    setLogin = { username, password };
+    setLogin = { email, password };
     console.log(login);
   };
 
@@ -39,7 +39,7 @@ export default function Login(props) {
           type="text"
           value={email}
           onChange={(e) => {
-            setUsername(e.target.value);
+            setEmail(e.target.value);
           }}
         />
 
