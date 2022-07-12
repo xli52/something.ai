@@ -38,17 +38,26 @@ const userRouter = (db: any): any => {
     const password = bcrypt.hashSync(req.body.password, salt);
 
     db.user
-      .create({
-        username: req.body.username,
-        password,
-        email: req.body.email,
-        createAt: new Date(),
-        updatedAt: new Date(),
-      })
+      .findOne({ where: { email: req.body.email } })
       .then((response: any) => {
-        console.log("Created user: " + response.id);
-        req.session.userID = response.id;
-        res.json(response);
+        console.log("Search completed, response is: ");
+        console.log(response);
+        if (response) {
+          return res.send("User already exists.");
+        }
+        return db.user
+          .create({
+            username: req.body.username,
+            password,
+            email: req.body.email,
+            createAt: new Date(),
+            updatedAt: new Date(),
+          })
+          .then((response: any) => {
+            console.log("Created user: " + response.id);
+            req.session.userID = response.id;
+            res.json(response);
+          });
       })
       .catch((err: any) => console.error(err));
   });
