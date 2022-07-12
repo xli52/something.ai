@@ -7,30 +7,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
-const avatarList = ["jane", "joshua"];
+import getCharacterList from '../../helpers/getCharacterList';
+import useCharacter from "../../hooks/useCharacter";
+
+const characterList = getCharacterList();
 
 export default function Setup() {
   const [bgColor, setBgColor] = useState("bg1");
-  const [aVa, setAva] = useState("joshua");
+  const { character, nextChar, lastChar } = useCharacter();
   const mainBodyClass = `setupMainBody ${bgColor}`;
-
-  const nextAva = function (aVa) {
-    let aVaIndex = avatarList.indexOf(aVa);
-    if (aVaIndex === avatarList.length - 1) {
-      setAva(avatarList[0]);
-    } else {
-      setAva(avatarList[aVaIndex + 1]);
-    }
-  };
-
-  const lastAva = function (aVa) {
-    let aVaIndex = avatarList.indexOf(aVa);
-    if (aVaIndex === 0) {
-      setAva(avatarList[avatarList.length - 1]);
-    } else {
-      setAva(avatarList[aVaIndex - 1]);
-    }
-  };
 
   return (
     <div className={mainBodyClass}>
@@ -38,22 +23,16 @@ export default function Setup() {
         <FontAwesomeIcon
           icon={faArrowLeft}
           className="leftArrow"
-          onClick={() => {
-            lastAva(aVa);
-            console.log(aVa);
-          }}
+          onClick={lastChar}
         />
-        <ModelDisplay name={aVa} />
+        <ModelDisplay character={character} />
         <FontAwesomeIcon
           icon={faArrowRight}
           className="rightArrow"
-          onClick={() => {
-            nextAva(aVa);
-            console.log(aVa);
-          }}
+          onClick={nextChar}
         />
       </div>
-      <SetupBox setBgColor={setBgColor} setAv={setAva} />
+      <SetupBox setBgColor={setBgColor} />
     </div>
   );
 }
