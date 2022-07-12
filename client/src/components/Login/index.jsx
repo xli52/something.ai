@@ -12,7 +12,12 @@ export default function Login(props) {
   let modalClass = `popModal ${props.show}`;
 
   return (
-    <div className={modalClass}>
+    <div
+      className={modalClass}
+      onClick={() => {
+        props.setShow("noShow");
+      }}
+    >
       <form className="formGroup">
         <FontAwesomeIcon
           className="close"
