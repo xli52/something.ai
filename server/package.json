@@ -24,7 +24,8 @@
     "openai": "^3.0.0",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.21.2"
+    "sequelize": "^6.21.2",
+    "socket.io": "^4.5.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
