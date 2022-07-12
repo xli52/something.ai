@@ -1,4 +1,27 @@
-.chat-scene-canvas {
-  background-color: white;
-  border: 2px solid black;
+.chat-container {
+  z-index: -2;
+  position: absolute;
+  top: 80px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+
+  display: flex;
+  flex-direction: column;
+
+  .chat-box-container {
+    z-index: -1;
+    height: 20%;
+    border: 2px solid red;
+  }
+
+  .chat-scene-container {
+    height: 80%;
+
+    .chat-scene-canvas {
+      background-color: white;
+      border: 2px solid black;
+    }
+  }
+
 }

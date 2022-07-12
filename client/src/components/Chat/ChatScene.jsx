@@ -1,33 +1,46 @@
-import React, { Suspense } from 'react';
+import React, { useState, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import { PerspectiveCamera } from "three";
-import Avatar from '../../avatars/Avatar';
+import Character from '../Character';
+import getCharacterList from '../../helpers/getCharacterList';
+// import { PerspectiveCamera } from "three";
 
 export default function ChatScene(props) {
-  function CameraHelper() {
-    const camera = new PerspectiveCamera(40, 1, 1, 3);
-    return (
-      <group position={[0, 1.4, 2.1]}>
-        <cameraHelper args={[camera]} />
-      </group>
-    );
-  }
-  
+  // function CameraHelper() {
+  //   const camera = new PerspectiveCamera(20, 1, 0.01, 5);
+  //   return (
+  //     <group position={[0, 0, 3.5]}>
+  //       <cameraHelper args={[camera]} />
+  //     </group>
+  //   );
+  // }
+  const [character, setCharacter] = useState(getCharacterList().jane);
+  const [action, setAction] = useState(character.greetingAction);
+
   return (
-    <Canvas
-      className={'chat-scene-canvas'}
-      camera={{ fov: 40, near: 1, far: 3, position: [0, 1.4, 2.1] }}
-    >
-      <ambientLight intensity={1.25} />
-      <ambientLight intensity={0.1} />
-      <directionalLight intensity={0.4} />
-      <Suspense fallback={null}>
-        <Avatar />
-      </Suspense>
-      <OrbitControls />
-      <CameraHelper />
-    </Canvas>
+    <>
+      <Canvas
+        className='chat-scene-canvas'
+        // This controls carema angle I believe
+        camera={{ fov: 100, near: 0.01, far: 1000, position: [0, 0, 20], zoom: 8 }}
+      >
+        <ambientLight intensity={1.25} />
+        <Suspense fallback={null}>
+          <Character
+            name={character.name}
+            position={{ x: 0, y: character.chatPageY, z: 0 }}
+            action={action}
+          />
+        </Suspense>
+        <OrbitControls />
+        {/* <CameraHelper /> */}
+      </Canvas>
+      <button onClick={() => { setAction('Waving') }}>Wave</button>
+      <button onClick={() => { setAction('StandingIdle') }}>StandingIdle</button>
+      <button onClick={() => { setAction('HipHopDancing') }}>Hip Hop</button>
+      <button onClick={() => { setAction('Yawn') }}>Yawn</button>
+      <button onClick={() => { setAction('Angry') }}>Angry</button>
+    </>
   );
 
 };
