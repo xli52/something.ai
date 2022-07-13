@@ -16,10 +16,7 @@
     "react-audio-player": "^0.17.0",
     "react-dom": "^18.2.0",
     "react-mic": "^12.4.6",
-<<<<<<< HEAD
     "react-router-dom": "^6.3.0",
-=======
->>>>>>> 601c8e92ec58120832f32bb84c920db0528d6195
     "react-scripts": "5.0.1",
     "three": "^0.142.0",
     "web-vitals": "^2.1.4"
