@@ -1,5 +1,6 @@
 .signuppopModal {
   position: absolute;
+  top: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -21,7 +22,6 @@
       color: #8d2add;
     }
   }
-
 
   h2 {
     color: #8d2add;

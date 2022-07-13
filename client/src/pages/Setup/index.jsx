@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Nav from '../../components/Nav';
+import Nav from "../../components/Nav";
 import ModelDisplay from "./ModelDisplay";
 import SetupBox from "./SetupBox";
 import "./styles.scss";
@@ -23,7 +23,7 @@ export default function Setup() {
 
   return (
     <main>
-      <Nav loginBtn={false} signupBtn={false} />
+      {/* <Nav loginBtn={false} signupBtn={false} /> */}
       <div className={mainBodyClass}>
         <div className="mdSetup">
           <FontAwesomeIcon

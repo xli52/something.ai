@@ -1,6 +1,7 @@
 .popModal {
   position: absolute;
-  display: flex;
+  top: 0;
+
   justify-content: center;
   align-items: center;
 
@@ -16,7 +17,7 @@
     align-self: end;
     margin: 1em;
     transition: 0.3s;
-    
+
     &:hover {
       color: #8d2add;
     }
@@ -66,7 +67,6 @@
         color: #ffffff;
       }
     }
-
   }
 }
 
