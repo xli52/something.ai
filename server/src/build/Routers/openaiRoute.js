@@ -41,24 +41,65 @@ const openaiRouter = (db) => {
         (0, helpers_1.cleanup)(req.session);
         console.log("TextToSpeech endpoint received request");
         console.log("req.session.recognizedText: ", req.session.recognizedText);
+        console.log("Current user session: ", req.session.userID, req.session.visitorID);
         // to deterentiate where the request was from speech or text
-        let requestedText = req.session.recognizedText
+        req.session.requestedText = req.session.recognizedText
             ? req.session.recognizedText
             : req.body.input;
+        // to make sure if the text is from registered user or visitor. If it is a visitor, then provide a visitorID
+        if (!req.session.userID && !req.session.visitorID) {
+            req.session.visitorID = (0, helpers_1.randomID)();
+        }
+        // to check if this is a new conversation for a user. If so, write to db to create a new conversation
+        if (req.session.userID && !req.session.convoID) {
+            db.conversation
+                .create({
+                user_id: req.session.userID,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            })
+                .then((response) => {
+                console.log("convoID created: ", response.id);
+                req.session.convoID = response.id;
+            })
+                .then(() => {
+                db.message
+                    .create({
+                    content: req.session.requestedText,
+                    conversation_id: req.session.convoID,
+                    from_bot: false,
+                    createdAt: new Date(),
+                })
+                    .catch((err) => console.error(err));
+            });
+        }
+        // when both userID and convoID exists, directly write to db.message
+        if (req.session.userID && req.session.convoID) {
+            db.message
+                .create({
+                content: req.session.requestedText,
+                conversation_id: req.session.convoID,
+                from_bot: false,
+                createdAt: new Date(),
+            })
+                .catch((err) => console.error(err));
+        }
         // first send the text off to Google NLA
-        return (0, gNLA_1.GoogleNLA)(requestedText)
+        return (0, gNLA_1.GoogleNLA)(req.session.requestedText)
             .then((response) => {
             req.session.requestedSentiment = (0, gNLA_1.checkSentiment)(response[0].documentSentiment.score);
             console.log("Google NLA says the speaker's sentiment is ", req.session.requestedSentiment, response[0].documentSentiment.score);
-            let prompt = (0, openai_1.chatPrompt)(requestedText, req.session.requestedSentiment);
+            let prompt = (0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment);
             // then, send off the text to openai
             return openai_1.openai.createCompletion(prompt);
         })
             .then((response) => {
             // once the response from openai is back, we pass it to NLA again
             console.log("OPEN AI: ", response.data);
-            // save the audioID for saving and retrieving the file
-            req.session.audioID = response.data.id;
+            // save the audioID for saving and retrieving the file. Based on different results, the prefix of audioID would be different
+            req.session.audioID = req.session.userID
+                ? `${req.session.userID}-${response.data.id}`
+                : `${req.session.visitorID}-${response.data.id}`;
             req.session.respondedText = response.data.choices[0].text.trim();
             return (0, gNLA_1.GoogleNLA)(req.session.respondedText);
         })
@@ -75,15 +116,35 @@ const openaiRouter = (db) => {
         })
             .then(() => {
             // this is will send response back to frontend, which react will update it's dom to retrieve new audio file and initiate character animation
-            let apiResponse = {
+            req.session.apiResponse = {
                 audioID: req.session.audioID,
-                recognizedText: req.session.recognizedText,
+                requestedText: req.session.requestedText,
                 aiSentiment: req.session.respondedSentiment,
+                aiText: req.session.respondedText,
             };
-            // clean up api related data
-            (0, helpers_1.cleanup)(req.session);
+            // clear any speech to text record
             req.session.recognizedText = null;
-            res.status(200).json(apiResponse);
+            // if it is a visitor, no need to write to db. However, if it is a user, write to db
+            if (req.session.visitorID) {
+                // clean up api related data
+                // cleanup(req.session);
+                req.session.recognizedText = null;
+                res.status(200).json(req.session.apiResponse);
+            }
+            else {
+                return db.message
+                    .create({
+                    content: req.session.respondedText,
+                    conversation_id: req.session.convoID,
+                    from_bot: true,
+                    createdAt: new Date(),
+                })
+                    .then((response) => {
+                    console.log("AI message written to db", response);
+                    req.session.apiResponse = Object.assign(Object.assign({}, req.session.apiResponse), { convoID: req.session.convoID });
+                    res.status(200).json(req.session.apiResponse);
+                });
+            }
         });
     });
     return router;

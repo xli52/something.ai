@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
             references: { model: "conversations", key: "id" },
             onDelete: "CASCADE",
         },
-        content: { type: DataTypes.STRING, allowNull: false },
+        content: { type: DataTypes.TEXT, allowNull: false },
         from_bot: {
             type: DataTypes.BOOLEAN,
             allowNull: false,

@@ -20,6 +20,7 @@ const userRouter = (db: any): any => {
           return res.send("Invalid email or password.");
         }
         req.session.userID = response.dataValues.id;
+        req.session.visitorID = null;
         res.status(200).json({ userID: req.session.userID });
       })
       .catch((err: any) => console.error(err));
@@ -27,8 +28,9 @@ const userRouter = (db: any): any => {
 
   router.post("/logout", (req: any, res: any) => {
     console.log("Received logout request!");
-    req.session.userID = null;
-    console.log("Confirm user session is empty: ", req.session.userID);
+    console.log("Current user session: ", req.session);
+    req.session = null;
+    console.log("Confirm user session is empty: ", req.session);
     res.status(200).send("You have already logged out! See you!");
   });
 

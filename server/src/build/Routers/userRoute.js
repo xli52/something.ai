@@ -20,14 +20,16 @@ const userRouter = (db) => {
                 return res.send("Invalid email or password.");
             }
             req.session.userID = response.dataValues.id;
+            req.session.visitorID = null;
             res.status(200).json({ userID: req.session.userID });
         })
             .catch((err) => console.error(err));
     });
     router.post("/logout", (req, res) => {
         console.log("Received logout request!");
-        req.session.userID = null;
-        console.log("Confirm user session is empty: ", req.session.userID);
+        console.log("Current user session: ", req.session);
+        req.session = null;
+        console.log("Confirm user session is empty: ", req.session);
         res.status(200).send("You have already logged out! See you!");
     });
     router.post("/register", (req, res) => {
@@ -35,12 +37,20 @@ const userRouter = (db) => {
         const salt = bcryptjs_1.default.genSaltSync(10);
         const password = bcryptjs_1.default.hashSync(req.body.password, salt);
         db.user
-            .create({
-            username: req.body.username,
-            password,
-            email: req.body.email,
-            createAt: new Date(),
-            updatedAt: new Date(),
+            .findOne({ where: { email: req.body.email } })
+            .then((response) => {
+            console.log("Search completed, response is: ");
+            console.log(response);
+            if (response) {
+                return res.send("User already exists.");
+            }
+            return db.user.create({
+                username: req.body.username,
+                password,
+                email: req.body.email,
+                createAt: new Date(),
+                updatedAt: new Date(),
+            });
         })
             .then((response) => {
             console.log("Created user: " + response.id);

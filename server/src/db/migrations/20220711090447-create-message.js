@@ -16,7 +16,7 @@ module.exports = {
       },
       content: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
       },
       from_bot: {
         type: Sequelize.BOOLEAN,

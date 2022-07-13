@@ -12,6 +12,14 @@ const cleanup = (session: any): void => {
   session.requestedSentiment = null;
   session.requestedText = null;
   session.respondedSentiment = null;
+  session.respondedText = null;
+  session.apiResponse;
 };
 
-export { cleanup, writeFile };
+const randomID = () => {
+  return Math.floor((1 + Math.random()) * 0x1000000)
+    .toString(16)
+    .substring(1);
+};
+
+export { cleanup, writeFile, randomID };
