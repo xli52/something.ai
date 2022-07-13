@@ -9,7 +9,7 @@ import { cleanup, writeFile, randomID } from "../helpers/helpers";
 import { GoogleTTS } from "../helpers/gTTS";
 import { config, GoogleSTT } from "../helpers/gSTT";
 import { GoogleNLA, checkSentiment } from "../helpers/gNLA";
-import { openai, chatPrompt } from "../helpers/openai";
+import { openai, chatPrompt, updatePrompt } from "../helpers/openai";
 
 const openaiRouter = (db: any): any => {
   ////////////////////////////////
@@ -44,7 +44,9 @@ const openaiRouter = (db: any): any => {
   // Text to Speech Route
   ////////////////////////////////
   router.post("/textToSpeech", (req: any, res: any) => {
+    console.log("Session before clean up: ", req.session);
     cleanup(req.session);
+    console.log("Session after clean up: ", req.session);
 
     console.log("TextToSpeech endpoint received request");
     console.log("req.session.recognizedText: ", req.session.recognizedText);
@@ -61,11 +63,15 @@ const openaiRouter = (db: any): any => {
 
     // to make sure if the text is from registered user or visitor. If it is a visitor, then provide a visitorID
     if (!req.session.userID && !req.session.visitorID) {
+      console.log("Initializing visitor ID...");
       req.session.visitorID = randomID();
     }
 
     // to check if this is a new conversation for a user. If so, write to db to create a new conversation
     if (req.session.userID && !req.session.convoID) {
+      console.log(
+        "user session exists but does not have convoID. Creating conversation now."
+      );
       db.conversation
         .create({
           user_id: req.session.userID,
@@ -84,12 +90,18 @@ const openaiRouter = (db: any): any => {
               from_bot: false,
               createdAt: new Date(),
             })
+            .then((response: any) =>
+              console.log("User input has been written to db")
+            )
             .catch((err: any) => console.error(err));
         });
     }
 
     // when both userID and convoID exists, directly write to db.message
     if (req.session.userID && req.session.convoID) {
+      console.log(
+        "Both user session and convoID exist. Writing user input now."
+      );
       db.message
         .create({
           content: req.session.requestedText,
@@ -97,8 +109,13 @@ const openaiRouter = (db: any): any => {
           from_bot: false,
           createdAt: new Date(),
         })
+        .then((response: any) =>
+          console.log("User input has been written to db")
+        )
         .catch((err: any) => console.error(err));
     }
+
+    console.log("Proceeding to GoogleNLA...");
 
     // first send the text off to Google NLA
     return GoogleNLA(req.session.requestedText)
@@ -116,6 +133,10 @@ const openaiRouter = (db: any): any => {
           req.session.requestedText,
           req.session.requestedSentiment
         );
+
+        // req.session.promptHistory = prompt.prompt;
+
+        // console.log("Prompt history: ", req.session.promptHistory);
 
         // then, send off the text to openai
         return openai.createCompletion(prompt);
@@ -142,7 +163,11 @@ const openaiRouter = (db: any): any => {
           req.session.respondedSentiment,
           response[0].documentSentiment.score
         );
-        return GoogleTTS(req.session.respondedText);
+
+        // choose voice based on character gender. FEMALE voice is used by default.
+        return req.body.gender
+          ? GoogleTTS(req.session.respondedText, req.body.gender)
+          : GoogleTTS(req.session.respondedText);
       })
       .then(([response]: any[]) => {
         // Base64 encoding is done, time to write file
@@ -156,7 +181,9 @@ const openaiRouter = (db: any): any => {
       })
       .then(() => {
         // this is will send response back to frontend, which react will update it's dom to retrieve new audio file and initiate character animation
-        req.session.apiResponse = {
+        console.log("preparing data for front-end");
+        let apiResponse: object = {
+          userID: req.session.userID,
           audioID: req.session.audioID,
           requestedText: req.session.requestedText,
           aiSentiment: req.session.respondedSentiment,
@@ -166,12 +193,15 @@ const openaiRouter = (db: any): any => {
         // clear any speech to text record
         req.session.recognizedText = null;
 
+        console.log(
+          "Session before sending off response to front-end: ",
+          req.session
+        );
+
         // if it is a visitor, no need to write to db. However, if it is a user, write to db
         if (req.session.visitorID) {
-          // clean up api related data
-          // cleanup(req.session);
-          req.session.recognizedText = null;
-          res.status(200).json(req.session.apiResponse);
+          console.log("Supposedly visitor session here", req.session);
+          res.status(200).json(apiResponse);
         } else {
           return db.message
             .create({
@@ -194,12 +224,19 @@ const openaiRouter = (db: any): any => {
                   ],
                 })
                 .then((response: any) => {
-                  req.session.apiResponse = {
-                    ...req.session.apiResponse,
+                  // update registered user's prompt to train the AI for responses
+                  // updatePrompt(
+                  //   req.session.promptHistory,
+                  //   req.session.respondedText,
+                  //   req.session.respondedSentiment
+                  // );
+                  apiResponse = {
+                    ...apiResponse,
                     convoID: req.session.convoID,
                     chatHistory: response,
                   };
-                  res.status(200).json(req.session.apiResponse);
+                  console.log("I am at the very bottom here.", req.session);
+                  res.status(200).json(apiResponse);
                 });
             });
         }

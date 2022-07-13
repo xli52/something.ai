@@ -22,6 +22,10 @@ app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+app.get("/", (req: any, res: any) => {
+  console.log("Checking user session", req.session);
+  res.status(200);
+});
 app.use("/api/openai", openaiRouter(db));
 app.use("/user", userRouter(db));
 
