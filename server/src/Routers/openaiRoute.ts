@@ -129,19 +129,29 @@ const openaiRouter = (db: any): any => {
           response[0].documentSentiment.score
         );
 
-        let prompt: any = !req.session.promptHistory
-          ? chatPrompt(
-              req.session.requestedText,
-              req.session.requestedSentiment
-            )
-          : chatPrompt(
-              req.session.requestedText,
-              req.session.requestedSentiment,
-              req.session.promptHistory
-            );
-
-        req.session.promptHistory = prompt.prompt;
-
+        let prompt: any;
+        // visitor will get a none saved prompt every time
+        if (req.session.visitorID) {
+          prompt = chatPrompt(
+            req.session.requestedText,
+            req.session.requestedSentiment
+          );
+        }
+        // reigstered user will get a history of the prompt to keep the dialogue flow between ai
+        if (req.session.userID) {
+          prompt = !req.session.promptHistory
+            ? chatPrompt(
+                req.session.requestedText,
+                req.session.requestedSentiment
+              )
+            : chatPrompt(
+                req.session.requestedText,
+                req.session.requestedSentiment,
+                req.session.promptHistory
+              );
+          req.session.promptHistory = prompt.prompt;
+        }
+        console.log("Current Prompt", prompt.prompt);
         console.log("Prompt history: ", req.session.promptHistory);
 
         // then, send off the text to openai
@@ -197,11 +207,13 @@ const openaiRouter = (db: any): any => {
         };
 
         // update req.session.promptHistory, so that gpt-3 will have history and can recall if we ask the same question
-        req.session.promptHistory = updatePrompt(
-          req.session.promptHistory,
-          req.session.respondedText,
-          req.session.respondedSentiment
-        );
+        if (req.session.userID) {
+          req.session.promptHistory = updatePrompt(
+            req.session.promptHistory,
+            req.session.respondedText,
+            req.session.respondedSentiment
+          );
+        }
 
         // clear any speech to text record
         req.session.recognizedText = null;
