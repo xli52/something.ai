@@ -1,0 +1,96 @@
+.setupMainBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+
+  height: 100vh;
+  width: 100vw;
+  margin: auto;
+
+  .mdSetup {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+
+    .leftArrow,
+    .rightArrow {
+      cursor: pointer;
+      font-size: 5em;
+      color: #a4a4a4;
+    }
+  }
+
+  .setupBox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 10vh;
+    margin: 4em;
+    background-color: rgba(148, 148, 148, 0.5);
+    border-radius: 23px;
+    // move the box to the front //
+    position: fixed;
+    bottom: 0%;
+    z-index: 88;
+
+    .btn {
+      font-size: 1.1em;
+      font-weight: bolder;
+      padding: 0.7em 1.5em;
+
+      width: 30%;
+      color: white;
+      background: #d5a7fb;
+      border-radius: 3em;
+      border: none;
+      transition: 0.5s;
+
+      &:hover {
+        background-color: #be6cff;
+        box-shadow: 12px 0px 41px 4px rgba(101, 49, 142, 0.25);
+        color: #ffffff;
+      }
+    }
+  }
+
+  .circleBtn {
+    cursor: pointer;
+    height: 5em;
+    width: 5em;
+    border: none;
+    border-radius: 50%;
+    margin: 0 5em;
+    transition: 0.5s;
+
+    &:hover {
+      box-shadow: 12px 0px 41px 4px rgba(101, 49, 142, 0.25);
+    }
+  }
+}
+
+.bg1 {
+  background: linear-gradient(104deg, #ffffff 28.72%, #daabff7d 101.32%);
+}
+
+.bg2 {
+  background: linear-gradient(230.22deg, #daa9ff 28.72%, #34184a 101.32%);
+}
+
+.bg3 {
+  background: linear-gradient(230.22deg, #9e8cac 28.72%, #21132c 101.32%);
+}
+
+.img1 {
+  background: url("../../../public/images/female.png") no-repeat center center;
+  background-size: 6em 6em;
+}
+
+.arrow {
+  color: black;
+  height: 2em;
+  width: 2em;
+}
