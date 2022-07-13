@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "./node_modules/.bin/nodemon -L ./src/index.ts",
-    "start": "./node_modules/.bin/nodemon -L ./src/build/index.js"
+    "start": "./node_modules/.bin/nodemon -L ./src/build/index.js",
+    "db:reset": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seeds:all"
   },
   "keywords": [],
   "author": "",
