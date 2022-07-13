@@ -141,8 +141,21 @@ const openaiRouter = (db) => {
                 })
                     .then((response) => {
                     console.log("AI message written to db", response);
-                    req.session.apiResponse = Object.assign(Object.assign({}, req.session.apiResponse), { convoID: req.session.convoID });
-                    res.status(200).json(req.session.apiResponse);
+                    console.log("Retrieving chat history...");
+                    db.message
+                        .findAll({
+                        include: [
+                            {
+                                model: db.conversation,
+                                where: { user_id: req.session.userID },
+                                required: true,
+                            },
+                        ],
+                    })
+                        .then((response) => {
+                        req.session.apiResponse = Object.assign(Object.assign({}, req.session.apiResponse), { convoID: req.session.convoID, chatHistory: response });
+                        res.status(200).json(req.session.apiResponse);
+                    });
                 });
             }
         });

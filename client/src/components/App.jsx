@@ -6,6 +6,8 @@ import Home from "./Home";
 import Setup from "./Setup";
 import Login from "./Login";
 import SignUp from "./Signup";
+import ChatBox from "./Chat/ChatBox";
+import UserLogin from "./Login/UserLogin";
 
 const HOME = "HOME";
 const CHAT = "CHAT";
@@ -18,7 +20,9 @@ function App() {
 
   return (
     <>
-      <Nav
+      <ChatBox />
+      <UserLogin />
+      {/* <Nav
         setPage={setPage}
         setLogInShow={setLogInShow}
         setSignUpShow={setSignUpShow}
@@ -30,7 +34,7 @@ function App() {
         {page === HOME && <Home setPage={setPage} />}
         {page === CHAT && <Chat />}
         {page === SETUP && <Setup />}
-      </main>
+      </main> */}
     </>
   );
 }
