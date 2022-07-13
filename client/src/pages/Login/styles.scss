@@ -1,4 +1,4 @@
-.signuppopModal {
+.popModal {
   position: absolute;
   display: flex;
   justify-content: center;
@@ -10,15 +10,16 @@
   z-index: 97;
 
   .close {
+    cursor: pointer;
     color: white;
     height: 2em;
     align-self: end;
     margin: 1em;
     transition: 0.3s;
-  }
-
-  .close:hover {
-    color: #8d2add;
+    
+    &:hover {
+      color: #8d2add;
+    }
   }
 
   h2 {
@@ -33,7 +34,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    height: 70vh;
+    height: 50vh;
     width: 40vw;
     max-width: 600px;
     border-radius: 1em;
@@ -48,6 +49,7 @@
     }
 
     .btn {
+      cursor: pointer;
       font-size: 1.1em;
       font-weight: bolder;
       color: white;
@@ -58,12 +60,13 @@
       border: none;
       border-radius: 3em;
       transition: 0.3s;
+
+      &:hover {
+        background-color: #be6cff;
+        color: #ffffff;
+      }
     }
 
-    .btn:hover {
-      background-color: #be6cff;
-      color: #ffffff;
-    }
   }
 }
 

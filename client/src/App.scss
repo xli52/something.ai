@@ -14,7 +14,7 @@ body {
 header {
   position: fixed;
   width: 100%;
-  z-index: 80;
+  z-index: 999;
 
   .container {
     width: 90%;
@@ -27,6 +27,7 @@ header {
     .logo {
       display: flex;
       flex-direction: column;
+      cursor: pointer;
 
       .main {
         margin: 0;
@@ -46,6 +47,7 @@ header {
 
     nav {
       .btn {
+        cursor: pointer;
         font-size: 1.1em;
         font-weight: bolder;
         padding: 0.7em 1.5em;
@@ -55,15 +57,15 @@ header {
         border-radius: 3em;
         border: none;
         transition: 0.5s;
+
+        &:hover {
+          background-color: #d5a7fb;
+          color: #ffffff;
+        }
       }
 
       .btn2 {
         background: rgba(101, 49, 142, 0.25);
-      }
-
-      .btn:hover {
-        background-color: #d5a7fb;
-        color: #ffffff;
       }
     }
   }

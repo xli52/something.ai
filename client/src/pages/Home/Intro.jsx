@@ -1,8 +1,9 @@
 import React from "react";
-
-const SETUP = "SETUP";
+import useNavigation from "../../hooks/useNavigation";
 
 export default function Intro(props) {
+  const { setupPage } = useNavigation();
+
   return (
     <div className="introBody">
       <h1 className="center">What to chat ?</h1>
@@ -14,11 +15,9 @@ export default function Intro(props) {
       <h2 className="center">No worry, We get it !</h2>
       <button
         className="btn"
-        onClick={() => {
-          props.setPage(SETUP);
-        }}
+        onClick={setupPage}
       >
-        Let's have a talk
+        Let's Chat
       </button>
     </div>
   );

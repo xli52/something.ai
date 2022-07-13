@@ -1,7 +1,7 @@
 import React, { useState, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import Character from '../Character';
+import Character from '../../components/Character';
 import getCharacterList from '../../helpers/getCharacterList';
 // import { PerspectiveCamera } from "three";
 

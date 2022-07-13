@@ -17,6 +17,7 @@
 
     .leftArrow,
     .rightArrow {
+      cursor: pointer;
       font-size: 5em;
       color: #a4a4a4;
     }
@@ -47,26 +48,27 @@
       border-radius: 3em;
       border: none;
       transition: 0.5s;
-    }
 
-    .btn:hover {
-      background-color: #be6cff;
-      box-shadow: 12px 0px 41px 4px rgba(101, 49, 142, 0.25);
-      color: #ffffff;
+      &:hover {
+        background-color: #be6cff;
+        box-shadow: 12px 0px 41px 4px rgba(101, 49, 142, 0.25);
+        color: #ffffff;
+      }
     }
   }
 
   .circleBtn {
+    cursor: pointer;
     height: 5em;
     width: 5em;
     border: none;
     border-radius: 50%;
     margin: 0 5em;
     transition: 0.5s;
-  }
 
-  .circleBtn:hover {
-    box-shadow: 12px 0px 41px 4px rgba(101, 49, 142, 0.25);
+    &:hover {
+      box-shadow: 12px 0px 41px 4px rgba(101, 49, 142, 0.25);
+    }
   }
 }
 

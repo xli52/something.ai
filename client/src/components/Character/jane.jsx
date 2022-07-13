@@ -16,7 +16,7 @@ export default function Character({ action, position }) {
   useEffect(() => {
     if (prevAction) {
       actions[prevAction].fadeOut(0.5);
-      actions[prevAction].stop();
+      actions[action].stop();
     }
     actions[action].play();
     actions[action].fadeIn(0.5);

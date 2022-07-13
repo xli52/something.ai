@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
-import Character from "../Character";
+import { PresentationControls } from "@react-three/drei";
+import Character from "../../components/Character";
 
 export default function ModelDisplay({ character }) {
   return (
@@ -12,9 +12,9 @@ export default function ModelDisplay({ character }) {
         near: 0.01,
         far: 1000,
         position: [0, 0, 20],
-        zoom: 4,
+        zoom: 5,
       }}
-      style={{ width: "70%", height: "100%" }}
+      style={{ width: "60%", height: "100%" }}
     >
       <ambientLight intensity={1.25} />
       <directionalLight intensity={0.4} />
@@ -25,7 +25,7 @@ export default function ModelDisplay({ character }) {
           action={character.greetingAction}
         />
       </Suspense>
-      <OrbitControls />
+      <PresentationControls global />
     </Canvas>
   );
 }

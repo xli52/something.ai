@@ -1,6 +1,6 @@
 import React from "react";
-import Jane from "./jane";
-import Joshua from "./joshua";
+import Jane from "./Jane";
+import Joshua from "./Joshua";
 
 export default function Character({ name, position, action }) {
   return (
