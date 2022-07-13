@@ -22,14 +22,7 @@ interface IOpenaiPrompt {
   stop?: string[];
 }
 
-// normal chat mode prompt
-const chatPrompt = (
-  text: string,
-  sentiment: string = "neutral"
-): IOpenaiPrompt => {
-  return {
-    model: "text-davinci-002",
-    prompt: `The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly. The human is talking with sentiment. The AI assistant's response should synchronize with a corresponding sentiment.
+const standardPrompt = `The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly. The human is talking with sentiment. The AI assistant's response should synchronize with a corresponding sentiment.
     ###
     Write a long response based on the following conversation history.
     Below is the conversation history between the AI assistant and the human and the conversation is still on going. The AI assistant remembers all the history with the human.
@@ -41,10 +34,19 @@ const chatPrompt = (
     AI: I am happy for you! You should tell your family and friends about it. Dining out at a nice restaurant with your family tonight would be a great choice for celebration. Or, maybe you can consider to hold a house party to share your happiness with them. AI_Sentiment: postive
 
     Human: I feel sad now because I failed my exam. What should I do? Human_Sentiment: negative
-    AI: I am sorry to hear that. I would suggest you to first find out why you did not pass the exam. After figuring out the reasons, then you improve yourself based on your findings. AI_Sentiment: negative
+    AI: I am sorry to hear that. I would suggest you to first find out why you did not pass the exam. After figuring out the reasons, then you improve yourself based on your findings. AI_Sentiment: negative`;
 
+// normal chat mode prompt
+const chatPrompt = (
+  text: string,
+  sentiment: string = "neutral",
+  prompt: string = standardPrompt
+): IOpenaiPrompt => {
+  return {
+    model: "text-davinci-002",
+    prompt: `${prompt}
     Human: ${generatePrompt(text)} Human_Sentiment: ${sentiment}
-    AI:`,
+    AI: `,
     temperature: 0.9,
     max_tokens: 2000,
     top_p: 1,
@@ -56,8 +58,9 @@ const updatePrompt = (
   currPrompt: string,
   AI: string,
   AI_Sentiment: string
-): void => {
-  currPrompt += `${AI} AI_Sentiment: ${AI_Sentiment}\n\nHuman: `;
+): string => {
+  console.log("current Prompt History is: ", currPrompt);
+  return `${currPrompt} ${AI} AI_Sentiment: ${AI_Sentiment}\n\n`;
 };
 
 export { openai, chatPrompt, updatePrompt };

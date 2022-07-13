@@ -20,7 +20,6 @@ const userRouter = (db) => {
                 return res.send("Invalid email or password.");
             }
             req.session.userID = response.dataValues.id;
-            req.session.visitorID = null;
             res.status(200).json({ userID: req.session.userID });
         })
             .catch((err) => console.error(err));
@@ -30,6 +29,7 @@ const userRouter = (db) => {
         console.log("Current user session: ", req.session);
         req.session = null;
         console.log("Confirm user session is empty: ", req.session);
+        // maybe can run a delete audio file command upon logout
         res.status(200).send("You have already logged out! See you!");
     });
     router.post("/register", (req, res) => {

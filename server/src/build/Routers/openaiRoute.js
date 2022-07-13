@@ -38,7 +38,9 @@ const openaiRouter = (db) => {
     // Text to Speech Route
     ////////////////////////////////
     router.post("/textToSpeech", (req, res) => {
+        console.log("Session before clean up: ", req.session);
         (0, helpers_1.cleanup)(req.session);
+        console.log("Session after clean up: ", req.session);
         console.log("TextToSpeech endpoint received request");
         console.log("req.session.recognizedText: ", req.session.recognizedText);
         console.log("Current user session: ", req.session.userID, req.session.visitorID);
@@ -48,10 +50,12 @@ const openaiRouter = (db) => {
             : req.body.input;
         // to make sure if the text is from registered user or visitor. If it is a visitor, then provide a visitorID
         if (!req.session.userID && !req.session.visitorID) {
+            console.log("Initializing visitor ID...");
             req.session.visitorID = (0, helpers_1.randomID)();
         }
         // to check if this is a new conversation for a user. If so, write to db to create a new conversation
         if (req.session.userID && !req.session.convoID) {
+            console.log("user session exists but does not have convoID. Creating conversation now.");
             db.conversation
                 .create({
                 user_id: req.session.userID,
@@ -70,11 +74,13 @@ const openaiRouter = (db) => {
                     from_bot: false,
                     createdAt: new Date(),
                 })
+                    .then((response) => console.log("User input has been written to db"))
                     .catch((err) => console.error(err));
             });
         }
         // when both userID and convoID exists, directly write to db.message
         if (req.session.userID && req.session.convoID) {
+            console.log("Both user session and convoID exist. Writing user input now.");
             db.message
                 .create({
                 content: req.session.requestedText,
@@ -82,14 +88,20 @@ const openaiRouter = (db) => {
                 from_bot: false,
                 createdAt: new Date(),
             })
+                .then((response) => console.log("User input has been written to db"))
                 .catch((err) => console.error(err));
         }
+        console.log("Proceeding to GoogleNLA...");
         // first send the text off to Google NLA
         return (0, gNLA_1.GoogleNLA)(req.session.requestedText)
             .then((response) => {
             req.session.requestedSentiment = (0, gNLA_1.checkSentiment)(response[0].documentSentiment.score);
             console.log("Google NLA says the speaker's sentiment is ", req.session.requestedSentiment, response[0].documentSentiment.score);
-            let prompt = (0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment);
+            let prompt = !req.session.promptHistory
+                ? (0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment)
+                : (0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment, req.session.promptHistory);
+            req.session.promptHistory = prompt.prompt;
+            console.log("Prompt history: ", req.session.promptHistory);
             // then, send off the text to openai
             return openai_1.openai.createCompletion(prompt);
         })
@@ -106,7 +118,10 @@ const openaiRouter = (db) => {
             .then((response) => {
             req.session.respondedSentiment = (0, gNLA_1.checkSentiment)(response[0].documentSentiment.score);
             console.log("responded sentiment is", req.session.respondedSentiment, response[0].documentSentiment.score);
-            return (0, gTTS_1.GoogleTTS)(req.session.respondedText);
+            // choose voice based on character gender. FEMALE voice is used by default.
+            return req.body.gender
+                ? (0, gTTS_1.GoogleTTS)(req.session.respondedText, req.body.gender)
+                : (0, gTTS_1.GoogleTTS)(req.session.respondedText);
         })
             .then(([response]) => {
             // Base64 encoding is done, time to write file
@@ -116,20 +131,23 @@ const openaiRouter = (db) => {
         })
             .then(() => {
             // this is will send response back to frontend, which react will update it's dom to retrieve new audio file and initiate character animation
-            req.session.apiResponse = {
+            console.log("preparing data for front-end");
+            let apiResponse = {
+                userID: req.session.userID,
                 audioID: req.session.audioID,
                 requestedText: req.session.requestedText,
                 aiSentiment: req.session.respondedSentiment,
                 aiText: req.session.respondedText,
             };
+            // update req.session.promptHistory, so that gpt-3 will have history and can recall if we ask the same question
+            req.session.promptHistory = (0, openai_1.updatePrompt)(req.session.promptHistory, req.session.respondedText, req.session.respondedSentiment);
             // clear any speech to text record
             req.session.recognizedText = null;
+            console.log("Session before sending off response to front-end: ", req.session);
             // if it is a visitor, no need to write to db. However, if it is a user, write to db
             if (req.session.visitorID) {
-                // clean up api related data
-                // cleanup(req.session);
-                req.session.recognizedText = null;
-                res.status(200).json(req.session.apiResponse);
+                console.log("Supposedly visitor session here", req.session);
+                res.status(200).json(apiResponse);
             }
             else {
                 return db.message
@@ -153,8 +171,9 @@ const openaiRouter = (db) => {
                         ],
                     })
                         .then((response) => {
-                        req.session.apiResponse = Object.assign(Object.assign({}, req.session.apiResponse), { convoID: req.session.convoID, chatHistory: response });
-                        res.status(200).json(req.session.apiResponse);
+                        apiResponse = Object.assign(Object.assign({}, apiResponse), { convoID: req.session.convoID, chatHistory: response });
+                        console.log("I am at the very bottom here.", req.session);
+                        res.status(200).json(apiResponse);
                     });
                 });
             }

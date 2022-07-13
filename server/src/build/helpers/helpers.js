@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.randomID = exports.writeFile = exports.cleanup = void 0;
+// general helper functions here
 const fs_1 = __importDefault(require("fs"));
 const util_1 = __importDefault(require("util"));
 // a function to write audio files (base64 encoded string will be sent from Google TTS api)

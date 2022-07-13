@@ -129,14 +129,20 @@ const openaiRouter = (db: any): any => {
           response[0].documentSentiment.score
         );
 
-        let prompt = chatPrompt(
-          req.session.requestedText,
-          req.session.requestedSentiment
-        );
+        let prompt: any = !req.session.promptHistory
+          ? chatPrompt(
+              req.session.requestedText,
+              req.session.requestedSentiment
+            )
+          : chatPrompt(
+              req.session.requestedText,
+              req.session.requestedSentiment,
+              req.session.promptHistory
+            );
 
-        // req.session.promptHistory = prompt.prompt;
+        req.session.promptHistory = prompt.prompt;
 
-        // console.log("Prompt history: ", req.session.promptHistory);
+        console.log("Prompt history: ", req.session.promptHistory);
 
         // then, send off the text to openai
         return openai.createCompletion(prompt);
@@ -190,6 +196,13 @@ const openaiRouter = (db: any): any => {
           aiText: req.session.respondedText,
         };
 
+        // update req.session.promptHistory, so that gpt-3 will have history and can recall if we ask the same question
+        req.session.promptHistory = updatePrompt(
+          req.session.promptHistory,
+          req.session.respondedText,
+          req.session.respondedSentiment
+        );
+
         // clear any speech to text record
         req.session.recognizedText = null;
 
@@ -224,12 +237,6 @@ const openaiRouter = (db: any): any => {
                   ],
                 })
                 .then((response: any) => {
-                  // update registered user's prompt to train the AI for responses
-                  // updatePrompt(
-                  //   req.session.promptHistory,
-                  //   req.session.respondedText,
-                  //   req.session.respondedSentiment
-                  // );
                   apiResponse = {
                     ...apiResponse,
                     convoID: req.session.convoID,

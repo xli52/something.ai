@@ -21,6 +21,10 @@ app.use((0, cookie_session_1.default)({
 app.use((0, morgan_1.default)("dev"));
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use(express_1.default.json());
+app.get("/", (req, res) => {
+    console.log("Checking user session", req.session);
+    res.status(200);
+});
 app.use("/api/openai", (0, openaiRoute_1.default)(models_1.default));
 app.use("/user", (0, userRoute_1.default)(models_1.default));
 app.use(express_1.default.static("./src/audio"));
