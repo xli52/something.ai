@@ -19,8 +19,13 @@ const userRouter = (db) => {
             if (!bcryptjs_1.default.compareSync(req.body.password, response.dataValues.password)) {
                 return res.send("Invalid email or password.");
             }
-            req.session.userID = response.dataValues.id;
-            res.status(200).json({ userID: req.session.userID });
+            if (req.session.visitorID) {
+                delete req.session.visitorID;
+            }
+            req.session.userID = response.id;
+            res
+                .status(200)
+                .json({ userID: req.session.userID, username: response.username });
         })
             .catch((err) => console.error(err));
     });

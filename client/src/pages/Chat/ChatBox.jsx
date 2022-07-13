@@ -33,6 +33,7 @@ export default function ChatBox(props) {
           type="text"
           name="input"
           placeholder="Ask me a question"
+          required
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />

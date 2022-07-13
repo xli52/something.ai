@@ -19,8 +19,15 @@ const userRouter = (db: any): any => {
         ) {
           return res.send("Invalid email or password.");
         }
-        req.session.userID = response.dataValues.id;
-        res.status(200).json({ userID: req.session.userID });
+
+        if (req.session.visitorID) {
+          delete req.session.visitorID;
+        }
+
+        req.session.userID = response.id;
+        res
+          .status(200)
+          .json({ userID: req.session.userID, username: response.username });
       })
       .catch((err: any) => console.error(err));
   });

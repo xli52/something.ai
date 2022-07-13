@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import "./styles.scss";
-import Nav from '../../components/Nav';
+import Nav from "../../components/Nav";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import useNavigation from "../../hooks/useNavigation";
+import axios from "axios";
 
 export default function Login(props) {
   const [login, setLogin] = useState({ email: "", password: "" });
@@ -23,7 +24,15 @@ export default function Login(props) {
   const submitLogin = function (e) {
     e.preventDefault();
     console.log(login);
-    setLogin({ email: "", password: "" });
+    return axios({
+      method: "POST",
+      url: "/user/login",
+      data: { ...login },
+      contentType: { "Content-Type": "application/json" },
+    }).then((res) => {
+      console.log("Login status: ", res);
+      setLogin({ email: "", password: "" });
+    });
   };
 
   // for logout /user/logout
