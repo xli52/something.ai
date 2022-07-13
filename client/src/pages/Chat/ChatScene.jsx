@@ -1,20 +1,11 @@
 import React, { useState, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { PresentationControls } from '@react-three/drei';
 import Character from '../../components/Character';
 import getCharacterList from '../../helpers/getCharacterList';
-// import { PerspectiveCamera } from "three";
 
 export default function ChatScene(props) {
-  // function CameraHelper() {
-  //   const camera = new PerspectiveCamera(20, 1, 0.01, 5);
-  //   return (
-  //     <group position={[0, 0, 3.5]}>
-  //       <cameraHelper args={[camera]} />
-  //     </group>
-  //   );
-  // }
-  const [character, setCharacter] = useState(getCharacterList().jane);
+  const [character] = useState(getCharacterList().jane);
   const [action, setAction] = useState(character.greetingAction);
 
   return (
@@ -26,14 +17,14 @@ export default function ChatScene(props) {
       >
         <ambientLight intensity={1.25} />
         <Suspense fallback={null}>
-          <Character
-            name={character.name}
-            position={{ x: 0, y: character.chatPageY, z: 0 }}
-            action={action}
-          />
+          <PresentationControls global snap >
+            <Character
+              name={character.name}
+              position={{ x: 0, y: character.chatPageY, z: 0 }}
+              action={action}
+            />
+          </PresentationControls>
         </Suspense>
-        <OrbitControls />
-        {/* <CameraHelper /> */}
       </Canvas>
       <button onClick={() => { setAction('Waving') }}>Wave</button>
       <button onClick={() => { setAction('StandingIdle') }}>StandingIdle</button>
