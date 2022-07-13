@@ -8,7 +8,7 @@ import LoginModal from "./LoginModal";
 export default function Login(props) {
   return (
     <main>
-      <Nav loginBtn={false} signupBtn />
+      {/* <Nav loginBtn={false} signupBtn /> */}
       <LoginModal showLogin={true} showCloseBtn={false} />
     </main>
   );

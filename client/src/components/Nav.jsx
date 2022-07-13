@@ -1,5 +1,6 @@
 import React from "react";
 import useNavigation from "../hooks/useNavigation";
+import { useLocation } from "react-router-dom";
 
 export default function Nav({
   loginBtn,
@@ -10,6 +11,8 @@ export default function Nav({
 }) {
   const { homePage, loginPage, signupPage } = useNavigation();
 
+  const { pathname } = useLocation();
+
   return (
     <header>
       <div className="container">
@@ -18,25 +21,26 @@ export default function Nav({
           <span className="sub">.AI</span>
         </div>
         <nav>
-          {loginBtn && (
-            <button
-              className="btn"
-              onClick={() => {
-                setShowLogin(true);
-              }}
-            >
-              Login
-            </button>
-          )}
-          {signupBtn && (
-            <button
-              className="btn btn2"
-              onClick={() => {
-                setShowSignUp(true);
-              }}
-            >
-              Sign Up
-            </button>
+          {pathname !== "/login" && pathname !== "/signup" && (
+            <>
+              <button
+                className="btn"
+                onClick={() => {
+                  setShowLogin(true);
+                }}
+              >
+                Login
+              </button>
+
+              <button
+                className="btn btn2"
+                onClick={() => {
+                  setShowSignUp(true);
+                }}
+              >
+                Sign Up
+              </button>
+            </>
           )}
         </nav>
       </div>
