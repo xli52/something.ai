@@ -9,10 +9,10 @@ export default function Nav({ setShowLogin, setShowSignUp, loggedUser }) {
 
   // It only happened once, need to make it call everytime path change
   useEffect(() => {
-    checkPath();
+    buttonCheck();
   }, [pathname, loggedUser]);
 
-  const checkPath = () => {
+  const buttonCheck = () => {
     if (pathname === "/login" || pathname === "/signup") {
       setShowComp(false);
     } else if (loggedUser) {
@@ -21,8 +21,6 @@ export default function Nav({ setShowLogin, setShowSignUp, loggedUser }) {
       setShowComp(true);
     }
   };
-
-  // console.log(loggedUser);
 
   return (
     <header>
