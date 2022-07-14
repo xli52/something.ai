@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 export default function SignUpModal(props) {
   const [msg, setMsg] = useState();
@@ -35,13 +36,23 @@ export default function SignUpModal(props) {
   const submitSignUp = function (e) {
     e.preventDefault();
     if (!passwordCheck(signUp, confirmPass)) {
-      return setMsg("Password and confirm password not same!");
+      return alert("Password not same!!");
     }
     console.log(signUp);
-    setSignUp({
-      username: "",
-      email: "",
-      password: "",
+
+    return axios({
+      method: "POST",
+      url: "/user/register",
+      data: { ...signUp },
+      contentType: "application/json",
+    }).then((res) => {
+      console.log("Registration status: ", res);
+      setSignUp({
+        username: "",
+        email: "",
+        password: "",
+      });
+      setConfirmPass("");
     });
   };
 
@@ -103,7 +114,7 @@ export default function SignUpModal(props) {
           value={signUp["password"]}
           onChange={handleChange}
           required
-          minLength={5}
+          minLength={3}
         />
 
         <input
@@ -115,7 +126,7 @@ export default function SignUpModal(props) {
             setConfirmPass(e.target.value);
           }}
           required
-          minLength={5}
+          minLength={3}
         />
         <button className="btn" type="submit">
           Sign up

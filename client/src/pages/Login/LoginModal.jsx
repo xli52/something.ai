@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import useNavigation from "../../hooks/useNavigation";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 export default function LoginModal(props) {
   const [login, setLogin] = useState({ email: "", password: "" });
@@ -19,7 +20,15 @@ export default function LoginModal(props) {
   const submitLogin = function (e) {
     e.preventDefault();
     console.log(login);
-    setLogin({ email: "", password: "" });
+    return axios({
+      method: "POST",
+      url: "/user/login",
+      data: { ...login },
+      contentType: { "Content-Type": "application/json" },
+    }).then((res) => {
+      console.log("Login status: ", res);
+      setLogin({ email: "", password: "" });
+    });
   };
 
   // Get path name
@@ -74,7 +83,7 @@ export default function LoginModal(props) {
           value={login["password"]}
           onChange={handleChange}
           required
-          minLength={5}
+          minLength={3}
         />
         <button className="btn" type="submit">
           Login
