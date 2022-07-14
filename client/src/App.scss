@@ -14,7 +14,8 @@ body {
 header {
   position: fixed;
   width: 100%;
-  z-index: 999;
+  // from 999 to 80 to avoid click when modal show
+  z-index: 80;
 
   .container {
     width: 90%;

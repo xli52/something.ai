@@ -12,7 +12,7 @@ export default function ModelDisplay({ character }) {
         near: 0.01,
         far: 1000,
         position: [0, 0, 20],
-        zoom: 5,
+        zoom: 3,
       }}
       style={{ width: "60%", height: "100%" }}
     >
