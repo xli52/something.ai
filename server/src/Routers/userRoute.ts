@@ -1,5 +1,6 @@
 import express from "express";
 import bcrypt from "bcryptjs";
+import { Op } from "sequelize";
 const router = express.Router();
 
 const userRouter = (db: any): any => {
@@ -47,25 +48,36 @@ const userRouter = (db: any): any => {
     const password = bcrypt.hashSync(req.body.password, salt);
 
     db.user
-      .findOne({ where: { email: req.body.email } })
+      .findAll({
+        where: {
+          [Op.or]: [{ email: req.body.email }, { username: req.body.username }],
+        },
+      })
       .then((response: any) => {
         console.log("Search completed, response is: ");
         console.log(response);
         if (response) {
-          return res.send("User already exists.");
+          return res.send(
+            "Either username or email has already been used, please input a new one."
+          );
+        } else {
+          return db.user
+            .create({
+              username: req.body.username,
+              password,
+              email: req.body.email,
+              createAt: new Date(),
+              updatedAt: new Date(),
+            })
+            .then((response: any) => {
+              console.log("Created user: " + response.id);
+              req.session.userID = response.id;
+              res.json({
+                userID: req.session.userID,
+                username: response.username,
+              });
+            });
         }
-        return db.user.create({
-          username: req.body.username,
-          password,
-          email: req.body.email,
-          createAt: new Date(),
-          updatedAt: new Date(),
-        });
-      })
-      .then((response: any) => {
-        console.log("Created user: " + response.id);
-        req.session.userID = response.id;
-        res.json({ userID: req.session.userID, username: response.username });
       })
       .catch((err: any) => console.error(err));
   });

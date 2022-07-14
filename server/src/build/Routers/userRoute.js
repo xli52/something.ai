@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const sequelize_1 = require("sequelize");
 const router = express_1.default.Router();
 const userRouter = (db) => {
     router.post("/login", (req, res) => {
@@ -42,25 +43,35 @@ const userRouter = (db) => {
         const salt = bcryptjs_1.default.genSaltSync(10);
         const password = bcryptjs_1.default.hashSync(req.body.password, salt);
         db.user
-            .findOne({ where: { email: req.body.email } })
+            .findAll({
+            where: {
+                [sequelize_1.Op.or]: [{ email: req.body.email }, { username: req.body.username }],
+            },
+        })
             .then((response) => {
             console.log("Search completed, response is: ");
             console.log(response);
             if (response) {
-                return res.send("User already exists.");
+                return res.send("Either username or email has already been used, please input a new one.");
             }
-            return db.user.create({
-                username: req.body.username,
-                password,
-                email: req.body.email,
-                createAt: new Date(),
-                updatedAt: new Date(),
-            });
-        })
-            .then((response) => {
-            console.log("Created user: " + response.id);
-            req.session.userID = response.id;
-            res.json({ userID: req.session.userID, username: response.username });
+            else {
+                return db.user
+                    .create({
+                    username: req.body.username,
+                    password,
+                    email: req.body.email,
+                    createAt: new Date(),
+                    updatedAt: new Date(),
+                })
+                    .then((response) => {
+                    console.log("Created user: " + response.id);
+                    req.session.userID = response.id;
+                    res.json({
+                        userID: req.session.userID,
+                        username: response.username,
+                    });
+                });
+            }
         })
             .catch((err) => console.error(err));
     });
