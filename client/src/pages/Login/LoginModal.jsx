@@ -2,13 +2,10 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import useNavigation from "../../hooks/useNavigation";
+import { useLocation } from "react-router-dom";
 
 export default function LoginModal(props) {
   const [login, setLogin] = useState({ email: "", password: "" });
-
-  let modalClass = `popModal ${props.showLogin ? "show" : "noShow"}`;
-
-  const { homePage } = useNavigation();
 
   // Use handleChange Function to onChange the setLogin
   const handleChange = function (e) {
@@ -24,6 +21,19 @@ export default function LoginModal(props) {
     console.log(login);
     setLogin({ email: "", password: "" });
   };
+
+  const { pathname } = useLocation();
+
+  const checkPath = () => {
+    if (pathname === "/login" || pathname == "/signup") {
+      return false;
+    }
+    return true;
+  };
+
+  let modalClass = `popModal ${props.showLogin ? "show" : "noShow"} ${
+    checkPath() ? "" : "bottom"
+  }`;
 
   return (
     <div className={modalClass}>

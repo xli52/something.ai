@@ -5,7 +5,6 @@ import { useLocation } from "react-router-dom";
 export default function Nav({
   loginBtn,
   signupBtn,
-
   setShowLogin,
   setShowSignUp,
 }) {

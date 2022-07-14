@@ -2,9 +2,21 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import useNavigation from "../../hooks/useNavigation";
+import { useLocation } from "react-router-dom";
 
 export default function SignUpModal(props) {
-  let modalClass = `signuppopModal ${props.showSignUp ? "show" : "noShow"}`;
+  const { pathname } = useLocation();
+
+  const checkPath = () => {
+    if (pathname === "/login" || pathname == "/signup") {
+      return false;
+    }
+    return true;
+  };
+
+  let modalClass = `signuppopModal ${props.showSignUp ? "show" : "noShow"} ${
+    checkPath() ? "" : "bottom"
+  }`;
 
   const [confirmPass, setConfirmPass] = useState("");
   const [signUp, setSignUp] = useState({
