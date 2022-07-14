@@ -13,13 +13,6 @@ export default function Setup() {
   const { character, nextChar, lastChar } = useCharacter();
   const mainBodyClass = `setupMainBody ${bgColor}`;
 
-  ////////////////////////
-  /// we can create a function inside the ModelDisplay component
-  /// use e.detail to get double click count
-  /// then pass data to chat page
-  /// so chat page know which chara and bgcolor user choice
-  //////////
-
   return (
     <main>
       {/* <Nav loginBtn={false} signupBtn={false} /> */}
@@ -38,6 +31,7 @@ export default function Setup() {
           />
         </div>
         <SetupBox setBgColor={setBgColor} />
+        <button>CHAT</button>
       </div>
     </main>
   );

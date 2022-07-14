@@ -53,7 +53,7 @@ export default function SignUpModal(props) {
     }).then((res) => {
       console.log("Registration status: ", res);
       if (!res.data.username) {
-        return setMsg("You already signed up!");
+        return setMsg(res.data);
       }
       props.setLoggedUser(res.data.username);
       setSignUp({
