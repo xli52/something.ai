@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatePrompt = exports.chatPrompt = exports.openai = void 0;
+exports.standardPrompt = exports.updatePrompt = exports.chatPrompt = exports.openai = void 0;
 const openai_1 = require("openai");
 const configuration = new openai_1.Configuration({
     apiKey: process.env.OPENAI_API_KEY,
@@ -10,6 +10,8 @@ exports.openai = openai;
 //helper function to trim input received from client side
 // need to return a more precised prompt
 function generatePrompt(input) {
+    if (!input)
+        "";
     const capitalizedInput = input[0].toUpperCase() + input.slice(1).toLowerCase();
     return capitalizedInput;
 }
@@ -21,11 +23,13 @@ const standardPrompt = `The following is a conversation with an AI assistant. Th
     Human: Hello, who are you? Human_Sentiment: neutral
     AI: I am great, thank you. My name is gpt-3 and I am an AI created by OpenAI. How can I help you today? AI_Sentiment: neutral
     
+    Human: I feel sad now because I failed my exam. What should I do? Human_Sentiment: negative
+    AI: I am sorry to hear that. I would suggest you to first find out why you did not pass the exam. After figuring out the reasons, then you improve yourself based on your findings. AI_Sentiment: negative
+    
     Human: I am feeling greate today because I won a very important match. How should I celebrate? Human_Sentiment: positive
     AI: I am happy for you! You should tell your family and friends about it. Dining out at a nice restaurant with your family tonight would be a great choice for celebration. Or, maybe you can consider to hold a house party to share your happiness with them. AI_Sentiment: postive
-
-    Human: I feel sad now because I failed my exam. What should I do? Human_Sentiment: negative
-    AI: I am sorry to hear that. I would suggest you to first find out why you did not pass the exam. After figuring out the reasons, then you improve yourself based on your findings. AI_Sentiment: negative`;
+    `;
+exports.standardPrompt = standardPrompt;
 // normal chat mode prompt
 const chatPrompt = (text, sentiment = "neutral", prompt = standardPrompt) => {
     return {
@@ -40,8 +44,9 @@ const chatPrompt = (text, sentiment = "neutral", prompt = standardPrompt) => {
     };
 };
 exports.chatPrompt = chatPrompt;
-const updatePrompt = (currPrompt, AI, AI_Sentiment) => {
-    console.log("current Prompt History is: ", currPrompt);
-    return `${currPrompt} ${AI} AI_Sentiment: ${AI_Sentiment}\n\n`;
+const updatePrompt = (currPrompt, humanText, humanSentiment, aiText, aiSentiment) => {
+    return `${currPrompt}
+    Human: ${generatePrompt(humanText)} Human_Sentiment: ${humanSentiment}
+    AI: ${generatePrompt(aiText)} AI_Sentiment: ${aiSentiment}\n\n`;
 };
 exports.updatePrompt = updatePrompt;

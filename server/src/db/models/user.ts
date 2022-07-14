@@ -31,7 +31,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         foreignKey: "user_id",
       });
 
-      user.hasOne(models.prompt, {
+      user.hasMany(models.prompt, {
         foreignKey: "user_id",
         onDelete: "CASCADE",
       });
