@@ -5,8 +5,10 @@ import useNavigation from "../../hooks/useNavigation";
 import { useLocation } from "react-router-dom";
 
 export default function SignUpModal(props) {
+  // Get recent path
   const { pathname } = useLocation();
 
+  // If it is not login or signup path return true
   const checkPath = () => {
     if (pathname === "/login" || pathname == "/signup") {
       return false;
@@ -14,6 +16,7 @@ export default function SignUpModal(props) {
     return true;
   };
 
+  // Use checkPath to set CSS z-index for the modal
   let modalClass = `signuppopModal ${props.showSignUp ? "show" : "noShow"} ${
     checkPath() ? "" : "bottom"
   }`;

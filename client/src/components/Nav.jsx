@@ -10,6 +10,7 @@ export default function Nav({
 }) {
   const { homePage, loginPage, signupPage } = useNavigation();
 
+  // Get path
   const { pathname } = useLocation();
 
   return (
@@ -20,6 +21,7 @@ export default function Nav({
           <span className="sub">.AI</span>
         </div>
         <nav>
+          {/* If path is login and signup, Don't show button and force user only choice home or finish task */}
           {pathname !== "/login" && pathname !== "/signup" && (
             <>
               <button

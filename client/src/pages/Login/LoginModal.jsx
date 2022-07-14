@@ -22,8 +22,10 @@ export default function LoginModal(props) {
     setLogin({ email: "", password: "" });
   };
 
+  // Get path name
   const { pathname } = useLocation();
 
+  // Return true if not login and signup path
   const checkPath = () => {
     if (pathname === "/login" || pathname == "/signup") {
       return false;
@@ -31,6 +33,7 @@ export default function LoginModal(props) {
     return true;
   };
 
+  // Use checkPath get to set z-index to 0
   let modalClass = `popModal ${props.showLogin ? "show" : "noShow"} ${
     checkPath() ? "" : "bottom"
   }`;
