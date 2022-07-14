@@ -5,8 +5,8 @@ module.exports = (sequelize, DataTypes) => {
     class prompt extends sequelize_1.Model {
         static associate(models) {
             // define association here
-            prompt.belongsTo(models.user);
-            prompt.belongsTo(models.conversation);
+            prompt.belongsTo(models.user, { foreignKey: "user_id" });
+            prompt.belongsTo(models.conversation, { foreignKey: "conversation_id" });
         }
     }
     prompt.init({

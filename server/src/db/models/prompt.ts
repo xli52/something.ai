@@ -20,9 +20,9 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
     static associate(models: any) {
       // define association here
-      prompt.belongsTo(models.user);
+      prompt.belongsTo(models.user, { foreignKey: "user_id" });
 
-      prompt.belongsTo(models.conversation);
+      prompt.belongsTo(models.conversation, { foreignKey: "conversation_id" });
     }
   }
   prompt.init(

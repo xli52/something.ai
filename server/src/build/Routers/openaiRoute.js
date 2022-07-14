@@ -97,23 +97,47 @@ const openaiRouter = (db) => {
             .then((response) => {
             req.session.requestedSentiment = (0, gNLA_1.checkSentiment)(response[0].documentSentiment.score);
             console.log("Google NLA says the speaker's sentiment is ", req.session.requestedSentiment, response[0].documentSentiment.score);
-            let prompt;
             // visitor will get a none saved prompt every time
             if (req.session.visitorID) {
-                prompt = (0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment);
+                return openai_1.openai.createCompletion((0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment));
             }
-            // reigstered user will get a history of the prompt to keep the dialogue flow between ai
-            if (req.session.userID) {
-                prompt = !req.session.promptHistory
-                    ? (0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment)
-                    : (0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment, req.session.promptHistory);
-                req.session.promptHistory = prompt.prompt;
-            }
-            console.log("Current Prompt", prompt.prompt);
-            console.log("Prompt history: ", req.session.promptHistory);
-            // then, send off the text to openai
-            // if we use db.prompt_history.findOne().then()
-            return openai_1.openai.createCompletion(prompt);
+            // if the above conditional didn't run, it meanse user is logged in. search for prompt history in db
+            return db.prompt
+                .findOne({
+                where: {
+                    user_id: req.session.userID,
+                    conversation_id: req.session.convoID,
+                },
+            })
+                .then((response) => {
+                if (response) {
+                    // there was prompt history created, simply insert the prompt history and proceed
+                    req.session.promptID = response.id;
+                    // reassigning new prompt with prompt history
+                    console.log("db prompt search returns a prompt history.", response.prompt);
+                    console.log(" Now we send this off to google: ", (0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment, response.prompt));
+                    return openai_1.openai.createCompletion((0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment, response.prompt));
+                }
+                else {
+                    // since no response, we create a new boiler-plate prompt
+                    console.log("db prompt search returns nothing,creating new boiler-plate prompt...");
+                    let boilerPlate = (0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment);
+                    console.log("boilerPlate is: ", boilerPlate);
+                    // perform a database upsert first then proceed. This will save some time for later prompt update search
+                    return db.prompt
+                        .upsert({
+                        user_id: req.session.userID,
+                        conversation_id: req.session.convoID,
+                        prompt: openai_1.standardPrompt,
+                    })
+                        .then((response) => {
+                        console.log("After boilerPlate upsert: ", response);
+                        console.log("boilerPlate completed, proceeding...");
+                        req.session.promptID = response[0].id;
+                        return openai_1.openai.createCompletion(boilerPlate);
+                    });
+                }
+            });
         })
             .then((response) => {
             // once the response from openai is back, we pass it to NLA again
@@ -128,6 +152,27 @@ const openaiRouter = (db) => {
             .then((response) => {
             req.session.respondedSentiment = (0, gNLA_1.checkSentiment)(response[0].documentSentiment.score);
             console.log("responded sentiment is", req.session.respondedSentiment, response[0].documentSentiment.score);
+            // update promptHistory, so that gpt-3 will have history and can recall if we ask the same question
+            if (req.session.userID) {
+                db.prompt
+                    .findOne({
+                    where: {
+                        user_id: req.session.userID,
+                        conversation_id: req.session.convoID,
+                    },
+                })
+                    .then((response) => {
+                    db.prompt.upsert({
+                        id: req.session.promptID,
+                        prompt: (0, openai_1.updatePrompt)(response.prompt, req.session.requestedText, req.session.requestedSentiment, req.session.respondedText, req.session.respondedSentiment),
+                        user_id: req.session.userID,
+                        conversation_id: req.session.convoID,
+                    });
+                })
+                    .then((response) => {
+                    console.log("Update prompt completed: ");
+                });
+            }
             // choose voice based on character gender. FEMALE voice is used by default.
             return req.body.gender
                 ? (0, gTTS_1.GoogleTTS)(req.session.respondedText, req.body.gender)
@@ -149,10 +194,6 @@ const openaiRouter = (db) => {
                 aiSentiment: req.session.respondedSentiment,
                 aiText: req.session.respondedText,
             };
-            // update req.session.promptHistory, so that gpt-3 will have history and can recall if we ask the same question
-            if (req.session.userID) {
-                req.session.promptHistory = (0, openai_1.updatePrompt)(req.session.promptHistory, req.session.respondedText, req.session.respondedSentiment);
-            }
             // clear any speech to text record
             req.session.recognizedText = null;
             console.log("Session before sending off response to front-end: ", req.session);
