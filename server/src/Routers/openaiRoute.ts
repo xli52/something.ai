@@ -1,5 +1,5 @@
 // router setup
-import express from "express";
+import express, { query } from "express";
 const router = express.Router();
 
 // import node modules and helpers
@@ -155,6 +155,7 @@ const openaiRouter = (db: any): any => {
         console.log("Prompt history: ", req.session.promptHistory);
 
         // then, send off the text to openai
+        // if we use db.prompt_history.findOne().then()
         return openai.createCompletion(prompt);
       })
       .then((response: any) => {

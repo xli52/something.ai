@@ -97,12 +97,22 @@ const openaiRouter = (db) => {
             .then((response) => {
             req.session.requestedSentiment = (0, gNLA_1.checkSentiment)(response[0].documentSentiment.score);
             console.log("Google NLA says the speaker's sentiment is ", req.session.requestedSentiment, response[0].documentSentiment.score);
-            let prompt = !req.session.promptHistory
-                ? (0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment)
-                : (0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment, req.session.promptHistory);
-            req.session.promptHistory = prompt.prompt;
+            let prompt;
+            // visitor will get a none saved prompt every time
+            if (req.session.visitorID) {
+                prompt = (0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment);
+            }
+            // reigstered user will get a history of the prompt to keep the dialogue flow between ai
+            if (req.session.userID) {
+                prompt = !req.session.promptHistory
+                    ? (0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment)
+                    : (0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment, req.session.promptHistory);
+                req.session.promptHistory = prompt.prompt;
+            }
+            console.log("Current Prompt", prompt.prompt);
             console.log("Prompt history: ", req.session.promptHistory);
             // then, send off the text to openai
+            // if we use db.prompt_history.findOne().then()
             return openai_1.openai.createCompletion(prompt);
         })
             .then((response) => {
@@ -140,7 +150,9 @@ const openaiRouter = (db) => {
                 aiText: req.session.respondedText,
             };
             // update req.session.promptHistory, so that gpt-3 will have history and can recall if we ask the same question
-            req.session.promptHistory = (0, openai_1.updatePrompt)(req.session.promptHistory, req.session.respondedText, req.session.respondedSentiment);
+            if (req.session.userID) {
+                req.session.promptHistory = (0, openai_1.updatePrompt)(req.session.promptHistory, req.session.respondedText, req.session.respondedSentiment);
+            }
             // clear any speech to text record
             req.session.recognizedText = null;
             console.log("Session before sending off response to front-end: ", req.session);

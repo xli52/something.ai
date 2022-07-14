@@ -30,6 +30,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
         as: "characters",
         foreignKey: "user_id",
       });
+
+      user.hasOne(models.prompt, {
+        foreignKey: "user_id",
+        onDelete: "CASCADE",
+      });
     }
   }
   user.init(
