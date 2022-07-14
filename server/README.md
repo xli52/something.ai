@@ -20,26 +20,15 @@ npm run dev
 
 ## Create a postgres database
 
-This project utilizes PostgreSQL as a default database. Before running any sequelize commands, you have to create a new database "final_development" with the development password. Default port for PostgresQL is 5432.
+This project utilizes PostgreSQL as a default database. Before running any sequelize commands, you have to set up your .env file as instrucuted in .env example.
 
-Run the following command in CLI:
-
-```sh
-psql -U development
-```
-
-After connecting to psql, run
+After setting up .env file, run the following command in CLI (inside the server folder):
 
 ```sh
-CREATE DATABASE final_development;
+npm run db:reset
 ```
 
-After this, you should write the following commands in your terminal to migrate tables and seed the mock data:
-
-```sh
-npx sequelize-cli db:migrate
-npx sequelize-cli db:seed:all
-```
+Your database is now set up. Whenever you need to reset your database, just run the above code again.
 
 ## API KEYS
 
@@ -61,4 +50,4 @@ export GOOGLE_APPLICATION_CREDENTIALS="/file/path/to/service-account-file.json"
 
 Once you finished the above steps, open a new terminal or source the .zshrc/.bashrc file so that the Google API key will be in your environment.
 
-Now you are good to good.
+Now you are good to go.
