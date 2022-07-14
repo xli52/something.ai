@@ -65,7 +65,7 @@ const userRouter = (db: any): any => {
       .then((response: any) => {
         console.log("Created user: " + response.id);
         req.session.userID = response.id;
-        res.json(response);
+        res.json({ userID: req.session.userID, username: response.username });
       })
       .catch((err: any) => console.error(err));
   });
