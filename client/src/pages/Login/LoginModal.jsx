@@ -26,6 +26,7 @@ export default function LoginModal(props) {
       data: { ...login },
       contentType: { "Content-Type": "application/json" },
     }).then((res) => {
+      props.setShowLogin(false);
       console.log("Login status: ", res);
       setLogin({ email: "", password: "" });
     });

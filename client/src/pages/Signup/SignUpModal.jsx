@@ -46,6 +46,7 @@ export default function SignUpModal(props) {
       data: { ...signUp },
       contentType: "application/json",
     }).then((res) => {
+      props.setShowSignUp(false);
       console.log("Registration status: ", res);
       setSignUp({
         username: "",
