@@ -1,15 +1,14 @@
-import React, { useRef, useEffect } from 'react';
-import { useGLTF, useAnimations } from '@react-three/drei';
-import SkinMesh from './SkinMesh';
-import usePrevious from '../../hooks/usePrevious';
-const name = 'joshua';
+import React, { useRef, useEffect } from "react";
+import { useGLTF, useAnimations } from "@react-three/drei";
+import SkinMesh from "./SkinMesh";
+import usePrevious from "../../hooks/usePrevious";
+const name = "joshua";
 
 export default function Character({ action, position }) {
-
   const group = useRef();
   const { nodes, materials, animations, scene } = useGLTF(`models/${name}.glb`);
   const { actions } = useAnimations(animations, group);
-  scene.traverse(obj => obj.frustumCulled = false); // Avoid partial model rendering
+  scene.traverse((obj) => (obj.frustumCulled = false)); // Avoid partial model rendering
   const prevAction = usePrevious(action);
 
   // Body animation play control
@@ -34,16 +33,12 @@ export default function Character({ action, position }) {
             rotation={[-Math.PI / 2, 0, 0]}
             scale={10}
           >
-            <SkinMesh
-              character={name}
-              nodes={nodes}
-              materials={materials}
-            />
+            <SkinMesh character={name} nodes={nodes} materials={materials} />
           </group>
         </group>
       </group>
     </>
-  )
+  );
 }
 
 useGLTF.preload(`models/${name}.glb`);

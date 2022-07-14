@@ -1,5 +1,6 @@
 .signuppopModal {
   position: absolute;
+  top: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -22,7 +23,6 @@
     }
   }
 
-
   h2 {
     color: #8d2add;
     font-size: 2em;
@@ -37,9 +37,14 @@
     align-items: center;
     height: 70vh;
     width: 40vw;
+    max-height: 500px;
     max-width: 600px;
     border-radius: 1em;
     padding: 1em;
+
+    .error {
+      color: rgb(255, 5, 5);
+    }
 
     input {
       width: 70%;
@@ -76,4 +81,8 @@
 
 .noShow {
   display: none;
+}
+
+.bottom {
+  z-index: 0;
 }

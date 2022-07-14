@@ -1,8 +1,8 @@
 import React, { useState, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { PresentationControls } from '@react-three/drei';
 import Character from '../../components/Character';
 import getCharacterList from '../../helpers/getCharacterList';
+// import { PresentationControls } from '@react-three/drei';
 
 export default function ChatScene(props) {
   const [character] = useState(getCharacterList().jane);
