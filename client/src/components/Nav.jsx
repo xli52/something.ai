@@ -1,17 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import useNavigation from "../hooks/useNavigation";
 import { useLocation } from "react-router-dom";
 
-export default function Nav({
-  loginBtn,
-  signupBtn,
-  setShowLogin,
-  setShowSignUp,
-}) {
-  const { homePage, loginPage, signupPage } = useNavigation();
-
-  // Get path
+export default function Nav({ setShowLogin, setShowSignUp, loggedUser }) {
+  const { homePage } = useNavigation();
+  const [showComp, setShowComp] = useState(true);
   const { pathname } = useLocation();
+
+  // It only happened once, need to make it call everytime path change
+  useEffect(() => {
+    checkPath();
+  }, [pathname, loggedUser]);
+
+  const checkPath = () => {
+    if (pathname === "/login" || pathname === "/signup") {
+      setShowComp(false);
+    } else if (loggedUser) {
+      setShowComp(false);
+    } else {
+      setShowComp(true);
+    }
+  };
+
+  // console.log(loggedUser);
 
   return (
     <header>
@@ -22,7 +33,7 @@ export default function Nav({
         </div>
         <nav>
           {/* If path is login and signup, Don't show button and force user only choice home or finish task */}
-          {pathname !== "/login" && pathname !== "/signup" && (
+          {showComp && (
             <>
               <button
                 className="btn"
@@ -40,6 +51,14 @@ export default function Nav({
                 }}
               >
                 Sign Up
+              </button>
+            </>
+          )}
+          {loggedUser && (
+            <>
+              <h3>{loggedUser}</h3>
+              <button className="btn" onClick={() => {}}>
+                Logout
               </button>
             </>
           )}

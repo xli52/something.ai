@@ -1,20 +1,21 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function LoginModal(props) {
   const [login, setLogin] = useState({ email: "", password: "" });
+  const navigate = useNavigate();
+
+  // Get path name
+  const { pathname } = useLocation();
 
   // Use handleChange Function to onChange the setLogin
   const handleChange = function (e) {
     const { name, value } = e.target;
     setLogin({ ...login, [name]: value });
   };
-
-  // Need axios send to backend.../user/login
-  // will get res.json(userID) for success
 
   const submitLogin = function (e) {
     e.preventDefault();
@@ -25,17 +26,18 @@ export default function LoginModal(props) {
       data: { ...login },
       contentType: { "Content-Type": "application/json" },
     }).then((res) => {
-      props.setShowLogin(false);
-      console.log("Login status: ", res);
+      props.setLoggedUser(res.data.username);
+      console.log("Login status: ", res.data.username);
       setLogin({ email: "", password: "" });
+      if (!checkPath()) {
+        return navigate("../", { replace: true });
+      }
+      props.setShowLogin(false);
     });
   };
 
-  // Get path name
-  const { pathname } = useLocation();
-
-  // Return true if not login and signup path
-  const checkPath = () => {
+  // Return false for login and signup path
+  const checkPath = function () {
     if (pathname === "/login" || pathname === "/signup") {
       return false;
     }
@@ -46,6 +48,8 @@ export default function LoginModal(props) {
   let modalClass = `popModal ${props.showLogin ? "show" : "noShow"} ${
     checkPath() ? "" : "bottom"
   }`;
+
+  // console.log(props);
 
   return (
     <div className={modalClass}>
