@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import useNavigation from "../../hooks/useNavigation";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 
@@ -37,7 +36,7 @@ export default function LoginModal(props) {
 
   // Return true if not login and signup path
   const checkPath = () => {
-    if (pathname === "/login" || pathname == "/signup") {
+    if (pathname === "/login" || pathname === "/signup") {
       return false;
     }
     return true;

@@ -1,0 +1,72 @@
+@import url(//fonts.googleapis.com/icon?family=Material+Icons);
+
+$user-color: rgba(#e0e0e0, 0.8);
+$bot-color: rgba(#e0e0e0, 0.8);
+
+.speech-bubble {
+  position: absolute;
+  z-index: 99;
+  line-height: 29px;
+  max-width: 50vw;
+  font-size: 22px;
+  padding: 1em 1.5em;
+  border-radius: 0.8em;
+  color: rgb(55, 55, 55);
+  // box-shadow: 7px 30px 40px rgba(0, 0, 0, 0.2);
+  // transition: 1s;
+  // animation: speech .7s linear 1;
+  
+  &--user {
+    right: 66%;
+    bottom: 20%;
+    max-width: 30vw;
+    background-color: $user-color;
+  }
+
+  &--bot {
+    left: 66%;
+    top: 5%;
+    max-width: 30vw;
+    background-color: $bot-color;
+  }
+
+  .bubble-tail {
+    position: absolute;
+    background-color: transparent;
+
+    &--user {
+      border: 0.7em solid $user-color;
+      right: 18px;
+      top: 100%;
+      border-left-color: transparent;
+      border-right-color: transparent;
+      border-bottom-color: transparent;
+    }
+
+    &--bot {
+      border: 0.7em solid $bot-color;
+      right: 100%;
+      top: 14px;
+      border-top-color: transparent;
+      border-left-color: transparent;
+      border-bottom-color: transparent;
+    }
+  }
+
+  .material-icons {
+    font-size: 20px;
+    background-color: white;
+    border-radius: 50%;
+    color: rgba(#9b9b9b, 0.5);
+    border: 1px solid rgba(#9b9b9b, 0.5);
+    position: absolute;
+    right: -8px;
+    top: -8px;
+    cursor: pointer;
+
+    &:hover {
+      color: rgb(28, 28, 28);
+      border: 1px solid rgb(28, 28, 28);
+    }
+  }
+}

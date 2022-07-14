@@ -19,13 +19,14 @@ export default function ModelDisplay({ character }) {
       <ambientLight intensity={1.25} />
       <directionalLight intensity={0.4} />
       <Suspense fallback={null}>
-        <Character
-          name={character.name}
-          position={{ x: 0, y: character.setupPageY, z: 0 }}
-          action={character.greetingAction}
-        />
+        <PresentationControls global snap >
+          <Character
+            name={character.name}
+            position={{ x: 0, y: character.setupPageY, z: 0 }}
+            action={character.greetingAction}
+          />
+        </PresentationControls>
       </Suspense>
-      <PresentationControls global />
     </Canvas>
   );
 }

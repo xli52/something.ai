@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Nav from "../../components/Nav";
 import ModelDisplay from "./ModelDisplay";
 import SetupBox from "./SetupBox";
 import "./styles.scss";

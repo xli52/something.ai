@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import Nav from "../../components/Nav";
+import React from "react";
 import "./styles.scss";
 
 import SignUpModal from "./SignUpModal";

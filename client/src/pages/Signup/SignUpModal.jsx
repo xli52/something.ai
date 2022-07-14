@@ -59,7 +59,7 @@ export default function SignUpModal(props) {
 
   // If it is not login or signup path return true
   const checkPath = () => {
-    if (pathname === "/login" || pathname == "/signup") {
+    if (pathname === "/login" || pathname === "/signup") {
       return false;
     }
     return true;

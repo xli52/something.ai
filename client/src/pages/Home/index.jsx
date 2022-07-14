@@ -1,5 +1,4 @@
 import React from "react";
-import Nav from "../../components/Nav";
 import Intro from "./Intro";
 import ModelDisplay from "./ModelDisplay";
 

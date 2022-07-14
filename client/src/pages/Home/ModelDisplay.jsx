@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import { PresentationControls } from "@react-three/drei";
 import Character from "../../components/Character";
 import getCharacterList from "../../helpers/getCharacterList";
 import useCharacter from "../../hooks/useCharacter";
@@ -22,13 +22,14 @@ export default function ModelDisplay(props) {
     >
       <ambientLight intensity={1.25} />
       <Suspense fallback={null}>
-        <Character
-          name={character.name}
-          position={{ x: 1, y: -14, z: 0 }}
-          action="Waving"
-        />
+        <PresentationControls global snap >
+          <Character
+            name={character.name}
+            position={{ x: 1, y: -14, z: 0 }}
+            action="Waving"
+          />
+        </PresentationControls>
       </Suspense>
-      <OrbitControls />
     </Canvas>
   );
 }
