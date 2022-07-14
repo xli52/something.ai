@@ -21,6 +21,7 @@ function App() {
         setShowLogin={setShowLogin}
         setShowSignUp={setShowSignUp}
         loggedUser={loggedUser}
+        setLoggedUser={setLoggedUser}
       />
       <Routes>
         <Route path="/" element={<Home />} />

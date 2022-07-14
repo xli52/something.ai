@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from "react";
 import useNavigation from "../hooks/useNavigation";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 
-export default function Nav({ setShowLogin, setShowSignUp, loggedUser }) {
+export default function Nav({
+  setShowLogin,
+  setShowSignUp,
+  loggedUser,
+  setLoggedUser,
+}) {
   const { homePage } = useNavigation();
   const [showComp, setShowComp] = useState(true);
   const { pathname } = useLocation();
@@ -20,6 +26,18 @@ export default function Nav({ setShowLogin, setShowSignUp, loggedUser }) {
     } else {
       setShowComp(true);
     }
+  };
+
+  const submitLogout = function (e) {
+    e.preventDefault();
+    return axios({
+      method: "POST",
+      url: "/user/logout",
+      // data: { ...login },
+      contentType: { "Content-Type": "application/json" },
+    }).then((res) => {
+      setLoggedUser();
+    });
   };
 
   return (
@@ -55,7 +73,12 @@ export default function Nav({ setShowLogin, setShowSignUp, loggedUser }) {
           {loggedUser && (
             <>
               <h3>{loggedUser}</h3>
-              <button className="btn" onClick={() => {}}>
+              <button
+                className="btn"
+                onClick={(e) => {
+                  submitLogout(e);
+                }}
+              >
                 Logout
               </button>
             </>
