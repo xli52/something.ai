@@ -1,17 +1,44 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import useNavigation from "../hooks/useNavigation";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 export default function Nav({
-  loginBtn,
-  signupBtn,
   setShowLogin,
   setShowSignUp,
+  loggedUser,
+  setLoggedUser,
 }) {
-  const { homePage, loginPage, signupPage } = useNavigation();
-
-  // Get path
+  const { homePage } = useNavigation();
+  const [showComp, setShowComp] = useState(true);
   const { pathname } = useLocation();
+
+  // It only happened once, need to make it call everytime path change
+  useEffect(() => {
+    buttonCheck();
+  }, [pathname, loggedUser]);
+
+  const buttonCheck = () => {
+    if (pathname === "/login" || pathname === "/signup") {
+      setShowComp(false);
+    } else if (loggedUser) {
+      setShowComp(false);
+    } else {
+      setShowComp(true);
+    }
+  };
+
+  const submitLogout = function (e) {
+    e.preventDefault();
+    return axios({
+      method: "POST",
+      url: "/user/logout",
+      // data: { ...login },
+      contentType: { "Content-Type": "application/json" },
+    }).then((res) => {
+      setLoggedUser();
+    });
+  };
 
   return (
     <header>
@@ -22,7 +49,7 @@ export default function Nav({
         </div>
         <nav>
           {/* If path is login and signup, Don't show button and force user only choice home or finish task */}
-          {pathname !== "/login" && pathname !== "/signup" && (
+          {showComp && (
             <>
               <button
                 className="btn"
@@ -40,6 +67,19 @@ export default function Nav({
                 }}
               >
                 Sign Up
+              </button>
+            </>
+          )}
+          {loggedUser && (
+            <>
+              <h3>{loggedUser}</h3>
+              <button
+                className="btn"
+                onClick={(e) => {
+                  submitLogout(e);
+                }}
+              >
+                Logout
               </button>
             </>
           )}

@@ -13,20 +13,34 @@ import SignUpModal from "./pages/Signup/SignUpModal";
 function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
+  const [loggedUser, setLoggedUser] = useState();
 
   return (
     <>
       <Nav
-        loginBtn={true}
-        signupBtn={true}
         setShowLogin={setShowLogin}
         setShowSignUp={setShowSignUp}
+        loggedUser={loggedUser}
+        setLoggedUser={setLoggedUser}
       />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
+        <Route
+          path="/login"
+          element={
+            <Login setShowLogin={setShowLogin} setLoggedUser={setLoggedUser} />
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <SignUp
+              setShowSignUp={setShowSignUp}
+              setLoggedUser={setLoggedUser}
+            />
+          }
+        />
         <Route path="/setup" element={<Setup />} />
         <Route path="/chat" element={<Chat />} />
         <Route
@@ -38,6 +52,7 @@ function App() {
         <LoginModal
           showLogin={showLogin}
           setShowLogin={setShowLogin}
+          setLoggedUser={setLoggedUser}
           showCloseBtn
         />
       )}
@@ -45,6 +60,7 @@ function App() {
         <SignUpModal
           showSignUp={showSignUp}
           setShowSignUp={setShowSignUp}
+          setLoggedUser={setLoggedUser}
           showCloseBtn
         />
       )}

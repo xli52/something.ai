@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function SignUpModal(props) {
@@ -13,12 +13,17 @@ export default function SignUpModal(props) {
     password: "",
   });
 
+  const navigate = useNavigate();
   // Get recent path
   const { pathname } = useLocation();
 
   // Use handleChange Function to onChange the setLogin
   const handleChange = function (e) {
     const { name, value } = e.target;
+    if (msg) {
+      setMsg();
+    }
+    console.log(e.target.value);
     setSignUp({ ...signUp, [name]: value });
   };
 
@@ -38,7 +43,7 @@ export default function SignUpModal(props) {
     if (!passwordCheck(signUp, confirmPass)) {
       return alert("Password not same!!");
     }
-    console.log(signUp);
+    // console.log(signUp);
 
     return axios({
       method: "POST",
@@ -47,12 +52,20 @@ export default function SignUpModal(props) {
       contentType: "application/json",
     }).then((res) => {
       console.log("Registration status: ", res);
+      if (!res.data.username) {
+        return setMsg(res.data);
+      }
+      props.setLoggedUser(res.data.username);
       setSignUp({
         username: "",
         email: "",
         password: "",
       });
       setConfirmPass("");
+      if (!checkPath()) {
+        return navigate("../", { replace: true });
+      }
+      props.setShowSignUp(false);
     });
   };
 
