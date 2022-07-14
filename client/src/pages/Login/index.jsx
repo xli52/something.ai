@@ -4,19 +4,16 @@ import "./styles.scss";
 import LoginModal from "./LoginModal";
 
 export default function Login(props) {
-  const [login, setLogin] = useState({ email: "", password: "" });
-
-  // Use handleChange Function to onChange the setLogin
-  const handleChange = function (e) {
-    const { name, value } = e.target;
-    setLogin({ ...login, [name]: value });
-  };
+  console.log("from login index:", props);
 
   // for logout /user/logout
   return (
     <main>
-      {/* <Nav loginBtn={false} signupBtn /> */}
-      <LoginModal showLogin={true} showCloseBtn={false} />
+      <LoginModal
+        showLogin={true}
+        showCloseBtn={false}
+        setLoggedUser={props.setLoggedUser}
+      />
     </main>
   );
 }
