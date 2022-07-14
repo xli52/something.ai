@@ -74,7 +74,7 @@ export default function LoginModal(props) {
           value={login["password"]}
           onChange={handleChange}
           required
-          min={3}
+          minLength={5}
         />
         <button className="btn" type="submit">
           Login

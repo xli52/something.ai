@@ -1,33 +1,19 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import useNavigation from "../../hooks/useNavigation";
 import { useLocation } from "react-router-dom";
 
 export default function SignUpModal(props) {
-  // Get recent path
-  const { pathname } = useLocation();
-
-  // If it is not login or signup path return true
-  const checkPath = () => {
-    if (pathname === "/login" || pathname == "/signup") {
-      return false;
-    }
-    return true;
-  };
-
-  // Use checkPath to set CSS z-index for the modal
-  let modalClass = `signuppopModal ${props.showSignUp ? "show" : "noShow"} ${
-    checkPath() ? "" : "bottom"
-  }`;
-
+  const [msg, setMsg] = useState();
   const [confirmPass, setConfirmPass] = useState("");
   const [signUp, setSignUp] = useState({
     username: "",
     email: "",
     password: "",
   });
-  const { homePage } = useNavigation();
+
+  // Get recent path
+  const { pathname } = useLocation();
 
   // Use handleChange Function to onChange the setLogin
   const handleChange = function (e) {
@@ -49,7 +35,7 @@ export default function SignUpModal(props) {
   const submitSignUp = function (e) {
     e.preventDefault();
     if (!passwordCheck(signUp, confirmPass)) {
-      return alert("Password not same!!");
+      return setMsg("Password and confirm password not same!");
     }
     console.log(signUp);
     setSignUp({
@@ -58,6 +44,19 @@ export default function SignUpModal(props) {
       password: "",
     });
   };
+
+  // If it is not login or signup path return true
+  const checkPath = () => {
+    if (pathname === "/login" || pathname == "/signup") {
+      return false;
+    }
+    return true;
+  };
+
+  // Use checkPath to set CSS z-index for the modal
+  let modalClass = `signuppopModal ${props.showSignUp ? "show" : "noShow"} ${
+    checkPath() ? "" : "bottom"
+  }`;
 
   return (
     <div className={modalClass}>
@@ -76,7 +75,7 @@ export default function SignUpModal(props) {
             }}
           ></FontAwesomeIcon>
         )}
-
+        {msg && <h3 className="error">{msg}</h3>}
         <h2>Sign Up</h2>
 
         <input
@@ -104,7 +103,7 @@ export default function SignUpModal(props) {
           value={signUp["password"]}
           onChange={handleChange}
           required
-          min={3}
+          minLength={5}
         />
 
         <input
@@ -116,7 +115,7 @@ export default function SignUpModal(props) {
             setConfirmPass(e.target.value);
           }}
           required
-          min={3}
+          minLength={5}
         />
         <button className="btn" type="submit">
           Sign up
