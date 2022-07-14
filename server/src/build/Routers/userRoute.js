@@ -49,18 +49,22 @@ const userRouter = (db) => {
             if (response) {
                 return res.send("User already exists.");
             }
-            return db.user.create({
+            return db.user
+                .create({
                 username: req.body.username,
                 password,
                 email: req.body.email,
                 createAt: new Date(),
                 updatedAt: new Date(),
+            })
+                .then((response) => {
+                console.log("Created user: " + response.id);
+                req.session.userID = response.id;
+                res.json({
+                    userID: req.session.userID,
+                    username: response.username,
+                });
             });
-        })
-            .then((response) => {
-            console.log("Created user: " + response.id);
-            req.session.userID = response.id;
-            res.json(response);
         })
             .catch((err) => console.error(err));
     });
