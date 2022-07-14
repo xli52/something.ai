@@ -28,6 +28,15 @@ module.exports = {
                     },
                     onDelete: "CASCADE",
                 },
+                conversation_id: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false,
+                    references: {
+                        model: "conversations",
+                        key: "id",
+                    },
+                    onDelete: "CASCADE",
+                },
                 createdAt: {
                     allowNull: false,
                     type: Sequelize.DATE,

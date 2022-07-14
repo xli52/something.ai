@@ -4,6 +4,7 @@ import { Model } from "sequelize";
 interface PromptAttributes {
   prompt: string;
   user_id: number;
+  conversation_id: number;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -15,10 +16,13 @@ module.exports = (sequelize: any, DataTypes: any) => {
      */
     prompt!: string;
     user_id!: number;
+    conversation_id!: number;
 
     static associate(models: any) {
       // define association here
       prompt.belongsTo(models.user);
+
+      prompt.belongsTo(models.conversation);
     }
   }
   prompt.init(
@@ -32,6 +36,14 @@ module.exports = (sequelize: any, DataTypes: any) => {
           key: "id",
         },
         onDelete: "CASCADE",
+      },
+      conversation_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "conversations",
+          key: "id",
+        },
       },
     },
     {

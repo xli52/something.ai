@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: "conversation_id",
                 onDelete: "CASCADE",
             });
+            conversation.hasOne(models.prompt, {
+                foreignKey: "conversation_id",
+                onDelete: "CASCADE",
+            });
         }
     }
     conversation.init({

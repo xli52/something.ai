@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
             prompt.belongsTo(models.user);
+            prompt.belongsTo(models.conversation);
         }
     }
     prompt.init({
@@ -18,6 +19,14 @@ module.exports = (sequelize, DataTypes) => {
                 key: "id",
             },
             onDelete: "CASCADE",
+        },
+        conversation_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: "conversations",
+                key: "id",
+            },
         },
     }, {
         sequelize,
