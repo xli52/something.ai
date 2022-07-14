@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import Nav from '../../components/Nav';
+import Nav from "../../components/Nav";
 import "./styles.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import useNavigation from "../../hooks/useNavigation";
+import axios from "axios";
 
 export default function SignUp(props) {
   const [confirmPass, setConfirmPass] = useState("");
@@ -37,10 +38,20 @@ export default function SignUp(props) {
       return alert("Password not same!!");
     }
     console.log(signUp);
-    setSignUp({
-      username: "",
-      email: "",
-      password: "",
+
+    return axios({
+      method: "POST",
+      url: "/user/register",
+      data: { ...signUp },
+      contentType: "application/json",
+    }).then((res) => {
+      console.log("Registration status: ", res);
+      setSignUp({
+        username: "",
+        email: "",
+        password: "",
+      });
+      setConfirmPass("");
     });
   };
 
@@ -48,7 +59,7 @@ export default function SignUp(props) {
 
   return (
     <main>
-      <Nav loginBtn signupBtn/>
+      <Nav loginBtn signupBtn />
       <div className={modalClass}>
         <form
           className="formGroup"
