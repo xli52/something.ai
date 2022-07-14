@@ -32,7 +32,15 @@ function App() {
             <Login setShowLogin={setShowLogin} setLoggedUser={setLoggedUser} />
           }
         />
-        <Route path="/signup" element={<SignUp />} />
+        <Route
+          path="/signup"
+          element={
+            <SignUp
+              setShowSignUp={setShowSignUp}
+              setLoggedUser={setLoggedUser}
+            />
+          }
+        />
         <Route path="/setup" element={<Setup />} />
         <Route path="/chat" element={<Chat />} />
         <Route
@@ -52,6 +60,7 @@ function App() {
         <SignUpModal
           showSignUp={showSignUp}
           setShowSignUp={setShowSignUp}
+          setLoggedUser={setLoggedUser}
           showCloseBtn
         />
       )}
