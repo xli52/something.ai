@@ -47,7 +47,7 @@ const openaiRouter = (db) => {
         // to deterentiate where the request was from speech or text
         req.session.requestedText = req.session.recognizedText
             ? req.session.recognizedText
-            : req.body.input;
+            : req.body.message;
         // to make sure if the text is from registered user or visitor. If it is a visitor, then provide a visitorID
         if (!req.session.userID && !req.session.visitorID) {
             console.log("Initializing visitor ID...");
