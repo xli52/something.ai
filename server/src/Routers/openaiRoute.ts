@@ -64,7 +64,7 @@ const openaiRouter = (db: any): any => {
     // to deterentiate where the request was from speech or text
     req.session.requestedText = req.session.recognizedText
       ? req.session.recognizedText
-      : req.body.input;
+      : req.body.message;
 
     // to make sure if the text is from registered user or visitor. If it is a visitor, then provide a visitorID
     if (!req.session.userID && !req.session.visitorID) {
@@ -145,7 +145,7 @@ const openaiRouter = (db: any): any => {
           );
         }
 
-        // if the above conditional didn't run, it meanse user is logged in. search for prompt history in db
+        // if the above conditional didn't run, it means user is logged in. search for prompt history in db
         return db.prompt
           .findOne({
             where: {
@@ -275,6 +275,7 @@ const openaiRouter = (db: any): any => {
         // this is will send response back to frontend, which react will update it's dom to retrieve new audio file and initiate character animation
         console.log("preparing data for front-end");
         let apiResponse: object = {
+          gender: req.session.gender || "FEMALE",
           userID: req.session.userID,
           audioID: req.session.audioID,
           requestedText: req.session.requestedText,
@@ -328,6 +329,7 @@ const openaiRouter = (db: any): any => {
         }
       });
   });
+
   return router;
 };
 

@@ -8,6 +8,13 @@
   width: 100vw;
   margin: auto;
 
+  h1 {
+    color: #896da0;
+    position:fixed;
+    top:9%;
+    text-shadow: 4px 4px rgba(#cdcdcd, 0.6);
+  }
+
   .mdSetup {
     display: flex;
     justify-content: center;
@@ -65,6 +72,8 @@
     border-radius: 50%;
     margin: 0 3em;
     transition: 0.5s;
+    font-weight: 600;
+    color: white;
 
     &:hover {
       box-shadow: 12px 0px 41px 4px rgba(101, 49, 142, 0.25);

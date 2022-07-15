@@ -1,22 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import ModelDisplay from "./ModelDisplay";
 import SetupBox from "./SetupBox";
 import "./styles.scss";
+import { characterContext } from "../../contexts/CharacterContext";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import useCharacter from "../../hooks/useCharacter";
 
 export default function Setup() {
-  const [bgColor, setBgColor] = useState("bg1");
-  const { character, nextChar, lastChar } = useCharacter();
-  const mainBodyClass = `setupMainBody ${bgColor}`;
+
+  const { character, nextChar, lastChar, bgColor, setBgColor } = useContext(characterContext);
+  function capFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
   return (
     <main>
-      {/* <Nav loginBtn={false} signupBtn={false} /> */}
-      <div className={mainBodyClass}>
+      <div className={`setupMainBody ${bgColor}`}>
+        <h1>{capFirstLetter(character.name)}</h1>
         <div className="mdSetup">
           <FontAwesomeIcon
             icon={faArrowLeft}
