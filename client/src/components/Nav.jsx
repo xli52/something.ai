@@ -17,7 +17,7 @@ export default function Nav({
     buttonCheck();
   }, [pathname, loggedUser]);
 
-  const routepath = ["/", "/home", "/Chat", "/setup", "/signup", "/login"];
+  const routepath = ["/", "/home", "/chat", "/setup", "/signup", "/login"];
 
   const buttonCheck = () => {
     if (!routepath.includes(pathname)) {
