@@ -1,7 +1,7 @@
 @import url(//fonts.googleapis.com/icon?family=Material+Icons);
-
-$user-color: rgba(#e0e0e0, 0.8);
-$bot-color: rgba(#e0e0e0, 0.8);
+$dark: #777777;
+$user-color: lighten($dark, 43%);
+$bot-color: lighten($dark, 43%);
 
 .speech-bubble {
   position: absolute;
@@ -15,12 +15,12 @@ $bot-color: rgba(#e0e0e0, 0.8);
   // box-shadow: 7px 30px 40px rgba(0, 0, 0, 0.2);
   // transition: 1s;
   // animation: speech .7s linear 1;
-  
+
   &--user {
     right: 66%;
     bottom: 20%;
     max-width: 30vw;
-    background-color: $user-color;
+    background: $user-color
   }
 
   &--bot {
@@ -69,4 +69,38 @@ $bot-color: rgba(#e0e0e0, 0.8);
       border: 1px solid rgb(28, 28, 28);
     }
   }
+}
+
+.typing {
+  background: transparent;
+
+  .ellipsis {
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    background: lighten($dark, 25%);
+    border-radius: 50%;
+    animation: bounce 1.3s linear infinite;
+  }
+
+  .one {
+    animation-delay: 0.6s;
+    margin-right: 5px;
+  }
+
+  .two {
+    animation-delay: 0.5s;
+    margin-right: 5px;
+  }
+
+  .three {
+    animation-delay: 0.8s;
+  }
+}
+
+@keyframes bounce {
+  30% { transform: translateY(-2px); }
+  60% { transform: translateY(0px); }
+  80% { transform: translateY(2px); }
+  100% { transform: translateY(0px); opacity: 0.5;  }
 }

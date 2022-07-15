@@ -10,18 +10,25 @@ export default function Chat(props) {
   const [userText, setUserText] = useState("");
   const [botText, setBotText] = useState("");
   const { bgColor } = useContext(characterContext);
+  const [botTyping, setBotTyping] = useState(false);
+  const [userTyping, setUserTyping] = useState(false);
 
   return (
     <main>
       <div className={`chat-container ${bgColor}`}>
         <div className="chat-scene-container">
           <ChatScene />
-          <InputBox setUserText={setUserText} setBotText={setBotText} />
-          {userText && (
-            <Bubble text={userText} user bot={false} setText={setUserText} />
+          <InputBox
+            setUserText={setUserText}
+            setBotText={setBotText}
+            setBotTyping={setBotTyping}
+            setUserTyping={setUserTyping}
+          />
+          {(userText || userTyping) && (
+            <Bubble text={userText} user bot={false} setText={setUserText} typing={userTyping} />
           )}
-          {botText && (
-            <Bubble text={botText} user={false} bot setText={setBotText} />
+          {(botText || botTyping) && (
+            <Bubble text={botText} user={false} bot setText={setBotText} typing={botTyping} />
           )}
         </div>
       </div>
