@@ -1,11 +1,10 @@
-import React, { useState, Suspense } from 'react';
+import React, { useState, useContext, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import Character from '../../components/Character';
-import getCharacterList from '../../helpers/getCharacterList';
-// import { PresentationControls } from '@react-three/drei';
+import { characterContext } from "../../contexts/CharacterContext";
 
 export default function ChatScene(props) {
-  const [character] = useState(getCharacterList().jane);
+  const { character } = useContext(characterContext);
   const [action, setAction] = useState('StandingIdle');
 
   return (
@@ -13,18 +12,16 @@ export default function ChatScene(props) {
       <Canvas
         className='chat-scene-canvas'
         // This controls carema angle I believe
-        camera={{ fov: 100, near: 0.01, far: 1000, position: [0, 0, 20], zoom: 7 }}
+        camera={{ fov: 100, near: 0.01, far: 1000, position: [0, 0, 20], zoom: 5 }}
       >
         <ambientLight intensity={1.25} />
         <Suspense fallback={null}>
-          {/* <PresentationControls global snap > */}
           <Character
             name={character.name}
             position={{ x: 0, y: character.chatPageY, z: 0 }}
             action={action}
             style={{ touchAction: 'none' }}
           />
-          {/* </PresentationControls> */}
         </Suspense>
       </Canvas>
     </>

@@ -10,7 +10,7 @@ export default function SetupBox(props) {
     <div className="setupBox">
       <BgSetup setBgColor={props.setBgColor} />
       <button className="circleBtn bg4" onClick={chatPage}>
-        CHAT
+        GO!
       </button>
     </div>
   );

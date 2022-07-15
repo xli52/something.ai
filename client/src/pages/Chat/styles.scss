@@ -1,21 +1,40 @@
 .chat-container {
   z-index: -2;
   position: absolute;
-  top: 80px;
+  top: 0px;
   right: 0px;
   bottom: 0px;
   left: 0px;
 
   .chat-scene-container {
     height: 100%;
-    z-index: -1;
-
-    .chat-scene-canvas {
-      background-color: white;
-    }
+    z-index: 0;
   }
-
 }
+
+.bg {
+  &1 {
+    background: linear-gradient(132deg,
+        #ffffff 28.72%,
+        rgb(180 101 243 / 49%) 101.32%);
+  }
+  
+  &2 {
+    background: linear-gradient(230.22deg, #daa9ff 28.72%, #34184a 101.32%);
+  }
+  
+  &3 {
+    background: linear-gradient(230.22deg, #9e8cac 28.72%, #21132c 101.32%);
+  }
+  
+  &4 {
+    color: #c6c6c6;
+    background: linear-gradient(78deg,
+        #78418c 28.72%,
+        rgb(216 113 228 / 64%) 101.32%);
+  }
+}
+
 
 // Chat message input box setup
 
