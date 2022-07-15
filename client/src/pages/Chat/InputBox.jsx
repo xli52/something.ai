@@ -4,9 +4,8 @@ import ReactAudioPlayer from "react-audio-player";
 import { characterContext } from "../../contexts/CharacterContext";
 
 export default function InputBox({ setUserText, setBotText, textMode }) {
-
   const { character } = useContext(characterContext);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [audio, setAudio] = useState("");
   const [gender] = useState(character.gender);
 
@@ -14,7 +13,7 @@ export default function InputBox({ setUserText, setBotText, textMode }) {
     if (message) {
       event.preventDefault();
       setUserText(message);
-      setMessage('');
+      setMessage("");
 
       // Send message to api
       return axios({
@@ -32,13 +31,16 @@ export default function InputBox({ setUserText, setBotText, textMode }) {
         })
         .catch((e) => console.log(e.message));
     }
-  };
+  }
 
   return (
     <div className="input-box-container__text">
       <ReactAudioPlayer src={audio} autoPlay={true} />
       <div className="chat-bar">
-        <form className="chat-bar__message" onSubmit={event => handleSendMsg(event)}>
+        <form
+          className="chat-bar__message"
+          onSubmit={(event) => handleSendMsg(event)}
+        >
           <input
             className="chat-bar__input"
             type="text"

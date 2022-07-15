@@ -31,7 +31,10 @@ function App() {
           <Route
             path="/login"
             element={
-              <Login setShowLogin={setShowLogin} setLoggedUser={setLoggedUser} />
+              <Login
+                setShowLogin={setShowLogin}
+                setLoggedUser={setLoggedUser}
+              />
             }
           />
           <Route
@@ -47,7 +50,11 @@ function App() {
           <Route path="/chat" element={<Chat />} />
           <Route
             path="*"
-            element={<h1 align="center">Error 404: Page Not Found!</h1>}
+            element={
+              <div className="errorClass">
+                <h1>Error 404: Page Not Found!</h1>
+              </div>
+            }
           />
         </Routes>
       </CharacterProvider>
