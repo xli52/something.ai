@@ -47,8 +47,10 @@ header {
     }
 
     nav {
+      display: flex;
       .btn {
         cursor: pointer;
+
         font-size: 1.1em;
         font-weight: bolder;
         padding: 0.7em 1.5em;
