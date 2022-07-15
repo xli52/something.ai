@@ -188,6 +188,7 @@ const openaiRouter = (db) => {
             // this is will send response back to frontend, which react will update it's dom to retrieve new audio file and initiate character animation
             console.log("preparing data for front-end");
             let apiResponse = {
+                gender: req.session.gender || "FEMALE",
                 userID: req.session.userID,
                 audioID: req.session.audioID,
                 requestedText: req.session.requestedText,
