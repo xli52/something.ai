@@ -14,33 +14,36 @@
 
 .bg {
   &1 {
-    background: linear-gradient(132deg,
-        #ffffff 28.72%,
-        rgb(180 101 243 / 49%) 101.32%);
+    background: linear-gradient(
+      132deg,
+      #ffffff 28.72%,
+      rgb(180 101 243 / 49%) 101.32%
+    );
   }
-  
+
   &2 {
     background: linear-gradient(230.22deg, #daa9ff 28.72%, #34184a 101.32%);
   }
-  
+
   &3 {
     background: linear-gradient(230.22deg, #9e8cac 28.72%, #21132c 101.32%);
   }
-  
+
   &4 {
     color: #c6c6c6;
-    background: linear-gradient(78deg,
-        #78418c 28.72%,
-        rgb(216 113 228 / 64%) 101.32%);
+    background: linear-gradient(
+      78deg,
+      #78418c 28.72%,
+      rgb(216 113 228 / 64%) 101.32%
+    );
   }
 }
-
 
 // Chat message input box setup
 
 @import url(//fonts.googleapis.com/icon?family=Material+Icons);
 
-$input-highlight: rgba(#FFFFFF, 0.3);
+$input-highlight: rgba(#ffffff, 0.3);
 $input-color: #856af2;
 $input-bar-width: 40vw;
 $input-padding: 0.7em;
@@ -66,7 +69,9 @@ $input-element-size: 38px;
       // width: auto;
 
       &__message {
-        width: calc($input-bar-width - 2 * $input-padding - $input-element-size);
+        width: calc(
+          $input-bar-width - 2 * $input-padding - $input-element-size
+        );
         padding-right: $input-padding;
       }
 
@@ -80,7 +85,7 @@ $input-element-size: 38px;
         color: white;
 
         &::placeholder {
-          color: rgba(#FFFFFF, 0.5);
+          color: rgba(#ffffff, 0.5);
         }
       }
 
@@ -110,4 +115,8 @@ $input-element-size: 38px;
     margin-left: -($input-bar-width / 2);
     z-index: 99;
   }
+}
+
+.sound-wave {
+  display: none;
 }

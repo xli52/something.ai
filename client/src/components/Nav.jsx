@@ -13,13 +13,16 @@ export default function Nav({
   const [showComp, setShowComp] = useState(true);
   const { pathname } = useLocation();
 
-  // It only happened once, need to make it call everytime path change
   useEffect(() => {
     buttonCheck();
   }, [pathname, loggedUser]);
 
+  const routepath = ["/", "/home", "/chat", "/setup", "/signup", "/login"];
+
   const buttonCheck = () => {
-    if (pathname === "/login" || pathname === "/signup") {
+    if (!routepath.includes(pathname)) {
+      setShowComp(false);
+    } else if (pathname === "/login" || pathname === "/signup") {
       setShowComp(false);
     } else if (loggedUser) {
       setShowComp(false);

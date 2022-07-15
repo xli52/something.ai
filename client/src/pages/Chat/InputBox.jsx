@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import ReactAudioPlayer from "react-audio-player";
+
 import { characterContext } from "../../contexts/CharacterContext";
 
 export default function InputBox({ textMode, setUserText, setBotText, setBotTyping, setUserTyping }) {
@@ -49,6 +50,7 @@ export default function InputBox({ textMode, setUserText, setBotText, setBotTypi
   return (
     <div className="input-box-container__text">
       <ReactAudioPlayer src={audio} autoPlay={true} />
+
       <div className="chat-bar">
         <form
           className="chat-bar__message"
