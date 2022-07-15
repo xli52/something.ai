@@ -145,7 +145,7 @@ const openaiRouter = (db: any): any => {
           );
         }
 
-        // if the above conditional didn't run, it meanse user is logged in. search for prompt history in db
+        // if the above conditional didn't run, it means user is logged in. search for prompt history in db
         return db.prompt
           .findOne({
             where: {
@@ -328,6 +328,7 @@ const openaiRouter = (db: any): any => {
         }
       });
   });
+
   return router;
 };
 
