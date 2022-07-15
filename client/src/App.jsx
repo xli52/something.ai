@@ -9,6 +9,7 @@ import { Routes, Route } from "react-router-dom";
 import Nav from "./components/Nav";
 import LoginModal from "./pages/Login/LoginModal";
 import SignUpModal from "./pages/Signup/SignUpModal";
+import ChatBox from "./pages/Chat/ChatBox";
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
@@ -17,6 +18,7 @@ function App() {
 
   return (
     <>
+      <ChatBox />
       <Nav
         setShowLogin={setShowLogin}
         setShowSignUp={setShowSignUp}

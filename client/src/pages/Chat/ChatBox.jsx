@@ -9,6 +9,7 @@ export default function ChatBox(props) {
   const onSubmit = (e) => {
     e.preventDefault();
     console.log("axios outgoing request");
+    setAudio("");
     return axios({
       method: "POST",
       url: "/api/openai/textToSpeech",
