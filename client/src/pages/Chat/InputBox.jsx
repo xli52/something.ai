@@ -42,6 +42,7 @@ export default function InputBox({ textMode, setUserText, setBotText, setBotTypi
   }
 
   function handleChange(event) {
+    setUserText('');
     const input = event.target.value;
     setMessage(input);
     input ? setUserTyping(true) :setUserTyping(false);
