@@ -31,7 +31,6 @@ export default function Setup() {
           />
         </div>
         <SetupBox setBgColor={setBgColor} />
-        <button>CHAT</button>
       </div>
     </main>
   );
