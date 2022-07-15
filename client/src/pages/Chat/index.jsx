@@ -15,7 +15,10 @@ export default function Chat(props) {
       <div className="chat-container">
         <div className="chat-scene-container">
           <ChatScene />
-          <InputBox setText={setUserText} />
+          <InputBox
+            setUserText={setUserText}
+            setBotText={setBotText}
+          />
           {userText &&
             <Bubble
               text={userText}
