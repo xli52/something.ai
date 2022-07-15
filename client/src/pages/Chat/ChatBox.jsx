@@ -3,7 +3,7 @@ import axios from "axios";
 import ReactAudioPlayer from "react-audio-player";
 
 export default function ChatBox(props) {
-  const [input, setInput] = useState("");
+  const [message, setMessage] = useState("");
   const [audio, setAudio] = useState("");
 
   const onSubmit = (e) => {
@@ -12,7 +12,7 @@ export default function ChatBox(props) {
     return axios({
       method: "POST",
       url: "/api/openai/textToSpeech",
-      data: JSON.stringify({ input }),
+      data: JSON.stringify({ message }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -20,7 +20,7 @@ export default function ChatBox(props) {
       .then((res) => {
         console.log("React render stage", res);
         setAudio(`/${res.data.audioID}.mp3`);
-        setInput("");
+        setMessage("");
       })
       .catch((e) => console.log(e.message));
   };
@@ -31,11 +31,11 @@ export default function ChatBox(props) {
       <form onSubmit={onSubmit}>
         <input
           type="text"
-          name="input"
+          name="message"
           placeholder="Ask me a question"
           required
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
         />
         <input type="submit" value="Get a response" />
       </form>
