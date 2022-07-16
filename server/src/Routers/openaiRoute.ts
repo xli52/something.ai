@@ -12,9 +12,11 @@ import { GoogleNLA, checkSentiment } from "../helpers/gNLA";
 import {
   openai,
   chatPrompt,
-  updatePrompt,
+  updatePromptHistory,
+  updatePromptGender,
   standardPrompt,
 } from "../helpers/openai";
+import { request } from "http";
 
 const openaiRouter = (db: any): any => {
   ////////////////////////////////
@@ -139,18 +141,25 @@ const openaiRouter = (db: any): any => {
           response[0].documentSentiment.score
         );
 
-        // visitor will get a none saved prompt every time
+        // assign gender
+        if (!req.session.gender) req.session.gender = req.body.gender;
 
+        // create a prompt content based based on gender
+        const genderPromptContent = standardPrompt(req.body.gender);
+
+        // create boiler plate prompt for 1st time user and visitor
+        const boilerPlate = chatPrompt(
+          req.session.requestedText,
+          req.session.requestedSentiment,
+          genderPromptContent
+        );
+
+        // visitor will get a none saved prompt every time
         if (req.session.visitorID) {
-          return openai.createCompletion(
-            chatPrompt(
-              req.session.requestedText,
-              req.session.requestedSentiment
-            )
-          );
+          return openai.createCompletion(boilerPlate);
         }
 
-        // if the above conditional didn't run, it means user is logged in. search for prompt history in db
+        // if the above conditional statement didn't run, it means user is logged in. search for prompt history in db then proceed to Openai
         return db.prompt
           .findOne({
             where: {
@@ -160,46 +169,111 @@ const openaiRouter = (db: any): any => {
           })
           .then((response: any) => {
             if (response) {
-              // there was prompt history created, simply insert the prompt history and proceed
-              req.session.promptID = response.id;
-              // reassigning new prompt with prompt history
               console.log(
                 "db prompt search returns a prompt history.",
                 response.prompt
               );
+
+              // assign promptID to session for later retrieval
+              req.session.promptID = response.id;
+
+              // there was prompt history created, compare the gender inside of the prompt history, and update if necessary
+              console.log("req.session.gender: ", req.session.gender);
+              console.log("req.body.gender: ", req.body.gender);
               console.log(
-                " Now we send this off to google: ",
-                chatPrompt(
-                  req.session.requestedText,
-                  req.session.requestedSentiment,
-                  response.prompt
-                )
-              );
-              return openai.createCompletion(
-                chatPrompt(
-                  req.session.requestedText,
-                  req.session.requestedSentiment,
-                  response.prompt
-                )
-              );
-            } else {
-              // since no response, we create a new boiler-plate prompt
-              console.log(
-                "db prompt search returns nothing,creating new boiler-plate prompt..."
-              );
-              let boilerPlate = chatPrompt(
-                req.session.requestedText,
-                req.session.requestedSentiment
+                "Gender is the same? ",
+                req.session.gender === req.body.gender
               );
 
-              console.log("boilerPlate is: ", boilerPlate);
+              if (req.session.gender === req.body.gender) {
+                // same character gender, no need to update prompt history
+                console.log(
+                  " Now we send this off to google: ",
+                  chatPrompt(
+                    req.session.requestedText,
+                    req.session.requestedSentiment,
+                    response.prompt
+                  )
+                );
+
+                return openai.createCompletion(
+                  chatPrompt(
+                    req.session.requestedText,
+                    req.session.requestedSentiment,
+                    response.prompt
+                  )
+                );
+              } else {
+                // need to update prompt history and write to database before we send of the request to google
+                console.log(
+                  "character gender has changed, updating prompt gender in db..."
+                );
+
+                console.log(
+                  "updated prompt gender: ",
+                  updatePromptGender(response.prompt, req.body.gender)
+                );
+
+                return db.prompt
+                  .upsert({
+                    id: req.session.promptID,
+                    user_id: req.session.userID,
+                    conversation_id: req.session.convoID,
+                    prompt: updatePromptGender(
+                      response.prompt,
+                      req.body.gender
+                    ),
+                  })
+                  .then((response: any) => {
+                    console.log("upserted prmopt: ", response);
+                    console.log(
+                      "which one is correct? ",
+                      response[0].dataValues.prompt
+                    );
+                    console.log(
+                      "Prompt gender history update completed, proceeding..."
+                    );
+
+                    console.log(
+                      "New chatPrompt: ",
+                      chatPrompt(
+                        req.session.requestedText,
+                        req.session.requestedSentiment,
+                        response[0].dataValues.prompt
+                      )
+                    );
+
+                    // after updateing db, need to update req.session.gender to reflect current gender selection
+                    req.session.gender = req.body.gender;
+                    console.log("Now req.body.gender is " + req.body.gender);
+                    console.log(
+                      "Now req.session.gender is: ",
+                      req.session.gender
+                    );
+
+                    return openai.createCompletion(
+                      chatPrompt(
+                        req.session.requestedText,
+                        req.session.requestedSentiment,
+                        response[0].dataValues.prompt
+                      )
+                    );
+                  });
+              }
+            } else {
+              // since no response, we create a new prompt history using the boilerPlate.prompt
+              console.log(
+                "db prompt search returns nothing,saving new boiler-plate prompt..."
+              );
+
+              console.log("boilerPlate is: ", boilerPlate.prompt);
 
               // perform a database upsert first then proceed. This will save some time for later prompt update search
               return db.prompt
                 .upsert({
                   user_id: req.session.userID,
                   conversation_id: req.session.convoID,
-                  prompt: standardPrompt,
+                  prompt: boilerPlate.prompt,
                 })
                 .then((response: any) => {
                   console.log("After boilerPlate upsert: ", response);
@@ -245,7 +319,7 @@ const openaiRouter = (db: any): any => {
             .then((response: any) => {
               db.prompt.upsert({
                 id: req.session.promptID,
-                prompt: updatePrompt(
+                prompt: updatePromptHistory(
                   response.prompt,
                   req.session.requestedText,
                   req.session.requestedSentiment,
@@ -280,7 +354,7 @@ const openaiRouter = (db: any): any => {
         // this is will send response back to frontend, which react will update it's dom to retrieve new audio file and initiate character animation
         console.log("preparing data for front-end");
         let apiResponse: object = {
-          gender: req.session.gender || "FEMALE",
+          gender: req.body.gender || "FEMALE",
           userID: req.session.userID,
           audioID: req.session.audioID,
           requestedText: req.session.requestedText,

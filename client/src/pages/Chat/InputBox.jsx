@@ -4,7 +4,13 @@ import ReactAudioPlayer from "react-audio-player";
 
 import { characterContext } from "../../contexts/CharacterContext";
 
-export default function InputBox({ textMode, setUserText, setBotText, setBotTyping, setUserTyping }) {
+export default function InputBox({
+  textMode,
+  setUserText,
+  setBotText,
+  setBotTyping,
+  setUserTyping,
+}) {
   const { character } = useContext(characterContext);
   const [message, setMessage] = useState("");
   const [audio, setAudio] = useState("");
@@ -35,17 +41,17 @@ export default function InputBox({ textMode, setUserText, setBotText, setBotTypi
         })
         .catch((e) => {
           setBotTyping(false);
-          setBotText('Sorry, something is wrong, pleaes try again later!');
+          setBotText("Sorry, something is wrong, pleaes try again later!");
           console.log(e.message);
         });
     }
   }
 
   function handleChange(event) {
-    setUserText('');
+    setUserText("");
     const input = event.target.value;
     setMessage(input);
-    input ? setUserTyping(true) :setUserTyping(false);
+    input ? setUserTyping(true) : setUserTyping(false);
   }
 
   return (
