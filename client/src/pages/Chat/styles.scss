@@ -14,11 +14,9 @@
 
 .bg {
   &1 {
-    background: linear-gradient(
-      132deg,
-      #ffffff 28.72%,
-      rgb(180 101 243 / 49%) 101.32%
-    );
+    background: linear-gradient(132deg,
+        #ffffff 28.72%,
+        rgb(180 101 243 / 49%) 101.32%);
   }
 
   &2 {
@@ -31,11 +29,9 @@
 
   &4 {
     color: #c6c6c6;
-    background: linear-gradient(
-      78deg,
-      #78418c 28.72%,
-      rgb(216 113 228 / 64%) 101.32%
-    );
+    background: linear-gradient(78deg,
+        #78418c 28.72%,
+        rgb(216 113 228 / 64%) 101.32%);
   }
 }
 
@@ -50,73 +46,84 @@ $input-padding: 0.7em;
 $input-element-size: 38px;
 
 .input-box-container {
-  &__text {
-    position: fixed;
-    bottom: 5%;
-    left: 50%;
-    width: $input-bar-width;
-    margin-left: -($input-bar-width / 2);
-    z-index: 99;
+  position: fixed;
+  bottom: 5%;
+  left: 50%;
+  width: $input-bar-width;
+  margin-left: -($input-bar-width / 2);
+  z-index: 99;
 
-    .chat-bar {
-      background: $input-color;
-      box-shadow: 0px 15px 24px rgba(0, 0, 0, 0.3);
-      border-radius: $input-element-size;
-      padding: $input-padding;
+  .chat-bar {
+    background: $input-color;
+    box-shadow: 0px 15px 24px rgba(0, 0, 0, 0.3);
+    border-radius: $input-element-size;
+    padding: $input-padding;
+    display: flex;
+    overflow: hidden;
+
+    &__speaker {
+      height: $input-element-size;
+      width: $input-element-size;
       display: flex;
-      // justify-content: space-between;
-      overflow: hidden;
-      // width: auto;
+      cursor: pointer;
+      justify-content: center;
+      align-items: center;
+      background: $input-highlight;
+      border-radius: 50%;
 
-      &__message {
-        width: calc(
-          $input-bar-width - 2 * $input-padding - $input-element-size
-        );
-        padding-right: $input-padding;
-      }
-
-      &__input {
-        background: $input-highlight;
-        height: $input-element-size;
-        border-radius: 18px;
-        width: 100%;
-        border: 0;
-        padding: $input-padding;
+      .material-icons {
+        font-size: 24px;
         color: white;
-
-        &::placeholder {
-          color: rgba(#ffffff, 0.5);
-        }
       }
+    }
 
-      &__send {
-        height: $input-element-size;
-        width: $input-element-size;
-        display: flex;
-        cursor: pointer;
-        justify-content: center;
-        align-items: center;
-        background: $input-highlight;
-        border-radius: 50%;
+    &__message {
+      width: calc($input-bar-width - 4 * $input-padding - 2 * $input-element-size );
+      margin-right: $input-padding;
+      margin-left: $input-padding;
+      border-radius: 18px;
+      background: $input-highlight;
+    }
 
-        .material-icons {
-          font-size: 24px;
-          color: white;
-        }
+    &__mic {
+      position: absolute;
+      height: $input-element-size;
+      width: $input-element-size;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: rgba(#ffffff, 0.6);
+    }
+
+    &__input {
+      background: transparent;
+      border-radius: 18px;
+      height: $input-element-size;
+      width: 100%;
+      border: 0;
+      color: white;
+      padding: $input-padding;
+      padding-left: $input-element-size;
+
+      &::placeholder {
+        color: rgba(#ffffff, 0.6);
+      }
+    }
+
+    &__send {
+      height: $input-element-size;
+      width: $input-element-size;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      background: $input-highlight;
+      border-radius: 50%;
+
+      .material-icons {
+        font-size: 24px;
+        color: white;
       }
     }
   }
-
-  &__speak {
-    position: fixed;
-    bottom: 5%;
-    left: 50%;
-    width: $input-bar-width;
-    margin-left: -($input-bar-width / 2);
-    z-index: 99;
-  }
-}
-
-.sound-wave {
-  display: none;
 }

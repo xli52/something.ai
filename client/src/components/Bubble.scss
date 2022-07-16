@@ -84,23 +84,23 @@ $bot-color: lighten($dark, 42%);
   }
 
   .one {
-    animation-delay: 0.6s;
+    animation-delay: 0.2s;
     margin-right: 5px;
   }
 
   .two {
-    animation-delay: 0.5s;
+    animation-delay: 0.1s;
     margin-right: 5px;
   }
 
   .three {
-    animation-delay: 0.8s;
+    animation-delay: 0.4s;
   }
 }
 
 @keyframes bounce {
-  30% { transform: translateY(-2px); }
+  30% { transform: translateY(-4px); }
   60% { transform: translateY(0px); }
-  80% { transform: translateY(2px); }
+  80% { transform: translateY(4px); }
   100% { transform: translateY(0px); opacity: 0.5;  }
 }

@@ -21,10 +21,10 @@ export default function Bubble({ text, setText, user, bot, typing }) {
       <div className={bubbleClass}>
         {!typing && text}
         {typing &&
-          <div class="typing">
-            <div class="ellipsis one"></div>
-            <div class="ellipsis two"></div>
-            <div class="ellipsis three"></div>
+          <div className="typing">
+            <div className="ellipsis one"></div>
+            <div className="ellipsis two"></div>
+            <div className="ellipsis three"></div>
           </div>
         }
         <div className={bubbleTailClass}></div>
