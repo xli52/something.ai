@@ -27,8 +27,10 @@ app.use(
   })
 );
 app.use(morgan("dev"));
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+app.use(
+  express.urlencoded({ extended: false, limit: "10mb", parameterLimit: 10000 })
+);
+app.use(express.json({ limit: "10mb" }));
 
 app.get("/", (req: any, res: any) => {
   console.log("Checking user session", req.session);
