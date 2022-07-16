@@ -25,8 +25,8 @@ app.use((0, cookie_session_1.default)({
     keys: ["key1", "key2", "key3"],
 }));
 app.use((0, morgan_1.default)("dev"));
-app.use(express_1.default.urlencoded({ extended: false }));
-app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({ extended: false, limit: "10mb", parameterLimit: 10000 }));
+app.use(express_1.default.json({ limit: "10mb" }));
 app.get("/", (req, res) => {
     console.log("Checking user session", req.session);
     res.status(200);

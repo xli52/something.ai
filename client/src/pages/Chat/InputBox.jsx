@@ -22,25 +22,32 @@ export default function InputBox({ setUserText, setBotText, textMode }) {
   };
 
   const onStop = (recordedBlob) => {
+    console.log("recording finished");
+    console.log("recordedBlob is: ", recordedBlob);
+    console.log(recordedBlob.blobURL);
     setUserText(". . .");
     setBotText("em . . . ");
     return blobToBase64(recordedBlob.blob, (error, base64) => {
       if (!error) {
-        return axios({
-          method: "POST",
-          url: "/api/openai/speechToText",
-          data: JSON.stringify({ base64 }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-          .then((res) => {
-            console.log("sucessfully finished", res);
-            setAudio(`/${res.data.audioID}.mp3`);
-            setUserText(res.data.requestedText);
-            setBotText(res.data.aiText);
+        if (recordedBlob.stopTime - recordedBlob.startTime <= 1000) {
+          console.log("Please record your input again.");
+        } else {
+          return axios({
+            method: "POST",
+            url: "/api/openai/speechToText",
+            data: JSON.stringify({ base64 }),
+            headers: {
+              "Content-Type": "application/json",
+            },
           })
-          .catch((e) => console.log(e));
+            .then((res) => {
+              console.log("sucessfully finished", res);
+              setAudio(`/${res.data.audioID}.mp3`);
+              setUserText(res.data.requestedText);
+              setBotText(res.data.aiText);
+            })
+            .catch((e) => console.log(e));
+        }
       } else {
         console.log(error);
         return;
