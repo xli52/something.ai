@@ -7,6 +7,7 @@ import getTimer from "../../helpers/getTimer";
 const SPEAK_TIME_LIMIT = 10000;
 
 export default function InputBox({ setUserText, setBotText, setBotTyping, setUserTyping }) {
+
   const { character } = useContext(characterContext);
   const [message, setMessage] = useState("");
   const [placeholder, setPlaceHolder] = useState("Tpye or hold ESC key to speak...");
@@ -90,7 +91,7 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
         })
         .catch((e) => {
           setBotTyping(false);
-          setBotText('Sorry, something is wrong, pleaes try again later!');
+          setBotText("Sorry, something is wrong, pleaes try again later!");
           console.log(e.message);
         });
     }
