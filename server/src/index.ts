@@ -3,6 +3,14 @@ import express from "express";
 import morgan from "morgan";
 import cookieSession from "cookie-session";
 import db from "../src/db/models";
+import { deleteFiles } from "./helpers/helpers";
+
+// a cron job to clean up audio files every 30 seconds
+// const audioDir: string = __dirname + "/audio";
+// setInterval(() => {
+//   deleteFiles(audioDir);
+//   console.log("cron job done.");
+// }, 30000);
 
 dotenv.config();
 const app = express();

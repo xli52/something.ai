@@ -8,6 +8,12 @@ const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
 const cookie_session_1 = __importDefault(require("cookie-session"));
 const models_1 = __importDefault(require("../src/db/models"));
+// a cron job to clean up audio files every 30 seconds
+// const audioDir: string = __dirname + "/audio";
+// setInterval(() => {
+//   deleteFiles(audioDir);
+//   console.log("cron job done.");
+// }, 30000);
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 // import Routers
