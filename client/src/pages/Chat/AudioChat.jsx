@@ -26,21 +26,24 @@ export default function AudioChat(props) {
     console.log(recordedBlob.blobURL);
     return blobToBase64(recordedBlob.blob, (error, base64) => {
       if (!error) {
-        console.log(base64);
-        return axios({
-          method: "POST",
-          url: "/api/openai/speechToText",
-          data: JSON.stringify({ base64 }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-          .then((res) => {
-            console.log("sucessfully finished", res);
-            setAudio(`/${res.data.audioID}.mp3`);
-            setRecognizedText(res.data.recognizedText);
+        if (recordedBlob.stopTime - recordedBlob.startTime < 1000) {
+          console.log("Please record your input again");
+        } else {
+          return axios({
+            method: "POST",
+            url: "/api/openai/speechToText",
+            data: JSON.stringify({ base64 }),
+            headers: {
+              "Content-Type": "application/json",
+            },
           })
-          .catch((e) => console.log(e));
+            .then((res) => {
+              console.log("sucessfully finished", res);
+              setAudio(`/${res.data.audioID}.mp3`);
+              setRecognizedText(res.data.recognizedText);
+            })
+            .catch((e) => console.log(e));
+        }
       } else {
         console.log(error);
         return;

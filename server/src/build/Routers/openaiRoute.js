@@ -26,12 +26,18 @@ const openaiRouter = (db) => {
         };
         console.log("firing to Google STT api");
         return (0, gSTT_1.GoogleSTT)(request).then(([response]) => {
-            console.log("received response from Google: ", response.results[0].alternatives[0].transcript);
-            // saved this text to req.session
-            req.session.recognizedText =
-                response.results[0].alternatives[0].transcript;
-            // redirect with code 307 will reserve the send method (i.e. POST method)
-            res.redirect(307, "/api/openai/textToSpeech");
+            // response will be an empty array if google cannot recognize anything
+            if (!response.results[0]) {
+                return res.send("Google could not recongize anything");
+            }
+            else {
+                console.log("received response from Google: ", response.results[0].alternatives[0].transcript);
+                // saved this text to req.session
+                req.session.recognizedText =
+                    response.results[0].alternatives[0].transcript;
+                // redirect with code 307 will reserve the send method (i.e. POST method)
+                res.redirect(307, "/api/openai/textToSpeech");
+            }
         });
     });
     ////////////////////////////////
@@ -101,7 +107,7 @@ const openaiRouter = (db) => {
             if (req.session.visitorID) {
                 return openai_1.openai.createCompletion((0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment));
             }
-            // if the above conditional didn't run, it meanse user is logged in. search for prompt history in db
+            // if the above conditional didn't run, it means user is logged in. search for prompt history in db
             return db.prompt
                 .findOne({
                 where: {
