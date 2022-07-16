@@ -31,17 +31,22 @@ const openaiRouter = (db: any): any => {
 
     console.log("firing to Google STT api");
     return GoogleSTT(request).then(([response]) => {
-      console.log(
-        "received response from Google: ",
-        response.results[0].alternatives[0].transcript
-      );
+      // response will be an empty array if google cannot recognize anything
+      if (!response.results[0]) {
+        return res.send("Google could not recongize anything");
+      } else {
+        console.log(
+          "received response from Google: ",
+          response.results[0].alternatives[0].transcript
+        );
 
-      // saved this text to req.session
-      req.session.recognizedText =
-        response.results[0].alternatives[0].transcript;
+        // saved this text to req.session
+        req.session.recognizedText =
+          response.results[0].alternatives[0].transcript;
 
-      // redirect with code 307 will reserve the send method (i.e. POST method)
-      res.redirect(307, "/api/openai/textToSpeech");
+        // redirect with code 307 will reserve the send method (i.e. POST method)
+        res.redirect(307, "/api/openai/textToSpeech");
+      }
     });
   });
 
