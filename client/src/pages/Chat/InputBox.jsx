@@ -110,7 +110,7 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('keyup', handleKeyUp);
     }
-  }, []);
+  });
 
   return (
     <div className="input-box-container">
@@ -125,8 +125,8 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
           onSubmit={(event) => handleSendMsg(event)}
         >
           <div className="chat-bar__mic">
-            {icon === 'keyboard' && <i className="material-icons">keyboard</i>}
-            {icon === 'mic' && <i className="material-icons">mic</i>}
+            {icon === 'keyboard' && <i className="material-icons keyboard">keyboard</i>}
+            {icon === 'mic' && <i className="material-icons mic">mic</i>}
           </div>
           <input
             className="chat-bar__input"
