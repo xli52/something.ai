@@ -187,6 +187,7 @@ const openaiRouter = (db) => {
             req.session.audioID = req.session.userID
                 ? `${req.session.userID}-${response.data.id}`
                 : `${req.session.visitorID}-${response.data.id}`;
+            // check if open returned an empty response, if so, we have to input our own responded text
             req.session.respondedText = response.data.choices[0].text.trim()
                 ? response.data.choices[0].text.trim()
                 : "I am sorry, I didn't understand what you meant. Can you repaet that again?";
