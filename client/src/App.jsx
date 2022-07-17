@@ -15,6 +15,7 @@ function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [loggedUser, setLoggedUser] = useState();
+  const [unlocked, setUnlocked] = useState(["jane"]);
 
   return (
     <>
@@ -46,7 +47,10 @@ function App() {
               />
             }
           />
-          <Route path="/setup" element={<Setup />} />
+          <Route
+            path="/setup"
+            element={<Setup unlocked={unlocked} setShowLogin={setShowLogin} />}
+          />
           <Route path="/chat" element={<Chat />} />
           <Route
             path="*"
