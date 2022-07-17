@@ -235,14 +235,6 @@ const openaiRouter = (db: any): any => {
                       )
                     );
 
-                    // after updateing db, need to update req.session.gender to reflect current gender selection
-                    req.session.gender = req.body.gender;
-                    console.log("Now req.body.gender is " + req.body.gender);
-                    console.log(
-                      "Now req.session.gender is: ",
-                      req.session.gender
-                    );
-
                     return openai.createCompletion(
                       chatPrompt(
                         req.session.requestedText,
@@ -348,7 +340,7 @@ const openaiRouter = (db: any): any => {
         // this is will send response back to frontend, which react will update it's dom to retrieve new audio file and initiate character animation
         console.log("preparing data for front-end");
         let apiResponse: object = {
-          gender: req.body.gender || "FEMALE",
+          gender: req.body.gender,
           userID: req.session.userID,
           audioID: req.session.audioID,
           requestedText: req.session.requestedText,
@@ -358,6 +350,11 @@ const openaiRouter = (db: any): any => {
 
         // clear any speech to text record
         req.session.recognizedText = null;
+
+        // after updateing db, need to update req.session.gender to reflect current gender selection
+        req.session.gender = req.body.gender;
+        console.log("Now req.body.gender is " + req.body.gender);
+        console.log("Now req.session.gender is: ", req.session.gender);
 
         console.log(
           "Session before sending off response to front-end: ",
