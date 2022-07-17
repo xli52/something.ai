@@ -30,7 +30,7 @@ app.use(express_1.default.urlencoded({ extended: false, limit: "10mb", parameter
 app.use(express_1.default.json({ limit: "10mb" }));
 app.get("/", (req, res) => {
     console.log("Checking user session", req.session);
-    res.status(200);
+    res.status(200).json(req.session);
 });
 app.use("/api/openai", (0, openaiRoute_1.default)(models_1.default));
 app.use("/user", (0, userRoute_1.default)(models_1.default));
