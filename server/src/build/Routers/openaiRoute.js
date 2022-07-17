@@ -133,7 +133,7 @@ const openaiRouter = (db) => {
                     console.log("Gender is the same? ", req.session.gender === req.body.gender);
                     if (req.session.gender === req.body.gender) {
                         // same character gender, no need to update prompt history
-                        console.log(" Now we send this off to google: ", (0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment, response.prompt));
+                        console.log(" Now we send this off to openai: ", (0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment, response.prompt));
                         return openai_1.openai.createCompletion((0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment, response.prompt));
                     }
                     else {
@@ -187,13 +187,15 @@ const openaiRouter = (db) => {
             req.session.audioID = req.session.userID
                 ? `${req.session.userID}-${response.data.id}`
                 : `${req.session.visitorID}-${response.data.id}`;
-            req.session.respondedText = response.data.choices[0].text.trim();
+            req.session.respondedText = response.data.choices[0].text.trim()
+                ? response.data.choices[0].text.trim()
+                : "I am sorry, I didn't understand what you meant. Can you repaet that again?";
             return (0, gNLA_1.GoogleNLA)(req.session.respondedText);
         })
             .then((response) => {
             req.session.respondedSentiment = (0, gNLA_1.checkSentiment)(response[0].documentSentiment.score);
             console.log("responded sentiment is", req.session.respondedSentiment, response[0].documentSentiment.score);
-            // update promptHistory, so that gpt-3 will have history and can recall if we ask the same question
+            // update promptHistory for users only when responded text is not empty, so that gpt-3 will have history and can recall if we ask the same question
             if (req.session.userID) {
                 db.prompt
                     .findOne({

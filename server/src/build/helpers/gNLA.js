@@ -19,7 +19,7 @@ const checkSentiment = (score) => {
         return "very positive";
     }
     else if (score >= 0.2 && score <= 0.5999999999999999) {
-        return "postive";
+        return "positive";
     }
     else if (score >= -0.6 && score <= -0.2000000000000001) {
         return "negative";

@@ -16,7 +16,6 @@ import {
   updatePromptGender,
   standardPrompt,
 } from "../helpers/openai";
-import { request } from "http";
 
 const openaiRouter = (db: any): any => {
   ////////////////////////////////
@@ -188,7 +187,7 @@ const openaiRouter = (db: any): any => {
               if (req.session.gender === req.body.gender) {
                 // same character gender, no need to update prompt history
                 console.log(
-                  " Now we send this off to google: ",
+                  " Now we send this off to openai: ",
                   chatPrompt(
                     req.session.requestedText,
                     req.session.requestedSentiment,
@@ -293,7 +292,9 @@ const openaiRouter = (db: any): any => {
           ? `${req.session.userID}-${response.data.id}`
           : `${req.session.visitorID}-${response.data.id}`;
 
-        req.session.respondedText = response.data.choices[0].text.trim();
+        req.session.respondedText = response.data.choices[0].text.trim()
+          ? response.data.choices[0].text.trim()
+          : "I am sorry, I didn't understand what you meant. Can you repaet that again?";
 
         return GoogleNLA(req.session.respondedText);
       })
@@ -307,7 +308,7 @@ const openaiRouter = (db: any): any => {
           response[0].documentSentiment.score
         );
 
-        // update promptHistory, so that gpt-3 will have history and can recall if we ask the same question
+        // update promptHistory for users only when responded text is not empty, so that gpt-3 will have history and can recall if we ask the same question
         if (req.session.userID) {
           db.prompt
             .findOne({
@@ -401,6 +402,7 @@ const openaiRouter = (db: any): any => {
                     convoID: req.session.convoID,
                     chatHistory: response,
                   };
+
                   console.log("I am at the very bottom here.", req.session);
                   res.status(200).json(apiResponse);
                 });
