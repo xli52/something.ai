@@ -32,8 +32,7 @@ const chatPrompt = (text, prompt) => {
         max_tokens: 1000,
         top_p: 1,
         stop: [" Human:", " AI:"],
-        presence_penalty: 1,
-        frequency_penalty: 1,
+        presence_penalty: 0.6,
     };
 };
 exports.chatPrompt = chatPrompt;

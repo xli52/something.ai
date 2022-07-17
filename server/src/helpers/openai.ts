@@ -33,7 +33,6 @@ interface IOpenaiPrompt {
   top_p?: number;
   stop?: string[];
   presence_penalty?: number;
-  frequency_penalty?: number;
 }
 
 // normal chat mode prompt
@@ -45,8 +44,7 @@ const chatPrompt = (text: string, prompt: string): IOpenaiPrompt => {
     max_tokens: 1000,
     top_p: 1,
     stop: [" Human:", " AI:"],
-    presence_penalty: 1,
-    frequency_penalty: 1,
+    presence_penalty: 0.6,
   };
 };
 
