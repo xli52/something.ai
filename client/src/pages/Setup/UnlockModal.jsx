@@ -32,13 +32,14 @@ export default function UnlockModal(props) {
           submitBuy(e);
         }}
       >
-        {props.showCloseBtn && (
-          <FontAwesomeIcon
-            className="close"
-            icon={faXmark}
-            onClick={() => {}}
-          ></FontAwesomeIcon>
-        )}
+        <FontAwesomeIcon
+          className="close"
+          icon={faXmark}
+          onClick={() => {
+            props.setShowUnlock(false);
+          }}
+        ></FontAwesomeIcon>
+
         {msg && <h3 className="error">{msg}</h3>}
         <h2>Unlock Character</h2>
 
@@ -46,25 +47,37 @@ export default function UnlockModal(props) {
           placeholder="Cardholder name"
           type="text"
           name="CardName"
-          value={purchase["CardName"]}
+          value={purchase["cardName"]}
           onChange={handleChange}
         />
 
         <input
           placeholder="CardNumber"
-          type="number"
+          type="tel"
+          autocomplete="cc-number"
+          maxlength="19"
           name="CardNumber"
-          value={purchase["CardNumber"]}
+          value={purchase["cardNumber"]}
           onChange={handleChange}
         />
 
         <input
-          placeholder="cvv"
-          type="number"
-          name="cvv"
-          value={purchase["cvv"]}
+          placeholder="MM / YY"
+          type="tel"
+          autocomplete="cc-expires"
+          maxlength="4"
+          name="credit-expires"
+          value={purchase["credit-expires"]}
           onChange={handleChange}
-          minLength={3}
+        />
+        <input
+          placeholder="CVC"
+          type="tel"
+          name="cvc"
+          maxlength="4"
+          value={purchase["cvv"]}
+          inputmode="numeric"
+          onChange={handleChange}
         />
 
         <button className="btn" type="submit">

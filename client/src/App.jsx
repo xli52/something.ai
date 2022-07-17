@@ -49,7 +49,13 @@ function App() {
           />
           <Route
             path="/setup"
-            element={<Setup unlocked={unlocked} setShowLogin={setShowLogin} />}
+            element={
+              <Setup
+                unlocked={unlocked}
+                setShowLogin={setShowLogin}
+                loggedUser={loggedUser}
+              />
+            }
           />
           <Route path="/chat" element={<Chat />} />
           <Route

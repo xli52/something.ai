@@ -9,12 +9,7 @@ export default function ModelDisplay({ character, layer, setShowUnlock }) {
       {layer && (
         <>
           <div className="locked">
-            <i
-              className="material-icons lockIcon"
-              onClick={() => {
-                setShowUnlock(true);
-              }}
-            >
+            <i className="material-icons lockIcon" onClick={setShowUnlock}>
               lock
             </i>
             <h2 className="unlockText">Unlock Character</h2>

@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
-export default function Setup({ unlocked }) {
+export default function Setup({ unlocked, loggedUser, setShowLogin }) {
   const { character, nextChar, lastChar, bgColor, setBgColor } =
     useContext(characterContext);
 
@@ -32,6 +32,15 @@ export default function Setup({ unlocked }) {
     }
   }
 
+  function checkLogin() {
+    // if (!loggedUser) {
+    //   setShowLogin(true);
+    // } else {
+    //   setShowUnlock(true);
+    // }
+    setShowUnlock(true);
+  }
+
   return (
     <main>
       <div className={`setupMainBody ${bgColor}`}>
@@ -46,7 +55,7 @@ export default function Setup({ unlocked }) {
           <ModelDisplay
             character={character}
             layer={layer}
-            setShowUnlock={setShowUnlock}
+            setShowUnlock={checkLogin}
           />
           <FontAwesomeIcon
             icon={faArrowRight}
