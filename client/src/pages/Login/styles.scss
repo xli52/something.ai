@@ -42,6 +42,10 @@
     border-radius: 1em;
     padding: 1em;
 
+    .error {
+      color: rgb(255, 5, 5);
+    }
+
     input {
       width: 70%;
       height: 3em;

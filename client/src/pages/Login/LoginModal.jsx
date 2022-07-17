@@ -6,6 +6,7 @@ import axios from "axios";
 
 export default function LoginModal(props) {
   const [login, setLogin] = useState({ email: "", password: "" });
+  const [msg, setMsg] = useState();
   const navigate = useNavigate();
 
   // Get path name
@@ -14,6 +15,9 @@ export default function LoginModal(props) {
   // Use handleChange Function to onChange the setLogin
   const handleChange = function (e) {
     const { name, value } = e.target;
+    if (msg) {
+      setMsg();
+    }
     setLogin({ ...login, [name]: value });
   };
 
@@ -26,13 +30,20 @@ export default function LoginModal(props) {
       data: { ...login },
       contentType: { "Content-Type": "application/json" },
     }).then((res) => {
-      props.setLoggedUser(res.data.username);
-      console.log("Login status: ", res.data.username);
-      setLogin({ email: "", password: "" });
-      if (!checkPath()) {
-        return navigate("../", { replace: true });
+      // If res is object mean success
+      if (typeof res.data === "object") {
+        props.setLoggedUser(res.data.username);
+        console.log("Login status: ", res);
+        setLogin({ email: "", password: "" });
+
+        if (!checkPath()) {
+          return navigate("../", { replace: true });
+        }
+
+        props.setShowLogin(false);
+      } else {
+        setMsg(res.data);
       }
-      props.setShowLogin(false);
     });
   };
 
@@ -68,7 +79,7 @@ export default function LoginModal(props) {
             }}
           ></FontAwesomeIcon>
         )}
-
+        {msg && <h3 className="error">{msg}</h3>}
         <h2>LOGIN</h2>
 
         <input
