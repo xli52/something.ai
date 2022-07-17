@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import axios from "axios";
 import ReactAudioPlayer from "react-audio-player";
+import { ReactMic } from "react-mic";
 import { characterContext } from "../../contexts/CharacterContext";
 import getTimer from "../../helpers/getTimer";
 
@@ -9,12 +10,13 @@ const SPEAK_TIME_LIMIT = 10000;
 export default function InputBox({ setUserText, setBotText, setBotTyping, setUserTyping }) {
 
   const { character } = useContext(characterContext);
+  const [gender] = useState(character.gender);
   const [message, setMessage] = useState("");
-  const [placeholder, setPlaceHolder] = useState("Tpye or hold ESC key to speak...");
   const [audio, setAudio] = useState("");
   const [muted, setMuted] = useState(false);
-  const [gender] = useState(character.gender);
+  const [record, setRecord] = useState(false);
   const [icon, setIcon] = useState('keyboard');
+  const [placeholder, setPlaceHolder] = useState("Type or hold ESC key to speak...");
   const speaking = useRef(false);
   const pressCount = useRef(0);
   const keyReleased = useRef(true);
@@ -22,12 +24,21 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
 
   function startRecording() {
     console.log('Start recording');
-
+    setRecord(true);
   };
+
+  function stopRecording() {
+    setRecord(false);
+    setIcon('keyboard');
+    setPlaceHolder("Tpye or hold ESC key to speak...")
+    pressCount.current = 0;
+    speaking.current = false;
+    console.log('Recording stopped.');
+  }
 
   function sendSpeech() {
     setIcon('keyboard');
-    setPlaceHolder("Tpye or hold ESC key to speak...")
+    setPlaceHolder("Type or hold ESC key to speak...")
     pressCount.current = 0;
     speaking.current = false;
 
@@ -43,13 +54,14 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
       if (pressCount.current > 1 && !speaking.current && keyReleased.current) {
         setMessage("");
         setUserTyping(false);
+        setUserText("");
         setIcon('mic');
         setPlaceHolder('Listening...');
         keyReleased.current = false;
         speaking.current = true;
         clearTimeout(timer.current);
         startRecording();
-        timer.current = getTimer(SPEAK_TIME_LIMIT, sendSpeech);
+        timer.current = getTimer(SPEAK_TIME_LIMIT, stopRecording);
       }
     }
   }
@@ -60,7 +72,7 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
       pressCount.current = 0;
       clearTimeout(timer.current);
       if (speaking.current) {
-        sendSpeech();
+        stopRecording();
       }
     }
   }
@@ -129,6 +141,17 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
             {icon === 'keyboard' && <i className="material-icons keyboard">keyboard</i>}
             {icon === 'mic' && <i className="material-icons mic">mic</i>}
           </div>
+          <ReactMic
+            className="sound-wave"
+            visualSetting="frequencyBars"
+            record={record}
+            // onStop={onStop}
+            // onData={onData}
+            strokeColor={"#fcfcfc"}
+            backgroundColor={"transparent"}
+            mimeType="audio/webm"
+            sampleRate={24000}
+          />
           <input
             className="chat-bar__input"
             autoFocus
