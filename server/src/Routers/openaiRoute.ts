@@ -147,7 +147,6 @@ const openaiRouter = (db: any): any => {
         // create boiler plate prompt for 1st time user and visitor
         const boilerPlate = chatPrompt(
           req.session.requestedText,
-          req.session.requestedSentiment,
           genderPromptContent
         );
 
@@ -186,17 +185,13 @@ const openaiRouter = (db: any): any => {
                 // same character gender, no need to update prompt history
                 console.log(
                   " Now we send this off to openai: ",
-                  chatPrompt(
-                    req.session.requestedText,
-                    req.session.requestedSentiment,
-                    response.prompt
-                  )
+                  chatPrompt(req.session.requestedText, response.prompt)
                 );
 
                 return openai.createCompletion(
                   chatPrompt(
                     req.session.requestedText,
-                    req.session.requestedSentiment,
+
                     response.prompt
                   )
                 );
@@ -235,7 +230,7 @@ const openaiRouter = (db: any): any => {
                       "New chatPrompt: ",
                       chatPrompt(
                         req.session.requestedText,
-                        req.session.requestedSentiment,
+
                         response[0].dataValues.prompt
                       )
                     );
@@ -251,7 +246,7 @@ const openaiRouter = (db: any): any => {
                     return openai.createCompletion(
                       chatPrompt(
                         req.session.requestedText,
-                        req.session.requestedSentiment,
+
                         response[0].dataValues.prompt
                       )
                     );
@@ -322,9 +317,8 @@ const openaiRouter = (db: any): any => {
                 prompt: updatePromptHistory(
                   response.prompt,
                   req.session.requestedText,
-                  req.session.requestedSentiment,
-                  req.session.respondedText,
-                  req.session.respondedSentiment
+
+                  req.session.respondedText
                 ),
                 user_id: req.session.userID,
                 conversation_id: req.session.convoID,

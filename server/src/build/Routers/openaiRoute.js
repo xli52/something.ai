@@ -107,7 +107,7 @@ const openaiRouter = (db) => {
             // create a prompt content based based on gender
             const genderPromptContent = (0, openai_1.standardPrompt)(req.body.gender);
             // create boiler plate prompt for 1st time user and visitor
-            const boilerPlate = (0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment, genderPromptContent);
+            const boilerPlate = (0, openai_1.chatPrompt)(req.session.requestedText, genderPromptContent);
             // visitor will get a none saved prompt every time
             if (req.session.visitorID) {
                 return openai_1.openai.createCompletion(boilerPlate);
@@ -131,8 +131,8 @@ const openaiRouter = (db) => {
                     console.log("Gender is the same? ", req.session.gender === req.body.gender);
                     if (req.session.gender === req.body.gender) {
                         // same character gender, no need to update prompt history
-                        console.log(" Now we send this off to openai: ", (0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment, response.prompt));
-                        return openai_1.openai.createCompletion((0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment, response.prompt));
+                        console.log(" Now we send this off to openai: ", (0, openai_1.chatPrompt)(req.session.requestedText, response.prompt));
+                        return openai_1.openai.createCompletion((0, openai_1.chatPrompt)(req.session.requestedText, response.prompt));
                     }
                     else {
                         // need to update prompt history and write to database before we send of the request to google
@@ -149,12 +149,12 @@ const openaiRouter = (db) => {
                             console.log("upserted prmopt: ", response);
                             console.log("which one is correct? ", response[0].dataValues.prompt);
                             console.log("Prompt gender history update completed, proceeding...");
-                            console.log("New chatPrompt: ", (0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment, response[0].dataValues.prompt));
+                            console.log("New chatPrompt: ", (0, openai_1.chatPrompt)(req.session.requestedText, response[0].dataValues.prompt));
                             // after updateing db, need to update req.session.gender to reflect current gender selection
                             req.session.gender = req.body.gender;
                             console.log("Now req.body.gender is " + req.body.gender);
                             console.log("Now req.session.gender is: ", req.session.gender);
-                            return openai_1.openai.createCompletion((0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment, response[0].dataValues.prompt));
+                            return openai_1.openai.createCompletion((0, openai_1.chatPrompt)(req.session.requestedText, response[0].dataValues.prompt));
                         });
                     }
                 }
@@ -206,7 +206,7 @@ const openaiRouter = (db) => {
                     .then((response) => {
                     db.prompt.upsert({
                         id: req.session.promptID,
-                        prompt: (0, openai_1.updatePromptHistory)(response.prompt, req.session.requestedText, req.session.requestedSentiment, req.session.respondedText, req.session.respondedSentiment),
+                        prompt: (0, openai_1.updatePromptHistory)(response.prompt, req.session.requestedText, req.session.respondedText),
                         user_id: req.session.userID,
                         conversation_id: req.session.convoID,
                     });
