@@ -150,10 +150,6 @@ const openaiRouter = (db) => {
                             console.log("which one is correct? ", response[0].dataValues.prompt);
                             console.log("Prompt gender history update completed, proceeding...");
                             console.log("New chatPrompt: ", (0, openai_1.chatPrompt)(req.session.requestedText, response[0].dataValues.prompt));
-                            // after updateing db, need to update req.session.gender to reflect current gender selection
-                            req.session.gender = req.body.gender;
-                            console.log("Now req.body.gender is " + req.body.gender);
-                            console.log("Now req.session.gender is: ", req.session.gender);
                             return openai_1.openai.createCompletion((0, openai_1.chatPrompt)(req.session.requestedText, response[0].dataValues.prompt));
                         });
                     }
@@ -216,9 +212,7 @@ const openaiRouter = (db) => {
                 });
             }
             // choose voice based on character gender. FEMALE voice is used by default.
-            return req.body.gender
-                ? (0, gTTS_1.GoogleTTS)(req.session.respondedText, req.body.gender)
-                : (0, gTTS_1.GoogleTTS)(req.session.respondedText);
+            return (0, gTTS_1.GoogleTTS)(req.session.respondedText, req.body.gender);
         })
             .then(([response]) => {
             // Base64 encoding is done, time to write file
@@ -230,7 +224,7 @@ const openaiRouter = (db) => {
             // this is will send response back to frontend, which react will update it's dom to retrieve new audio file and initiate character animation
             console.log("preparing data for front-end");
             let apiResponse = {
-                gender: req.body.gender || "FEMALE",
+                gender: req.body.gender,
                 userID: req.session.userID,
                 audioID: req.session.audioID,
                 requestedText: req.session.requestedText,
@@ -239,6 +233,10 @@ const openaiRouter = (db) => {
             };
             // clear any speech to text record
             req.session.recognizedText = null;
+            // after updateing db, need to update req.session.gender to reflect current gender selection
+            req.session.gender = req.body.gender;
+            console.log("Now req.body.gender is " + req.body.gender);
+            console.log("Now req.session.gender is: ", req.session.gender);
             console.log("Session before sending off response to front-end: ", req.session);
             // if it is a visitor, no need to write to db. However, if it is a user, write to db
             if (req.session.visitorID) {
