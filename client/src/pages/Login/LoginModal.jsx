@@ -35,7 +35,7 @@ export default function LoginModal(props) {
         props.setLoggedUser(res.data.username);
         console.log("Login status: ", res);
         setLogin({ email: "", password: "" });
-
+        localStorage.setItem("user", res.data.username);
         if (!checkPath()) {
           return navigate("../", { replace: true });
         }

@@ -40,6 +40,7 @@ export default function Nav({
       contentType: { "Content-Type": "application/json" },
     }).then((res) => {
       setLoggedUser();
+      localStorage.clear();
     });
   };
 
