@@ -33,12 +33,11 @@ export default function Setup({ unlocked, loggedUser, setShowLogin }) {
   }
 
   function checkLogin() {
-    // if (!loggedUser) {
-    //   setShowLogin(true);
-    // } else {
-    //   setShowUnlock(true);
-    // }
-    setShowUnlock(true);
+    if (!loggedUser) {
+      setShowLogin(true);
+    } else {
+      setShowUnlock(true);
+    }
   }
 
   return (

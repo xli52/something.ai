@@ -54,8 +54,8 @@ export default function UnlockModal(props) {
         <input
           placeholder="CardNumber"
           type="tel"
-          autocomplete="cc-number"
-          maxlength="19"
+          autoComplete="cc-number"
+          maxLength="19"
           name="CardNumber"
           value={purchase["cardNumber"]}
           onChange={handleChange}
@@ -64,8 +64,8 @@ export default function UnlockModal(props) {
         <input
           placeholder="MM / YY"
           type="tel"
-          autocomplete="cc-expires"
-          maxlength="4"
+          autoComplete="cc-expires"
+          maxLength="4"
           name="credit-expires"
           value={purchase["credit-expires"]}
           onChange={handleChange}
@@ -74,9 +74,9 @@ export default function UnlockModal(props) {
           placeholder="CVC"
           type="tel"
           name="cvc"
-          maxlength="4"
+          maxLength="4"
           value={purchase["cvv"]}
-          inputmode="numeric"
+          inputMode="numeric"
           onChange={handleChange}
         />
 
