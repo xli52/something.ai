@@ -51,9 +51,7 @@ const openaiRouter = (db) => {
         console.log("req.session.recognizedText: ", req.session.recognizedText);
         console.log("Current user session: ", req.session.userID, req.session.visitorID);
         // to deterentiate where the request was from speech or text
-        req.session.requestedText = req.session.recognizedText
-            ? req.session.recognizedText
-            : req.body.message;
+        req.session.requestedText = req.session.recognizedText || req.body.message;
         // to make sure if the text is from registered user or visitor. If it is a visitor, then provide a visitorID
         if (!req.session.userID && !req.session.visitorID) {
             console.log("Initializing visitor ID...");
@@ -188,9 +186,9 @@ const openaiRouter = (db) => {
                 ? `${req.session.userID}-${response.data.id}`
                 : `${req.session.visitorID}-${response.data.id}`;
             // check if open returned an empty response, if so, we have to input our own responded text
-            req.session.respondedText = response.data.choices[0].text.trim()
-                ? response.data.choices[0].text.trim()
-                : "I am sorry, I didn't understand what you meant. Can you repaet that again?";
+            req.session.respondedText =
+                response.data.choices[0].text.trim() ||
+                    "I am sorry, I didn't understand what you meant. Can you repaet that again?";
             return (0, gNLA_1.GoogleNLA)(req.session.respondedText);
         })
             .then((response) => {
