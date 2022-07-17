@@ -5,7 +5,7 @@ exports.GoogleTTS = void 0;
 const textToSpeech = require("@google-cloud/text-to-speech");
 // Creates a client
 const client = new textToSpeech.TextToSpeechClient();
-const GoogleTTS = (text, gender = "FEMALE") => {
+const GoogleTTS = (text, gender) => {
     const name = gender === "FEMALE" ? "en-US-Wavenet-F" : "en-US-Wavenet-D";
     // Construct the request
     const request = {

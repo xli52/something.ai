@@ -212,9 +212,7 @@ const openaiRouter = (db) => {
                 });
             }
             // choose voice based on character gender. FEMALE voice is used by default.
-            return req.body.gender
-                ? (0, gTTS_1.GoogleTTS)(req.session.respondedText, req.body.gender)
-                : (0, gTTS_1.GoogleTTS)(req.session.respondedText);
+            return (0, gTTS_1.GoogleTTS)(req.session.respondedText, req.body.gender);
         })
             .then(([response]) => {
             // Base64 encoding is done, time to write file

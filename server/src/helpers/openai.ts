@@ -17,7 +17,7 @@ function generatePrompt(input: string): string {
   return capitalizedInput;
 }
 
-const standardPrompt = (gender: string = "FEMALE") => {
+const standardPrompt = (gender: string) => {
   const name: string = gender === "FEMALE" ? "Jane" : "Joshua";
 
   return `The following is a conversation with an AI. Below is the conversation history between the AI assistant and the human.
