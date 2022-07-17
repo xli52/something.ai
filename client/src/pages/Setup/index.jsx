@@ -14,6 +14,7 @@ export default function Setup({ unlocked }) {
     useContext(characterContext);
 
   const [layer, setLayer] = useState(false);
+  const [showUnlock, setShowUnlock] = useState(false);
 
   useEffect(() => {
     unlockCheck(unlocked, character);
@@ -25,7 +26,6 @@ export default function Setup({ unlocked }) {
 
   function unlockCheck(unlocked, character) {
     if (!unlocked.includes(character.name)) {
-      console.log("locked");
       setLayer(true);
     } else {
       setLayer(false);
@@ -35,6 +35,7 @@ export default function Setup({ unlocked }) {
   return (
     <main>
       <div className={`setupMainBody ${bgColor}`}>
+        {showUnlock && <UnlockModal setShowUnlock={setShowUnlock} />}
         <h1>{capFirstLetter(character.name)}</h1>
         <div className="mdSetup">
           <FontAwesomeIcon
@@ -42,7 +43,11 @@ export default function Setup({ unlocked }) {
             className="leftArrow"
             onClick={lastChar}
           />
-          <ModelDisplay character={character} layer={layer} />
+          <ModelDisplay
+            character={character}
+            layer={layer}
+            setShowUnlock={setShowUnlock}
+          />
           <FontAwesomeIcon
             icon={faArrowRight}
             className="rightArrow"

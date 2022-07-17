@@ -101,8 +101,26 @@
       cursor: pointer;
       font-size: 10em;
       color: hsl(248deg 48% 69% / 53%);
+      transition: 0.4s;
+
+      &:hover {
+        color: #be6cff;
+      }
     }
   }
+}
+
+.unlockpopModal {
+  position: absolute;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 100vh;
+  width: 100vw;
+  background: rgba(178, 178, 178, 0.313);
+  z-index: 97;
 }
 
 .bg1 {

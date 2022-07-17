@@ -3,13 +3,18 @@ import { Canvas } from "@react-three/fiber";
 import { PresentationControls } from "@react-three/drei";
 import Character from "../../components/Character";
 
-export default function ModelDisplay({ character, layer }) {
+export default function ModelDisplay({ character, layer, setShowUnlock }) {
   return (
     <>
       {layer && (
         <>
           <div className="locked">
-            <i className="material-icons lockIcon" onClick={() => {}}>
+            <i
+              className="material-icons lockIcon"
+              onClick={() => {
+                setShowUnlock(true);
+              }}
+            >
               lock
             </i>
             <h2 className="unlockText">Unlock Character</h2>

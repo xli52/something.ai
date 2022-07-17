@@ -5,9 +5,9 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 export default function UnlockModal(props) {
   const [msg, setMsg] = useState();
-  const [purchase, setPurchase] = useState();
+  const [purchase, setPurchase] = useState({});
 
-  let modalClass = `unlockpopModal ${props.showSignUp ? "show" : "noShow"} `;
+  let modalClass = `unlockpopModal  `;
 
   // Use handleChange Function to onChange the setLogin
   const handleChange = function (e) {
@@ -21,6 +21,7 @@ export default function UnlockModal(props) {
 
   function submitBuy() {
     console.log("buy");
+    props.setShowUnlock(false);
   }
 
   return (
@@ -47,7 +48,6 @@ export default function UnlockModal(props) {
           name="CardName"
           value={purchase["CardName"]}
           onChange={handleChange}
-          required
         />
 
         <input
@@ -56,7 +56,6 @@ export default function UnlockModal(props) {
           name="CardNumber"
           value={purchase["CardNumber"]}
           onChange={handleChange}
-          required
         />
 
         <input
@@ -65,7 +64,6 @@ export default function UnlockModal(props) {
           name="cvv"
           value={purchase["cvv"]}
           onChange={handleChange}
-          required
           minLength={3}
         />
 
