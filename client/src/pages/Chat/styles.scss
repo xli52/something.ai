@@ -112,9 +112,10 @@ $input-element-size: 38px;
       height: $input-element-size;
       width: calc($input-bar-width - 4 * $input-padding - 2 * $input-element-size );
       padding-left: 130px;
+      padding-right: 12px;
       padding-top: 10px;
       padding-bottom: 10px;
-      padding-right: 12px;
+      pointer-events: none;
     }
 
     &__input {
