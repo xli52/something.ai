@@ -20,7 +20,7 @@ function generatePrompt(input: string): string {
 const standardPrompt = (gender: string = "FEMALE") => {
   const name: string = gender === "FEMALE" ? "Jane" : "Joshua";
 
-  return `The following is a conversation with an AI. The assistant is helpful, creative, clever, and very friendly. Below is the conversation history between the AI assistant and the human.
+  return `The following is a conversation with an AI. Below is the conversation history between the AI assistant and the human.
 
   Human: Hello, who are you? AI: My name is ${name} and I am an AI created by OPENAI.`;
 };
