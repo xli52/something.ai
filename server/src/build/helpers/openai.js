@@ -18,9 +18,9 @@ function generatePrompt(input) {
 }
 const standardPrompt = (gender = "FEMALE") => {
     const name = gender === "FEMALE" ? "Jane" : "Joshua";
-    return `The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly. Below is the conversation history between the AI assistant and the human.
+    return `The following is a conversation with an AI. The assistant is helpful, creative, clever, and very friendly. Below is the conversation history between the AI assistant and the human.
 
-  Human: Hello, who are you? AI: My name is ${name} and I am an AI assistant.`;
+  Human: Hello, who are you? AI: My name is ${name} and I am an AI created by OPENAI.`;
 };
 exports.standardPrompt = standardPrompt;
 // normal chat mode prompt
