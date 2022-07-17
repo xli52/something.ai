@@ -16,7 +16,6 @@ import {
   updatePromptGender,
   standardPrompt,
 } from "../helpers/openai";
-import { request } from "http";
 
 const openaiRouter = (db: any): any => {
   ////////////////////////////////
@@ -69,9 +68,7 @@ const openaiRouter = (db: any): any => {
     );
 
     // to deterentiate where the request was from speech or text
-    req.session.requestedText = req.session.recognizedText
-      ? req.session.recognizedText
-      : req.body.message;
+    req.session.requestedText = req.session.recognizedText || req.body.message;
 
     // to make sure if the text is from registered user or visitor. If it is a visitor, then provide a visitorID
     if (!req.session.userID && !req.session.visitorID) {
@@ -150,7 +147,6 @@ const openaiRouter = (db: any): any => {
         // create boiler plate prompt for 1st time user and visitor
         const boilerPlate = chatPrompt(
           req.session.requestedText,
-          req.session.requestedSentiment,
           genderPromptContent
         );
 
@@ -188,18 +184,14 @@ const openaiRouter = (db: any): any => {
               if (req.session.gender === req.body.gender) {
                 // same character gender, no need to update prompt history
                 console.log(
-                  " Now we send this off to google: ",
-                  chatPrompt(
-                    req.session.requestedText,
-                    req.session.requestedSentiment,
-                    response.prompt
-                  )
+                  " Now we send this off to openai: ",
+                  chatPrompt(req.session.requestedText, response.prompt)
                 );
 
                 return openai.createCompletion(
                   chatPrompt(
                     req.session.requestedText,
-                    req.session.requestedSentiment,
+
                     response.prompt
                   )
                 );
@@ -238,7 +230,7 @@ const openaiRouter = (db: any): any => {
                       "New chatPrompt: ",
                       chatPrompt(
                         req.session.requestedText,
-                        req.session.requestedSentiment,
+
                         response[0].dataValues.prompt
                       )
                     );
@@ -254,7 +246,7 @@ const openaiRouter = (db: any): any => {
                     return openai.createCompletion(
                       chatPrompt(
                         req.session.requestedText,
-                        req.session.requestedSentiment,
+
                         response[0].dataValues.prompt
                       )
                     );
@@ -293,7 +285,10 @@ const openaiRouter = (db: any): any => {
           ? `${req.session.userID}-${response.data.id}`
           : `${req.session.visitorID}-${response.data.id}`;
 
-        req.session.respondedText = response.data.choices[0].text.trim();
+        // check if open returned an empty response, if so, we have to input our own responded text
+        req.session.respondedText =
+          response.data.choices[0].text.trim() ||
+          "I am sorry, I didn't understand what you meant. Can you repaet that again?";
 
         return GoogleNLA(req.session.respondedText);
       })
@@ -307,7 +302,7 @@ const openaiRouter = (db: any): any => {
           response[0].documentSentiment.score
         );
 
-        // update promptHistory, so that gpt-3 will have history and can recall if we ask the same question
+        // update promptHistory for users only when responded text is not empty, so that gpt-3 will have history and can recall if we ask the same question
         if (req.session.userID) {
           db.prompt
             .findOne({
@@ -322,9 +317,8 @@ const openaiRouter = (db: any): any => {
                 prompt: updatePromptHistory(
                   response.prompt,
                   req.session.requestedText,
-                  req.session.requestedSentiment,
-                  req.session.respondedText,
-                  req.session.respondedSentiment
+
+                  req.session.respondedText
                 ),
                 user_id: req.session.userID,
                 conversation_id: req.session.convoID,
@@ -401,6 +395,7 @@ const openaiRouter = (db: any): any => {
                     convoID: req.session.convoID,
                     chatHistory: response,
                   };
+
                   console.log("I am at the very bottom here.", req.session);
                   res.status(200).json(apiResponse);
                 });

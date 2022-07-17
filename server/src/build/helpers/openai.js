@@ -18,46 +18,36 @@ function generatePrompt(input) {
 }
 const standardPrompt = (gender = "FEMALE") => {
     const name = gender === "FEMALE" ? "Jane" : "Joshua";
-    return `The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly. The human is talking with sentiment. The AI assistant's response should synchronize with a corresponding sentiment.
-  ###
-  Write a long response based on the following conversation history.
-  Below is the conversation history between the AI assistant and the human and the conversation is still on going. The AI assistant remembers all the history with the human.
-  ###
-  Human: Hello, who are you? Human_Sentiment: neutral
-  AI: I am great, thank you. My name is ${name} and I am an AI created by OpenAI. How can I help you today? AI_Sentiment: neutral
-  
-  Human: I feel sad now because I failed my exam. What should I do? Human_Sentiment: negative
-  AI: I am sorry to hear that. I would suggest you to first find out why you did not pass the exam. After figuring out the reasons, then you improve yourself based on your findings. AI_Sentiment: negative
-  
-  Human: I am feeling greate today because I won a very important match. How should I celebrate? Human_Sentiment: positive
-  AI: I am happy for you! You should tell your family and friends about it. Dining out at a nice restaurant with your family tonight would be a great choice for celebration. Or, maybe you can consider to hold a house party to share your happiness with them. AI_Sentiment: postive
-  `;
+    return `The following is a conversation with an AI. Below is the conversation history between the AI assistant and the human.
+
+  Human: Hello, who are you? AI: My name is ${name} and I am an AI created by OPENAI.`;
 };
 exports.standardPrompt = standardPrompt;
 // normal chat mode prompt
-const chatPrompt = (text, sentiment = "neutral", prompt) => {
+const chatPrompt = (text, prompt) => {
     return {
         model: "text-davinci-002",
-        prompt: `${prompt}
-    Human: ${generatePrompt(text)} Human_Sentiment: ${sentiment}
-    AI: `,
+        prompt: `${prompt} Human: ${generatePrompt(text)} AI:`,
         temperature: 0.9,
-        max_tokens: 2000,
+        max_tokens: 1000,
         top_p: 1,
-        stop: ["Human_Sentiment: ", "AI_Sentiment", " Human:", " AI:"],
+        stop: [" Human:", " AI:"],
+        presence_penalty: 0.6,
     };
 };
 exports.chatPrompt = chatPrompt;
-const updatePromptHistory = (currPrompt, humanText, humanSentiment, aiText, aiSentiment) => {
-    return `${currPrompt}
-    Human: ${generatePrompt(humanText)} Human_Sentiment: ${humanSentiment}
-    AI: ${generatePrompt(aiText)} AI_Sentiment: ${aiSentiment}\n\n`;
+const updatePromptHistory = (currPrompt, humanText, aiText) => {
+    if (currPrompt.slice(-4) === " AI:") {
+        return `${currPrompt} ${generatePrompt(aiText)}`;
+    }
+    else {
+        return `${currPrompt} Human: ${generatePrompt(humanText)} AI: ${generatePrompt(aiText)}`;
+    }
 };
 exports.updatePromptHistory = updatePromptHistory;
 const updatePromptGender = (currPrompt, newGender) => {
     const newName = newGender === "FEMALE" ? "Jane" : "Joshua";
     const oldName = newName === "Jane" ? "Joshua" : "Jane";
-    let newPromptGender = currPrompt.replace(new RegExp(`${oldName}`, "gi"), newName);
-    return `${newPromptGender}\n\nHuman: What is your name again? AI: Now my name is ${newName}, I will be responding under name ${newName}\n\n`;
+    return currPrompt.replace(new RegExp(`${oldName}`, "gi"), newName);
 };
 exports.updatePromptGender = updatePromptGender;

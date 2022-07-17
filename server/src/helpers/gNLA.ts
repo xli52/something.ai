@@ -12,14 +12,10 @@ const GoogleNLA = (text: string) => {
 };
 
 const checkSentiment = (score: number): string => {
-  if (score >= 0.6 && score <= 1.0) {
-    return "very positive";
-  } else if (score >= 0.2 && score <= 0.5999999999999999) {
-    return "postive";
-  } else if (score >= -0.6 && score <= -0.2000000000000001) {
+  if (score >= 0.3333333333333333 && score <= 1.0) {
+    return "positive";
+  } else if (score > -1.0 && score <= -0.3333333333333333) {
     return "negative";
-  } else if (score > -1.0 && score <= -0.6000000000000001) {
-    return "very negative";
   } else {
     return "neutral";
   }
