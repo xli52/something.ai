@@ -12,16 +12,21 @@ const userRouter = (db) => {
         db.user
             .findOne({ where: { email: req.body.email } })
             .then((response) => {
-            console.log("ORM search completed: ", req.body);
+            console.log("ORM search completed: ", response);
             if (!response) {
+                console.log("Login ORM search response is null");
                 return res.send("Invalid email or password.");
             }
             if (!bcryptjs_1.default.compareSync(req.body.password, response.dataValues.password)) {
+                console.log("ORM search found user email but password does not match");
                 return res.send("Invalid email or password.");
             }
             if (req.session.visitorID) {
+                console.log("Login process: visitorID exists, deleting...");
                 delete req.session.visitorID;
+                console.log("visitorID deleted", req.session.visitorID);
             }
+            console.log("ORM search found user email and password matched");
             req.session.userID = response.id;
             res
                 .status(200)
