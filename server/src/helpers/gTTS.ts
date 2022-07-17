@@ -10,7 +10,7 @@ interface IgoogleSpeech {
 // Creates a client
 const client = new textToSpeech.TextToSpeechClient();
 
-const GoogleTTS = (text: string, gender: string = "FEMALE"): Promise<[]> => {
+const GoogleTTS = (text: string, gender: string): Promise<[]> => {
   const name: string =
     gender === "FEMALE" ? "en-US-Wavenet-F" : "en-US-Wavenet-D";
 

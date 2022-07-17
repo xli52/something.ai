@@ -32,22 +32,15 @@ const openaiRouter = (db: any): any => {
 
     console.log("firing to Google STT api");
     return GoogleSTT(request).then(([response]) => {
+      console.log("received response from Google: ", response.results[0]);
       // response will be an empty array if google cannot recognize anything
       if (!response.results[0]) {
-        return res.send("Google could not recongize anything");
-      } else {
-        console.log(
-          "received response from Google: ",
-          response.results[0].alternatives[0].transcript
-        );
-
-        // saved this text to req.session
-        req.session.recognizedText =
-          response.results[0].alternatives[0].transcript;
-
-        // redirect with code 307 will reserve the send method (i.e. POST method)
-        res.redirect(307, "/api/openai/textToSpeech");
+        return res.send("Sorry, I cannot recognize your voice.");
       }
+
+      res.json({
+        transcript: response.results[0].alternatives[0].transcript,
+      });
     });
   });
 
@@ -60,7 +53,6 @@ const openaiRouter = (db: any): any => {
     console.log("Session after clean up: ", req.session);
 
     console.log("TextToSpeech endpoint received request");
-    console.log("req.session.recognizedText: ", req.session.recognizedText);
     console.log(
       "Current user session: ",
       req.session.userID,
@@ -68,7 +60,7 @@ const openaiRouter = (db: any): any => {
     );
 
     // to deterentiate where the request was from speech or text
-    req.session.requestedText = req.session.recognizedText || req.body.message;
+    req.session.requestedText = req.body.message;
 
     // to make sure if the text is from registered user or visitor. If it is a visitor, then provide a visitorID
     if (!req.session.userID && !req.session.visitorID) {
@@ -235,14 +227,6 @@ const openaiRouter = (db: any): any => {
                       )
                     );
 
-                    // after updateing db, need to update req.session.gender to reflect current gender selection
-                    req.session.gender = req.body.gender;
-                    console.log("Now req.body.gender is " + req.body.gender);
-                    console.log(
-                      "Now req.session.gender is: ",
-                      req.session.gender
-                    );
-
                     return openai.createCompletion(
                       chatPrompt(
                         req.session.requestedText,
@@ -330,9 +314,7 @@ const openaiRouter = (db: any): any => {
         }
 
         // choose voice based on character gender. FEMALE voice is used by default.
-        return req.body.gender
-          ? GoogleTTS(req.session.respondedText, req.body.gender)
-          : GoogleTTS(req.session.respondedText);
+        return GoogleTTS(req.session.respondedText, req.body.gender);
       })
       .then(([response]: any[]) => {
         // Base64 encoding is done, time to write file
@@ -348,7 +330,7 @@ const openaiRouter = (db: any): any => {
         // this is will send response back to frontend, which react will update it's dom to retrieve new audio file and initiate character animation
         console.log("preparing data for front-end");
         let apiResponse: object = {
-          gender: req.body.gender || "FEMALE",
+          gender: req.body.gender,
           userID: req.session.userID,
           audioID: req.session.audioID,
           requestedText: req.session.requestedText,
@@ -356,8 +338,10 @@ const openaiRouter = (db: any): any => {
           aiText: req.session.respondedText,
         };
 
-        // clear any speech to text record
-        req.session.recognizedText = null;
+        // after updateing db, need to update req.session.gender to reflect current gender selection
+        req.session.gender = req.body.gender;
+        console.log("Now req.body.gender is " + req.body.gender);
+        console.log("Now req.session.gender is: ", req.session.gender);
 
         console.log(
           "Session before sending off response to front-end: ",

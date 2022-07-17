@@ -23,7 +23,7 @@ export default function SignUpModal(props) {
     if (msg) {
       setMsg();
     }
-    console.log(e.target.value);
+    // console.log(e.target.value);
     setSignUp({ ...signUp, [name]: value });
   };
 
@@ -56,6 +56,7 @@ export default function SignUpModal(props) {
         return setMsg(res.data);
       }
       props.setLoggedUser(res.data.username);
+      localStorage.setItem("user", res.data.username);
       setSignUp({
         username: "",
         email: "",
