@@ -38,13 +38,13 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
   }
 
   const onStop = (recordedBlob) => {
-    
+
     return blobToBase64(recordedBlob.blob, (error, base64) => {
       if (!error) {
         if (recordedBlob.stopTime - recordedBlob.startTime < 1000) {
           console.log("Recording too short. Please record your input again");
         } else {
-          setBotTyping(true);
+          setUserTyping(true);
           return axios({
             method: "POST",
             url: "/api/openai/speechToText",
@@ -55,17 +55,17 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
           })
             .then(res => {
               console.log("sucessfully finished", res);
-              setAudio(`/${res.data.audioID}.mp3`);
               if (res.data.aiText) {
                 setUserText(res.data.requestedText);
-                setBotText(res.data.aiText);
+                setTimeout(() => setBotTyping(true), 300);
+                sendMsgRequest(res.data.requestedText);
               } else {
                 setBotText("Sorry, I didn't recongize that. Could you say that again?");
               }
-              setBotTyping(false);
+              setUserTyping(false);
             })
             .catch(e => {
-              setBotTyping(false);
+              setUserTyping(false);
               setBotText("Sorry, something is wrong, pleaes try again later!");
               console.log(e.message);
             });
@@ -114,28 +114,30 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
       e.preventDefault();
       setUserText(message);
       setTimeout(() => setBotTyping(true), 300);
-
-      // Send message to api
-      return axios({
-        method: "POST",
-        url: "/api/openai/textToSpeech",
-        data: JSON.stringify({ message, gender }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then(res => {
-          console.log("React render stage", res);
-          setAudio(`/${res.data.audioID}.mp3`);
-          setBotText(res.data.aiText);
-          setBotTyping(false);
-        })
-        .catch(e => {
-          setBotTyping(false);
-          setBotText("Sorry, something is wrong, pleaes try again later!");
-          console.log(e.message);
-        });
+      sendMsgRequest(message);
     }
+  }
+
+  function sendMsgRequest(message) {
+    return axios({
+      method: "POST",
+      url: "/api/openai/textToSpeech",
+      data: JSON.stringify({ message, gender }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(res => {
+        console.log("React render stage", res);
+        setAudio(`/${res.data.audioID}.mp3`);
+        setBotText(res.data.aiText);
+        setBotTyping(false);
+      })
+      .catch(e => {
+        setBotTyping(false);
+        setBotText("Sorry, something is wrong, pleaes try again later!");
+        console.log(e.message);
+      });
   }
 
   function handleChange(e) {
