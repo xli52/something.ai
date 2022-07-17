@@ -51,9 +51,7 @@ const openaiRouter = (db) => {
         console.log("req.session.recognizedText: ", req.session.recognizedText);
         console.log("Current user session: ", req.session.userID, req.session.visitorID);
         // to deterentiate where the request was from speech or text
-        req.session.requestedText = req.session.recognizedText
-            ? req.session.recognizedText
-            : req.body.message;
+        req.session.requestedText = req.session.recognizedText || req.body.message;
         // to make sure if the text is from registered user or visitor. If it is a visitor, then provide a visitorID
         if (!req.session.userID && !req.session.visitorID) {
             console.log("Initializing visitor ID...");
@@ -109,7 +107,7 @@ const openaiRouter = (db) => {
             // create a prompt content based based on gender
             const genderPromptContent = (0, openai_1.standardPrompt)(req.body.gender);
             // create boiler plate prompt for 1st time user and visitor
-            const boilerPlate = (0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment, genderPromptContent);
+            const boilerPlate = (0, openai_1.chatPrompt)(req.session.requestedText, genderPromptContent);
             // visitor will get a none saved prompt every time
             if (req.session.visitorID) {
                 return openai_1.openai.createCompletion(boilerPlate);
@@ -133,8 +131,8 @@ const openaiRouter = (db) => {
                     console.log("Gender is the same? ", req.session.gender === req.body.gender);
                     if (req.session.gender === req.body.gender) {
                         // same character gender, no need to update prompt history
-                        console.log(" Now we send this off to google: ", (0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment, response.prompt));
-                        return openai_1.openai.createCompletion((0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment, response.prompt));
+                        console.log(" Now we send this off to openai: ", (0, openai_1.chatPrompt)(req.session.requestedText, response.prompt));
+                        return openai_1.openai.createCompletion((0, openai_1.chatPrompt)(req.session.requestedText, response.prompt));
                     }
                     else {
                         // need to update prompt history and write to database before we send of the request to google
@@ -151,12 +149,12 @@ const openaiRouter = (db) => {
                             console.log("upserted prmopt: ", response);
                             console.log("which one is correct? ", response[0].dataValues.prompt);
                             console.log("Prompt gender history update completed, proceeding...");
-                            console.log("New chatPrompt: ", (0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment, response[0].dataValues.prompt));
+                            console.log("New chatPrompt: ", (0, openai_1.chatPrompt)(req.session.requestedText, response[0].dataValues.prompt));
                             // after updateing db, need to update req.session.gender to reflect current gender selection
                             req.session.gender = req.body.gender;
                             console.log("Now req.body.gender is " + req.body.gender);
                             console.log("Now req.session.gender is: ", req.session.gender);
-                            return openai_1.openai.createCompletion((0, openai_1.chatPrompt)(req.session.requestedText, req.session.requestedSentiment, response[0].dataValues.prompt));
+                            return openai_1.openai.createCompletion((0, openai_1.chatPrompt)(req.session.requestedText, response[0].dataValues.prompt));
                         });
                     }
                 }
@@ -187,13 +185,16 @@ const openaiRouter = (db) => {
             req.session.audioID = req.session.userID
                 ? `${req.session.userID}-${response.data.id}`
                 : `${req.session.visitorID}-${response.data.id}`;
-            req.session.respondedText = response.data.choices[0].text.trim();
+            // check if open returned an empty response, if so, we have to input our own responded text
+            req.session.respondedText =
+                response.data.choices[0].text.trim() ||
+                    "I am sorry, I didn't understand what you meant. Can you repaet that again?";
             return (0, gNLA_1.GoogleNLA)(req.session.respondedText);
         })
             .then((response) => {
             req.session.respondedSentiment = (0, gNLA_1.checkSentiment)(response[0].documentSentiment.score);
             console.log("responded sentiment is", req.session.respondedSentiment, response[0].documentSentiment.score);
-            // update promptHistory, so that gpt-3 will have history and can recall if we ask the same question
+            // update promptHistory for users only when responded text is not empty, so that gpt-3 will have history and can recall if we ask the same question
             if (req.session.userID) {
                 db.prompt
                     .findOne({
@@ -205,7 +206,7 @@ const openaiRouter = (db) => {
                     .then((response) => {
                     db.prompt.upsert({
                         id: req.session.promptID,
-                        prompt: (0, openai_1.updatePromptHistory)(response.prompt, req.session.requestedText, req.session.requestedSentiment, req.session.respondedText, req.session.respondedSentiment),
+                        prompt: (0, openai_1.updatePromptHistory)(response.prompt, req.session.requestedText, req.session.respondedText),
                         user_id: req.session.userID,
                         conversation_id: req.session.convoID,
                     });

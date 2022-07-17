@@ -34,7 +34,7 @@ app.use(express.json({ limit: "10mb" }));
 
 app.get("/", (req: any, res: any) => {
   console.log("Checking user session", req.session);
-  res.status(200);
+  res.status(200).json(req.session);
 });
 app.use("/api/openai", openaiRouter(db));
 app.use("/user", userRouter(db));

@@ -92,19 +92,30 @@ $input-element-size: 38px;
       display: flex;
       justify-content: center;
       align-items: center;
-      color: rgba(#ffffff, 0.6);
+      color: rgba(#ffffff, 0.8);
 
       .mic {
         animation: flashing 2.5s infinite linear
       }
 
       @keyframes flashing {
-        0% {color: rgba(#ffffff, 0.3)}
+        0% {color: rgba(#ffffff, 0.2)}
         25% {color: rgba(#ffffff, 0.6)}
-        50% {color: rgba(#ffffff, 0.9)}
+        50% {color: rgba(#ffffff, 1)}
         75% {color: rgba(#ffffff, 0.6)}
-        100% {color: rgba(#ffffff, 0.3)}
+        100% {color: rgba(#ffffff, 0.2)}
       }
+    }
+
+    .sound-wave {
+      position: absolute;
+      height: $input-element-size;
+      width: calc($input-bar-width - 4 * $input-padding - 2 * $input-element-size );
+      padding-left: 130px;
+      padding-right: 12px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      pointer-events: none;
     }
 
     &__input {
@@ -118,7 +129,7 @@ $input-element-size: 38px;
       padding-left: $input-element-size;
 
       &::placeholder {
-        color: rgba(#ffffff, 0.6);
+        color: rgba(#ffffff, 0.8);
       }
     }
 

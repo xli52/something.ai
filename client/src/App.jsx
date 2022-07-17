@@ -1,5 +1,5 @@
 import "./App.scss";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import SignUp from "./pages/Signup";
@@ -16,6 +16,13 @@ function App() {
   const [showSignUp, setShowSignUp] = useState(false);
   const [loggedUser, setLoggedUser] = useState();
   const [unlocked, setUnlocked] = useState(["jane"]);
+
+  useEffect(() => {
+    const foundUser = localStorage.getItem("user");
+    if (foundUser) {
+      setLoggedUser(foundUser);
+    }
+  }, []);
 
   return (
     <>

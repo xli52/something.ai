@@ -1,20 +1,23 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import axios from "axios";
 import ReactAudioPlayer from "react-audio-player";
+import { ReactMic } from "react-mic";
 import { characterContext } from "../../contexts/CharacterContext";
 import getTimer from "../../helpers/getTimer";
+import blobToBase64 from "blob-to-base64";
 
 const SPEAK_TIME_LIMIT = 10000;
 
 export default function InputBox({ setUserText, setBotText, setBotTyping, setUserTyping }) {
 
   const { character } = useContext(characterContext);
+  const [gender] = useState(character.gender);
   const [message, setMessage] = useState("");
-  const [placeholder, setPlaceHolder] = useState("Tpye or hold ESC key to speak...");
   const [audio, setAudio] = useState("");
   const [muted, setMuted] = useState(false);
-  const [gender] = useState(character.gender);
+  const [record, setRecord] = useState(false);
   const [icon, setIcon] = useState('keyboard');
+  const [placeholder, setPlaceHolder] = useState("Type or hold ESC key to speak...");
   const speaking = useRef(false);
   const pressCount = useRef(0);
   const keyReleased = useRef(true);
@@ -22,19 +25,56 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
 
   function startRecording() {
     console.log('Start recording');
-
+    setRecord(true);
   };
 
-  function sendSpeech() {
+  function stopRecording() {
+    setRecord(false);
     setIcon('keyboard');
-    setPlaceHolder("Tpye or hold ESC key to speak...")
+    setPlaceHolder("Type or hold ESC key to speak...")
     pressCount.current = 0;
     speaking.current = false;
+    console.log('Recording stopped.');
+  }
 
-    console.log('Speech send...');
-
-    // Send message to api here...
-
+  const onStop = (recordedBlob) => {
+    
+    return blobToBase64(recordedBlob.blob, (error, base64) => {
+      if (!error) {
+        if (recordedBlob.stopTime - recordedBlob.startTime < 1000) {
+          console.log("Recording too short. Please record your input again");
+        } else {
+          setBotTyping(true);
+          return axios({
+            method: "POST",
+            url: "/api/openai/speechToText",
+            data: JSON.stringify({ base64 }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then(res => {
+              console.log("sucessfully finished", res);
+              setAudio(`/${res.data.audioID}.mp3`);
+              if (res.data.aiText) {
+                setUserText(res.data.requestedText);
+                setBotText(res.data.aiText);
+              } else {
+                setBotText("Sorry, I didn't recongize that. Could you say that again?");
+              }
+              setBotTyping(false);
+            })
+            .catch(e => {
+              setBotTyping(false);
+              setBotText("Sorry, something is wrong, pleaes try again later!");
+              console.log(e.message);
+            });
+        }
+      } else {
+        console.log(error);
+        return;
+      }
+    });
   };
 
   function handleKeyDown(e) {
@@ -43,13 +83,14 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
       if (pressCount.current > 1 && !speaking.current && keyReleased.current) {
         setMessage("");
         setUserTyping(false);
+        setUserText("");
         setIcon('mic');
         setPlaceHolder('Listening...');
         keyReleased.current = false;
         speaking.current = true;
         clearTimeout(timer.current);
         startRecording();
-        timer.current = getTimer(SPEAK_TIME_LIMIT, sendSpeech);
+        timer.current = getTimer(SPEAK_TIME_LIMIT, stopRecording);
       }
     }
   }
@@ -60,7 +101,7 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
       pressCount.current = 0;
       clearTimeout(timer.current);
       if (speaking.current) {
-        sendSpeech();
+        stopRecording();
       }
     }
   }
@@ -83,13 +124,13 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
           "Content-Type": "application/json",
         },
       })
-        .then((res) => {
+        .then(res => {
           console.log("React render stage", res);
           setAudio(`/${res.data.audioID}.mp3`);
           setBotText(res.data.aiText);
           setBotTyping(false);
         })
-        .catch((e) => {
+        .catch(e => {
           setBotTyping(false);
           setBotText("Sorry, something is wrong, pleaes try again later!");
           console.log(e.message);
@@ -98,6 +139,7 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
   }
 
   function handleChange(e) {
+    setUserText("");
     const input = e.target.value;
     setMessage(input);
     input ? setUserTyping(true) : setUserTyping(false);
@@ -129,6 +171,16 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
             {icon === 'keyboard' && <i className="material-icons keyboard">keyboard</i>}
             {icon === 'mic' && <i className="material-icons mic">mic</i>}
           </div>
+          <ReactMic
+            className="sound-wave"
+            visualSetting="frequencyBars"
+            record={record}
+            onStop={onStop}
+            strokeColor={"#fcfcfc"}
+            backgroundColor={"transparent"}
+            mimeType="audio/webm"
+            sampleRate={24000}
+          />
           <input
             className="chat-bar__input"
             autoFocus
