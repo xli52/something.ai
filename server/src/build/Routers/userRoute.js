@@ -28,9 +28,20 @@ const userRouter = (db) => {
             }
             console.log("ORM search found user email and password matched");
             req.session.userID = response.id;
+            req.session.username = response.username;
+            return db.users_character.findAll({
+                where: { user_id: req.session.userID },
+            });
+        })
+            .then((response) => {
+            req.session.userCharacters = response.dataValues;
             res
                 .status(200)
-                .json({ userID: req.session.userID, username: response.username });
+                .json({
+                userID: req.session.userID,
+                username: req.session.username,
+                characters: req.session.userCharacters,
+            });
         })
             .catch((err) => console.error(err));
     });

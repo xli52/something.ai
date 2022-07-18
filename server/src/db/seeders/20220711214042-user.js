@@ -16,7 +16,7 @@ module.exports = {
       "users",
       [
         {
-          username: "John Doe",
+          username: "Amy Donut",
           password:
             "$2a$10$XLdY7cRuH19aG3c9.NLvTuTYMxwv6y1dsJ2r9CqTfIbu6U.acSi8W", //123
           email: "a@a.com",
@@ -24,7 +24,7 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
-          username: "Jane Donut",
+          username: "John Doe",
           password:
             "$2a$10$68wXbfzS9LBLA8/XLs4V/OSz3bUitTp5wXpsfm802S0douO7Aqseu", //123
           email: "b@b.com",

@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     character.init({
         name: { type: DataTypes.STRING, allowNull: false },
         gender: { type: DataTypes.STRING, allowNull: false },
+        price_cents: { type: DataTypes.INTEGER, allowNull: false },
     }, {
         sequelize,
         modelName: "character",
