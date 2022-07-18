@@ -4,6 +4,7 @@ import { Model } from "sequelize";
 interface UserCharacterAttributes {
   user_id: number;
   character_id: number;
+  unlocked: boolean;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -18,6 +19,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
      */
     user_id!: number;
     character_id!: number;
+    unlocked!: boolean;
 
     static associate(models: any) {
       // define association here
@@ -40,6 +42,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
           model: "characters",
           key: "id",
         },
+      },
+      unlocked: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
       },
     },
     {

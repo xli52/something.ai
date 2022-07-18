@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const sequelize_1 = require("sequelize");
 const router = express_1.default.Router();
 const userRouter = (db) => {
     router.post("/login", (req, res) => {
@@ -28,9 +29,22 @@ const userRouter = (db) => {
             }
             console.log("ORM search found user email and password matched");
             req.session.userID = response.id;
-            res
-                .status(200)
-                .json({ userID: req.session.userID, username: response.username });
+            req.session.username = response.username;
+            return db.sequelize
+                .query("SELECT c.name, c.price_cents FROM characters c JOIN users_characters u ON c.id = u.character_id WHERE u.user_id = ?;", {
+                replacements: [req.session.userID],
+                type: sequelize_1.QueryTypes.SELECT,
+                raw: true,
+            })
+                .then((response) => {
+                console.log("search results? ", response);
+                req.session.userCharacters = response;
+                res.status(200).json({
+                    userID: req.session.userID,
+                    username: req.session.username,
+                    characters: req.session.userCharacters,
+                });
+            });
         })
             .catch((err) => console.error(err));
     });
