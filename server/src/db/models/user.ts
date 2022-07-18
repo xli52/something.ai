@@ -31,6 +31,12 @@ module.exports = (sequelize: any, DataTypes: any) => {
         foreignKey: "user_id",
       });
 
+      user.belongsToMany(models.character, {
+        through: models.transaction,
+        as: "characters_transactions",
+        foreignKey: "user_id",
+      });
+
       user.hasMany(models.prompt, {
         foreignKey: "user_id",
         onDelete: "CASCADE",

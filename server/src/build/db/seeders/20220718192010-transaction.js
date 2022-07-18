@@ -20,18 +20,12 @@ module.exports = {
              *   isBetaMember: false
              * }], {});
              */
-            yield queryInterface.bulkInsert("characters", [
+            yield queryInterface.bulkInsert("transactions", [
                 {
-                    name: "jane",
-                    gender: "FEMALE",
-                    price_cents: 0,
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                },
-                {
-                    name: "joshua",
-                    gender: "MALE",
-                    price_cents: 599,
+                    user_id: 2,
+                    character_id: 2,
+                    amount_paid_cents: 671,
+                    payment_type: "card",
                     createdAt: new Date(),
                     updatedAt: new Date(),
                 },
@@ -46,7 +40,7 @@ module.exports = {
              * Example:
              * await queryInterface.bulkDelete('People', null, {});
              */
-            yield queryInterface.bulkDelete("characters", null, {});
+            yield queryInterface.bulkDelete("transactions", null, {});
         });
     },
 };
