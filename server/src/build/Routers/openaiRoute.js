@@ -100,7 +100,7 @@ const openaiRouter = (db) => {
             if (!req.session.gender)
                 req.session.gender = req.body.gender;
             // create a prompt content based based on gender
-            const genderPromptContent = (0, openai_1.standardPrompt)(req.body.gender);
+            const genderPromptContent = (0, openai_1.standardPrompt)(req.body.gender, req.session.username || "visitor");
             // create boiler plate prompt for 1st time user and visitor
             const boilerPlate = (0, openai_1.chatPrompt)(req.session.requestedText, genderPromptContent);
             // visitor will get a none saved prompt every time

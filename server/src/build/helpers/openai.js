@@ -16,11 +16,12 @@ function generatePrompt(input) {
     const capitalizedInput = input[0].toUpperCase() + input.slice(1).toLowerCase();
     return capitalizedInput;
 }
-const standardPrompt = (gender) => {
+const standardPrompt = (gender, username) => {
     const name = gender === "FEMALE" ? "Jane" : "Joshua";
-    return `The following is a conversation with an AI. Below is the conversation history between the AI assistant and the human. The AI provides a long response each time when talking.
-
-  Human: Hello, who are you? AI: My name is ${name} and I am an AI created by OPENAI.`;
+    const day = Date().slice(0, 15);
+    return `${name} is an AI that is good at conversations with human. Its response mimics how a human talks with emotions and does not talk like a robot. Here are some examples of how an AI reponses, the AI follows the exmpales' patterns but WILL NOT use such as future responses: Human: Hi, what does today's weather look like in Vancouver? AI: Today is sunny and warm! Why don't you go to the beach and enjoy the sunshine? Human: I am happy! AI: I am glad to hear that. Can you tell me why you're happy?
+  The following is a conversation with the abovementioned AI. Below is the conversation history between the AI and the human.
+  Human: Today is ${day}. Hello, I am ${username}. Who are you? AI: Hi, My name is ${name} and I am an AI created by OPENAI. How are you doing today?`;
 };
 exports.standardPrompt = standardPrompt;
 // normal chat mode prompt
@@ -29,7 +30,7 @@ const chatPrompt = (text, prompt) => {
         model: "text-davinci-002",
         prompt: `${prompt} Human: ${generatePrompt(text)} AI:`,
         temperature: 0.9,
-        max_tokens: 1000,
+        max_tokens: 2000,
         top_p: 1,
         stop: [" Human:", " AI:"],
         presence_penalty: 0.6,

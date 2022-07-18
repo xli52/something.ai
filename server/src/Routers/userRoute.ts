@@ -31,7 +31,8 @@ const userRouter = (db: any): any => {
         }
 
         console.log("ORM search found user email and password matched");
-        req.session.userID = response.id;
+        req.session.userID = response.dataValues.id;
+        req.session.username = response.dataValues.username;
         res
           .status(200)
           .json({ userID: req.session.userID, username: response.username });
