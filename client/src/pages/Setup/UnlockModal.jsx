@@ -32,17 +32,16 @@ export default function UnlockModal(props) {
     setProcess(true);
     console.log("buy");
 
-    setInterval(() => {
+    setTimeout(() => {
       axios({
         method: "POST",
         url: "/character/purchase",
-        data: { ...purchase },
-        // Check Contect-type
-        contentType: { character: "Joshua", price: 599 },
+        data: { character: "Joshua", price: 599 },
+        contentType: { "Content-Type": "application/json" },
       }).then(() => {
         props.setShowUnlock(false);
       });
-    }, 2000);
+    }, 3000);
   }
 
   return (
