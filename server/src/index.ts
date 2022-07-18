@@ -18,6 +18,7 @@ const app = express();
 // import Routers
 import openaiRouter from "./Routers/openaiRoute";
 import userRouter from "./Routers/userRoute";
+import characterRouter from "./Routers/characterRoute";
 
 // Middlewares
 app.use(
@@ -38,6 +39,7 @@ app.get("/", (req: any, res: any) => {
 });
 app.use("/api/openai", openaiRouter(db));
 app.use("/user", userRouter(db));
+app.use("/character", characterRouter(db));
 
 app.use(express.static("./src/audio"));
 
