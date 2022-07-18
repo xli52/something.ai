@@ -1,11 +1,17 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 export default function UnlockModal(props) {
   const [msg, setMsg] = useState();
-  const [purchase, setPurchase] = useState({});
+  const [purchase, setPurchase] = useState({
+    cardName: "",
+    cardNumber: "",
+    credit_expires: "",
+    cvc: "",
+  });
 
   const [processing, setProcess] = useState(false);
 
@@ -25,8 +31,17 @@ export default function UnlockModal(props) {
     // "/character/purchase"
     setProcess(true);
     console.log("buy");
+
     setInterval(() => {
-      props.setShowUnlock(false);
+      axios({
+        method: "POST",
+        url: "/character/purchase",
+        data: { ...purchase },
+        // Check Contect-type
+        contentType: { "Content-Type": "application/json" },
+      }).then(() => {
+        props.setShowUnlock(false);
+      });
     }, 2000);
   }
 
@@ -72,8 +87,8 @@ export default function UnlockModal(props) {
           type="tel"
           autoComplete="cc-expires"
           maxLength="4"
-          name="credit-expires"
-          value={purchase["credit-expires"]}
+          name="credit_expires"
+          value={purchase["credit_expires"]}
           onChange={handleChange}
         />
         <input
@@ -81,7 +96,7 @@ export default function UnlockModal(props) {
           type="tel"
           name="cvc"
           maxLength="4"
-          value={purchase["cvv"]}
+          value={purchase["cvc"]}
           inputMode="numeric"
           onChange={handleChange}
         />
