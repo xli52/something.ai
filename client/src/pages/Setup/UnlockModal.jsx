@@ -7,6 +7,8 @@ export default function UnlockModal(props) {
   const [msg, setMsg] = useState();
   const [purchase, setPurchase] = useState({});
 
+  const [processing, setProcess] = useState(false);
+
   let modalClass = `unlockpopModal  `;
 
   // Use handleChange Function to onChange the setLogin
@@ -20,8 +22,12 @@ export default function UnlockModal(props) {
   };
 
   function submitBuy() {
+    // "/character/purchase"
+    setProcess(true);
     console.log("buy");
-    props.setShowUnlock(false);
+    setInterval(() => {
+      props.setShowUnlock(false);
+    }, 2000);
   }
 
   return (
@@ -80,8 +86,8 @@ export default function UnlockModal(props) {
           onChange={handleChange}
         />
 
-        <button className="btn" type="submit">
-          Purchase
+        <button className="btn" type="submit" disabled={processing}>
+          {processing ? "Processing ..." : "Purchase"}
         </button>
       </form>
     </div>
