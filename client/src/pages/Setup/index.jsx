@@ -3,17 +3,15 @@ import ModelDisplay from "./ModelDisplay";
 import SetupBox from "./SetupBox";
 import "./styles.scss";
 import { characterContext } from "../../contexts/CharacterContext";
+import { capFirstLetter } from "../../helpers/getHelperFunc";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 export default function Setup() {
-
+  
   const { character, nextChar, lastChar, bgColor, setBgColor } = useContext(characterContext);
-  function capFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
 
   return (
     <main>
