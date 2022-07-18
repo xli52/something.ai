@@ -31,8 +31,8 @@ const userRouter = (db) => {
             req.session.userID = response.id;
             req.session.username = response.username;
             return db.sequelize
-                .query("SELECT c.name, c.price_cents FROM characters c JOIN users_characters u ON c.id = u.character_id WHERE u.user_id = ?;", {
-                replacements: [req.session.userID],
+                .query("SELECT c.name, c.price_cents FROM characters c JOIN users_characters u ON c.id = u.character_id WHERE u.user_id = ? AND u.unlocked = ?;", {
+                replacements: [req.session.userID, "true"],
                 type: sequelize_1.QueryTypes.SELECT,
                 raw: true,
             })
