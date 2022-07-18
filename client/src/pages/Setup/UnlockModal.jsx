@@ -38,7 +38,7 @@ export default function UnlockModal(props) {
         url: "/character/purchase",
         data: { ...purchase },
         // Check Contect-type
-        contentType: { "Content-Type": "application/json" },
+        contentType: { character: "Joshua", price: 599 },
       }).then(() => {
         props.setShowUnlock(false);
       });
