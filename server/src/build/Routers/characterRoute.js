@@ -55,5 +55,6 @@ const characterRouter = (db) => {
             console.error(error);
         });
     });
+    return router;
 };
 exports.default = characterRouter;

@@ -60,6 +60,7 @@ const characterRouter = (db: any): any => {
         console.error(error);
       });
   });
+  return router;
 };
 
 export default characterRouter;
