@@ -1,5 +1,7 @@
 import express from "express";
 import bcrypt from "bcryptjs";
+import { QueryTypes } from "sequelize";
+
 const router = express.Router();
 
 const userRouter = (db: any): any => {
@@ -32,9 +34,26 @@ const userRouter = (db: any): any => {
 
         console.log("ORM search found user email and password matched");
         req.session.userID = response.id;
-        res
-          .status(200)
-          .json({ userID: req.session.userID, username: response.username });
+        req.session.username = response.username;
+
+        return db.sequelize
+          .query(
+            "SELECT c.name, c.price_cents FROM characters c JOIN users_characters u ON c.id = u.character_id WHERE u.user_id = ? AND u.unlocked = ?;",
+            {
+              replacements: [req.session.userID, "true"],
+              type: QueryTypes.SELECT,
+              raw: true,
+            }
+          )
+          .then((response: any) => {
+            console.log("search results? ", response);
+            req.session.userCharacters = response;
+            res.status(200).json({
+              userID: req.session.userID,
+              username: req.session.username,
+              characters: req.session.userCharacters,
+            });
+          });
       })
       .catch((err: any) => console.error(err));
   });

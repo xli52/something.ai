@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import useNavigation from "../hooks/useNavigation";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function Nav({
@@ -10,6 +10,8 @@ export default function Nav({
   setLoggedUser,
 }) {
   const { homePage } = useNavigation();
+  const navigate = useNavigate();
+
   const [showComp, setShowComp] = useState(true);
   const { pathname } = useLocation();
 
@@ -36,11 +38,11 @@ export default function Nav({
     return axios({
       method: "POST",
       url: "/user/logout",
-      // data: { ...login },
       contentType: { "Content-Type": "application/json" },
     }).then((res) => {
       setLoggedUser();
       localStorage.clear();
+      return navigate("../", { replace: true });
     });
   };
 

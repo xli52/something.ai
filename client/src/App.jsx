@@ -15,6 +15,7 @@ function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [loggedUser, setLoggedUser] = useState();
+  const [unlocked, setUnlocked] = useState(["jane"]);
 
   useEffect(() => {
     const foundUser = localStorage.getItem("user");
@@ -48,12 +49,23 @@ function App() {
             path="/signup"
             element={
               <SignUp
+                unlocked={unlocked}
                 setShowSignUp={setShowSignUp}
                 setLoggedUser={setLoggedUser}
               />
             }
           />
-          <Route path="/setup" element={<Setup />} />
+          <Route
+            path="/setup"
+            element={
+              <Setup
+                unlocked={unlocked}
+                setUnlocked={setUnlocked}
+                setShowLogin={setShowLogin}
+                loggedUser={loggedUser}
+              />
+            }
+          />
           <Route path="/chat" element={<Chat />} />
           <Route
             path="*"
@@ -70,6 +82,7 @@ function App() {
           showLogin={showLogin}
           setShowLogin={setShowLogin}
           setLoggedUser={setLoggedUser}
+          setUnlocked={setUnlocked}
           showCloseBtn
         />
       )}
