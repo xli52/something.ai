@@ -6,7 +6,7 @@ import { characterContext } from "../../contexts/CharacterContext";
 
 import "./styles.scss";
 
-export default function Chat(props) {
+export default function Chat() {
   const [userText, setUserText] = useState("");
   const [botText, setBotText] = useState("");
   const { bgColor } = useContext(characterContext);

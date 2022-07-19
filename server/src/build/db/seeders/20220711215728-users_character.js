@@ -23,13 +23,29 @@ module.exports = {
             yield queryInterface.bulkInsert("users_characters", [
                 {
                     user_id: 1,
+                    character_id: 1,
+                    unlocked: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                },
+                {
+                    user_id: 1,
                     character_id: 2,
+                    unlocked: false,
                     createdAt: new Date(),
                     updatedAt: new Date(),
                 },
                 {
                     user_id: 2,
                     character_id: 1,
+                    unlocked: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                },
+                {
+                    user_id: 2,
+                    character_id: 2,
+                    unlocked: true,
                     createdAt: new Date(),
                     updatedAt: new Date(),
                 },

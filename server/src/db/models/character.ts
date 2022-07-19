@@ -4,6 +4,7 @@ import { Model } from "sequelize";
 interface CharacterAttributes {
   name: string;
   gender: string;
+  price_cents: number;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -19,6 +20,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
     name!: string;
     gender!: string;
+    price_cents!: number;
 
     static associate(models: any) {
       // define association here
@@ -33,6 +35,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     {
       name: { type: DataTypes.STRING, allowNull: false },
       gender: { type: DataTypes.STRING, allowNull: false },
+      price_cents: { type: DataTypes.INTEGER, allowNull: false },
     },
     {
       sequelize,

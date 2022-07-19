@@ -20,6 +20,7 @@ const app = (0, express_1.default)();
 // import Routers
 const openaiRoute_1 = __importDefault(require("./Routers/openaiRoute"));
 const userRoute_1 = __importDefault(require("./Routers/userRoute"));
+const characterRoute_1 = __importDefault(require("./Routers/characterRoute"));
 // Middlewares
 app.use((0, cookie_session_1.default)({
     name: "session",
@@ -34,6 +35,7 @@ app.get("/", (req, res) => {
 });
 app.use("/api/openai", (0, openaiRoute_1.default)(models_1.default));
 app.use("/user", (0, userRoute_1.default)(models_1.default));
+app.use("/character", (0, characterRoute_1.default)(models_1.default));
 app.use(express_1.default.static("./src/audio"));
 app.listen(8080, () => {
     console.log("backend listening on port 8080");

@@ -24,6 +24,11 @@ module.exports = (sequelize, DataTypes) => {
                 key: "id",
             },
         },
+        unlocked: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
+        },
     }, {
         sequelize,
         modelName: "users_character",

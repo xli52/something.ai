@@ -49,6 +49,7 @@ function App() {
             path="/signup"
             element={
               <SignUp
+                unlocked={unlocked}
                 setShowSignUp={setShowSignUp}
                 setLoggedUser={setLoggedUser}
               />

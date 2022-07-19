@@ -26,18 +26,14 @@ const openaiRouter = (db) => {
         };
         console.log("firing to Google STT api");
         return (0, gSTT_1.GoogleSTT)(request).then(([response]) => {
+            console.log("received response from Google: ", response.results[0]);
             // response will be an empty array if google cannot recognize anything
             if (!response.results[0]) {
-                return res.send("Google could not recongize anything");
+                return res.send("Sorry, I cannot recognize your voice.");
             }
-            else {
-                console.log("received response from Google: ", response.results[0].alternatives[0].transcript);
-                // saved this text to req.session
-                req.session.recognizedText =
-                    response.results[0].alternatives[0].transcript;
-                // redirect with code 307 will reserve the send method (i.e. POST method)
-                res.redirect(307, "/api/openai/textToSpeech");
-            }
+            res.json({
+                transcript: response.results[0].alternatives[0].transcript,
+            });
         });
     });
     ////////////////////////////////
@@ -48,10 +44,9 @@ const openaiRouter = (db) => {
         (0, helpers_1.cleanup)(req.session);
         console.log("Session after clean up: ", req.session);
         console.log("TextToSpeech endpoint received request");
-        console.log("req.session.recognizedText: ", req.session.recognizedText);
         console.log("Current user session: ", req.session.userID, req.session.visitorID);
         // to deterentiate where the request was from speech or text
-        req.session.requestedText = req.session.recognizedText || req.body.message;
+        req.session.requestedText = req.body.message;
         // to make sure if the text is from registered user or visitor. If it is a visitor, then provide a visitorID
         if (!req.session.userID && !req.session.visitorID) {
             console.log("Initializing visitor ID...");
@@ -231,8 +226,6 @@ const openaiRouter = (db) => {
                 aiSentiment: req.session.respondedSentiment,
                 aiText: req.session.respondedText,
             };
-            // clear any speech to text record
-            req.session.recognizedText = null;
             // after updateing db, need to update req.session.gender to reflect current gender selection
             req.session.gender = req.body.gender;
             console.log("Now req.body.gender is " + req.body.gender);
