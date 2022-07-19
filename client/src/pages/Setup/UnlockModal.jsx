@@ -47,7 +47,7 @@ export default function UnlockModal({ setShowUnlock, setUnlocked, setLayer }) {
         data: { character: "Joshua", price: 599 },
         contentType: { "Content-Type": "application/json" },
       }).then((res) => {
-        getUnlockArray(res.data);
+        getUnlockArray(res.data.characters);
         console.log(res.data);
         setShowUnlock(false);
         setLayer(false);
@@ -78,7 +78,7 @@ export default function UnlockModal({ setShowUnlock, setUnlocked, setLayer }) {
           placeholder="Cardholder name"
           type="text"
           name="CardName"
-          value="Amy Donut"
+          value="Amy Heisenberg"
           onChange={handleChange}
         />
 
