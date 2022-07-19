@@ -15,29 +15,31 @@ const characterRouter = (db) => {
             .findOne({
             where: {
                 [sequelize_1.Op.and]: [
-                    { name: req.body.character },
+                    { name: req.body.character.toLowerCase().trim() },
                     { price_cents: req.body.price },
                 ],
             },
         })
             .then((response) => {
+            console.log("search character result: ", response);
             if (!response)
-                res.status(500).send("Oops, something went wrong! Please try again!");
-            db.users_character
-                .findOne({
-                where: {
-                    [sequelize_1.Op.and]: [
-                        { user_id: req.session.userID },
-                        { character_id: response.id },
-                    ],
-                },
+                res.send("Oops, something went wrong! Please try again!");
+            db.sequelize
+                .query("SELECT id, user_id, character_id, unlocked FROM users_characters WHERE user_id = ? AND character_id = ?", {
+                replacements: [req.session.userID, response.id],
+                type: sequelize_1.QueryTypes.SELECT,
+                raw: true,
             })
                 .then((response) => {
+                console.log("user_character table search done: ", response);
                 console.log("Unlocking character for user");
-                db.users_character
-                    .upsert({
-                    id: response.id,
-                    unlocked: true,
+                db.sequelize
+                    .query(`UPDATE users_characters
+            SET unlocked = ?
+            WHERE id = ?`, {
+                    replacements: [true, response[0].id],
+                    type: sequelize_1.QueryTypes.UPDATE,
+                    raw: true,
                 })
                     .then((response) => {
                     console.log("upsert done, result is: ", response);

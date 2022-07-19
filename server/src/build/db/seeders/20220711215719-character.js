@@ -22,14 +22,14 @@ module.exports = {
              */
             yield queryInterface.bulkInsert("characters", [
                 {
-                    name: "Jane",
+                    name: "jane",
                     gender: "FEMALE",
                     price_cents: 0,
                     createdAt: new Date(),
                     updatedAt: new Date(),
                 },
                 {
-                    name: "Joshua",
+                    name: "joshua",
                     gender: "MALE",
                     price_cents: 599,
                     createdAt: new Date(),

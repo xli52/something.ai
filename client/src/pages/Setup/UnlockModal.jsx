@@ -27,8 +27,9 @@ export default function UnlockModal(props) {
     setPurchase({ ...purchase, [name]: value });
   };
 
-  function submitBuy() {
+  function submitBuy(e) {
     // "/character/purchase"
+    e.preventDefault();
     setProcess(true);
     console.log("buy");
 
