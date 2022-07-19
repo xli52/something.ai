@@ -40,6 +40,5 @@ export default function ModelDisplay({ character, layer, setShowUnlock }) {
         </Suspense>
       </Canvas>
     </>
->>>>>>> main
   );
 }
