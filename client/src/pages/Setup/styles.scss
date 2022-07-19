@@ -9,7 +9,7 @@
   margin: auto;
 
   h1 {
-    color: #896da0;
+    color: #8860a8;
     position: fixed;
     top: 9%;
     text-shadow: 4px 4px rgba(#cdcdcd, 0.6);
@@ -38,7 +38,7 @@
     justify-content: space-between;
     height: 10vh;
     margin: 4em;
-    background-color: rgba(148, 148, 148, 0.25);
+    background-color: rgba(148, 148, 148, 0.6);
     border-radius: 23px;
     // move the box to the front //
     position: fixed;
@@ -188,28 +188,26 @@
 }
 
 .bg1 {
-  background: linear-gradient(
-    132deg,
-    #ffffff 28.72%,
-    rgb(180 101 243 / 49%) 101.32%
-  );
+  // background: linear-gradient(
+  //   132deg,
+  //   #ffffff 28.72%,
+  //   rgb(180 101 243 / 49%) 101.32%
+  // );
 }
 
 .bg2 {
-  background: linear-gradient(230.22deg, #daa9ff 28.72%, #34184a 101.32%);
+  // background: linear-gradient(230.22deg, #daa9ff 28.72%, #34184a 101.32%);
 }
 
 .bg3 {
-  background: linear-gradient(230.22deg, #9e8cac 28.72%, #21132c 101.32%);
+  // background: linear-gradient(230.22deg, #9e8cac 28.72%, #21132c 101.32%);
 }
 
-.bg4 {
+.bg6 {
   color: #c6c6c6;
-  background: linear-gradient(
-    78deg,
-    #78418c 28.72%,
-    rgb(216 113 228 / 64%) 101.32%
-  );
+  background: linear-gradient(78deg,
+      #78418c 28.72%,
+      rgb(216 113 228 / 64%) 101.32%);
 }
 
 .arrow {

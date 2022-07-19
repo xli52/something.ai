@@ -17,6 +17,7 @@ export default function ModelDisplay() {
       style={{ width: "60%", margin: "auto" }}
     >
       <ambientLight intensity={1.25} />
+      <directionalLight intensity={1} />
       <Suspense fallback={null}>
         <PresentationControls global snap >
           <Character

@@ -14,24 +14,37 @@
 
 .bg {
   &1 {
-    background: linear-gradient(132deg,
-        #ffffff 28.72%,
-        rgb(180 101 243 / 49%) 101.32%);
+    // background: linear-gradient(132deg,
+    //     #ffffff 28.72%,
+    //     rgb(180 101 243 / 49%) 101.32%);
+    background: url(../../../public/backgrounds/bg1.webp);
+    background-size: cover;
+    
   }
 
   &2 {
-    background: linear-gradient(230.22deg, #daa9ff 28.72%, #34184a 101.32%);
+    // background: linear-gradient(230.22deg, #daa9ff 28.72%, #34184a 101.32%);
+    background: url(../../../public/backgrounds/bg2.webp);
+    background-size: cover;
   }
 
   &3 {
-    background: linear-gradient(230.22deg, #9e8cac 28.72%, #21132c 101.32%);
+    // background: linear-gradient(230.22deg, #9e8cac 28.72%, #21132c 101.32%);
+    background: url(../../../public/backgrounds/bg3.webp);
+    background-size: cover;
   }
 
   &4 {
-    color: #c6c6c6;
-    background: linear-gradient(78deg,
-        #78418c 28.72%,
-        rgb(216 113 228 / 64%) 101.32%);
+    // color: #c6c6c6;
+    // background: linear-gradient(78deg,
+    //     #78418c 28.72%,
+    //     rgb(216 113 228 / 64%) 101.32%);
+    background: url(../../../public/backgrounds/bg4.webp);
+    background-size: cover;
+  }
+  &5 {
+    background: url(../../../public/backgrounds/bg5.webp);
+    background-size: cover;
   }
 }
 

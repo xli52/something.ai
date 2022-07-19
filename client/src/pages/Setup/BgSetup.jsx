@@ -8,6 +8,8 @@ export default function BgSetup(props) {
       <Circle bg="bg1" setBgColor={props.setBgColor} />
       <Circle bg="bg2" setBgColor={props.setBgColor} />
       <Circle bg="bg3" setBgColor={props.setBgColor} />
+      <Circle bg="bg4" setBgColor={props.setBgColor} />
+      <Circle bg="bg5" setBgColor={props.setBgColor} />
     </>
   );
 }
