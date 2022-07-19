@@ -22,14 +22,14 @@ module.exports = {
              */
             yield queryInterface.bulkInsert("users", [
                 {
-                    username: "Amy Heisenberg",
+                    username: "John Doe",
                     password: "$2a$10$XLdY7cRuH19aG3c9.NLvTuTYMxwv6y1dsJ2r9CqTfIbu6U.acSi8W",
                     email: "a@a.com",
                     createdAt: new Date(),
                     updatedAt: new Date(),
                 },
                 {
-                    username: "John Doe",
+                    username: "Amy Heisenberg",
                     password: "$2a$10$68wXbfzS9LBLA8/XLs4V/OSz3bUitTp5wXpsfm802S0douO7Aqseu",
                     email: "b@b.com",
                     createdAt: new Date(),
