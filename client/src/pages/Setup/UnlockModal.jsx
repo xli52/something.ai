@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
-export default function UnlockModal(props) {
+export default function UnlockModal({ setShowUnlock, setUnlocked, setLayer }) {
   const [msg, setMsg] = useState();
   const [purchase, setPurchase] = useState({
     cardName: "",
@@ -27,8 +26,16 @@ export default function UnlockModal(props) {
     setPurchase({ ...purchase, [name]: value });
   };
 
+  const getUnlockArray = function (characters) {
+    let result = [];
+    for (let character of characters) {
+      result.push(character.name.toLowerCase());
+    }
+    console.log(result);
+    setUnlocked(result);
+  };
+
   function submitBuy(e) {
-    // "/character/purchase"
     e.preventDefault();
     setProcess(true);
     console.log("buy");
@@ -39,10 +46,13 @@ export default function UnlockModal(props) {
         url: "/character/purchase",
         data: { character: "Joshua", price: 599 },
         contentType: { "Content-Type": "application/json" },
-      }).then(() => {
-        props.setShowUnlock(false);
+      }).then((res) => {
+        getUnlockArray(res.data);
+        console.log(res.data);
+        setShowUnlock(false);
+        setLayer(false);
       });
-    }, 3000);
+    }, 2000);
   }
 
   return (
@@ -57,7 +67,7 @@ export default function UnlockModal(props) {
           className="close"
           icon={faXmark}
           onClick={() => {
-            props.setShowUnlock(false);
+            setShowUnlock(false);
           }}
         ></FontAwesomeIcon>
 
@@ -68,7 +78,7 @@ export default function UnlockModal(props) {
           placeholder="Cardholder name"
           type="text"
           name="CardName"
-          value={purchase["cardName"]}
+          value="Amy Donut"
           onChange={handleChange}
         />
 
@@ -78,7 +88,7 @@ export default function UnlockModal(props) {
           autoComplete="cc-number"
           maxLength="19"
           name="CardNumber"
-          value={purchase["cardNumber"]}
+          value="**** **** **** ****"
           onChange={handleChange}
         />
 
@@ -88,7 +98,7 @@ export default function UnlockModal(props) {
           autoComplete="cc-expires"
           maxLength="4"
           name="credit_expires"
-          value={purchase["credit_expires"]}
+          value="12 / 26"
           onChange={handleChange}
         />
         <input
@@ -96,7 +106,7 @@ export default function UnlockModal(props) {
           type="tel"
           name="cvc"
           maxLength="4"
-          value={purchase["cvc"]}
+          value="123"
           inputMode="numeric"
           onChange={handleChange}
         />

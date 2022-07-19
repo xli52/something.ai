@@ -60,6 +60,7 @@ function App() {
             element={
               <Setup
                 unlocked={unlocked}
+                setUnlocked={setUnlocked}
                 setShowLogin={setShowLogin}
                 loggedUser={loggedUser}
               />
@@ -81,6 +82,7 @@ function App() {
           showLogin={showLogin}
           setShowLogin={setShowLogin}
           setLoggedUser={setLoggedUser}
+          setUnlocked={setUnlocked}
           showCloseBtn
         />
       )}

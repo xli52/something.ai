@@ -9,7 +9,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
-export default function Setup({ unlocked, loggedUser, setShowLogin }) {
+export default function Setup({
+  unlocked,
+  loggedUser,
+  setShowLogin,
+  setUnlocked,
+}) {
   const { character, nextChar, lastChar, bgColor, setBgColor } =
     useContext(characterContext);
 
@@ -43,7 +48,15 @@ export default function Setup({ unlocked, loggedUser, setShowLogin }) {
   return (
     <main>
       <div className={`setupMainBody ${bgColor}`}>
-        {showUnlock && <UnlockModal setShowUnlock={setShowUnlock} />}
+        {showUnlock && (
+          <UnlockModal
+            unlockCheck={unlockCheck}
+            setShowUnlock={setShowUnlock}
+            unlocked={unlocked}
+            setUnlocked={setUnlocked}
+            setLayer={setLayer}
+          />
+        )}
         <h1>{capFirstLetter(character.name)}</h1>
         <div className="mdSetup">
           <FontAwesomeIcon
