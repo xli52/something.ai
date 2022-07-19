@@ -10,7 +10,7 @@ import { capFirstLetter } from "../../helpers/getHelperFunc";
 
 const SPEAK_TIME_LIMIT = 10000;
 
-export default function InputBox({ setUserText, setBotText, setBotTyping, setUserTyping }) {
+export default function InputBox({ setUserText, setBotText, setBotTyping, setUserTyping, setStatus }) {
 
   const { character } = useContext(characterContext);
   const [gender] = useState(character.gender);
@@ -26,7 +26,6 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
   const timer = useRef(null);
 
   function startRecording() {
-    console.log('Start recording');
     setRecord(true);
   };
 
@@ -36,10 +35,9 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
     setPlaceHolder("Type or hold ESC key to speak...")
     pressCount.current = 0;
     speaking.current = false;
-    console.log('Recording stopped.');
   }
 
-  const onStop = (recordedBlob) => {
+  const onStopRecording = (recordedBlob) => {
 
     return blobToBase64(recordedBlob.blob, (error, base64) => {
       if (!error) {
@@ -59,15 +57,18 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
                 const transcript = capFirstLetter(res.data.transcript);
                 setUserText(transcript);
                 setTimeout(() => setBotTyping(true), 300);
+                setStatus({ status: 'thinking', sentiment: 'neutral' });
                 sendMsgRequest(transcript);
               } else {
                 setBotText("Sorry, I didn't recongize that. Could you say that again?");
+                setStatus({ status: 'error', sentiment: 'negative' });
               }
               setUserTyping(false);
             })
             .catch(e => {
               setUserTyping(false);
               setBotText("Sorry, something is wrong, pleaes try again later!");
+              setStatus({ status: 'error', sentiment: 'negative' });
               console.log(e.message);
             });
         }
@@ -130,6 +131,7 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
     })
       .then(res => {
         console.log("React render stage", res);
+        setStatus({ status: 'speaking', sentiment: res.data.aiSentiment });
         setAudio(`/${res.data.audioID}.mp3`);
         setBotText(res.data.aiText);
         setBotTyping(false);
@@ -137,6 +139,7 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
       .catch(e => {
         setBotTyping(false);
         setBotText("Sorry, something is wrong, pleaes try again later!");
+        setStatus({ status: 'error', sentiment: 'negative' });
         console.log(e.message);
       });
   }
@@ -156,11 +159,17 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('keyup', handleKeyUp);
     }
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="input-box-container">
-      <ReactAudioPlayer src={audio} autoPlay={true} muted={muted} />
+      <ReactAudioPlayer
+        src={audio}
+        autoPlay={true}
+        muted={muted}
+        onEnded={() => setStatus({ status: 'idle', sentiment: 'neutral' })}
+      />
       <div className="chat-bar">
         <div className="chat-bar__speaker" onClick={() => setMuted(!muted)}>
           {!muted && <i className="material-icons">volume_up</i>}
@@ -168,7 +177,7 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
         </div>
         <form
           className="chat-bar__message"
-          onSubmit={(event) => handleSendMsg(event)}
+          onSubmit={handleSendMsg}
         >
           <div className="chat-bar__mic">
             {icon === 'keyboard' && <i className="material-icons keyboard">keyboard</i>}
@@ -178,7 +187,7 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
             className="sound-wave"
             visualSetting="frequencyBars"
             record={record}
-            onStop={onStop}
+            onStop={onStopRecording}
             strokeColor={"#fcfcfc"}
             backgroundColor={"transparent"}
             mimeType="audio/webm"
