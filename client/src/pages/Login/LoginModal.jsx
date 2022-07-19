@@ -21,6 +21,15 @@ export default function LoginModal(props) {
     setLogin({ ...login, [name]: value });
   };
 
+  const getUnlockArray = function (characters) {
+    let result = [];
+    for (let character of characters) {
+      result.push(character.name.toLowerCase());
+    }
+    console.log(result);
+    props.setUnlocked(result);
+  };
+
   const submitLogin = function (e) {
     e.preventDefault();
     console.log(login);
@@ -30,12 +39,16 @@ export default function LoginModal(props) {
       data: { ...login },
       contentType: { "Content-Type": "application/json" },
     }).then((res) => {
+      console.log("Login status: ", res.data);
       // If res is object mean success
       if (typeof res.data === "object") {
         props.setLoggedUser(res.data.username);
-        console.log("Login status: ", res);
+
         setLogin({ email: "", password: "" });
         localStorage.setItem("user", res.data.username);
+
+        getUnlockArray(res.data.characters);
+
         if (!checkPath()) {
           return navigate("../", { replace: true });
         }

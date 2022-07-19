@@ -10,8 +10,8 @@
 
   h1 {
     color: #896da0;
-    position:fixed;
-    top:9%;
+    position: fixed;
+    top: 9%;
     text-shadow: 4px 4px rgba(#cdcdcd, 0.6);
   }
 
@@ -27,6 +27,7 @@
       cursor: pointer;
       font-size: 5em;
       color: #a4a4a4;
+      z-index: 50;
     }
   }
 
@@ -77,6 +78,111 @@
 
     &:hover {
       box-shadow: 12px 0px 41px 4px rgba(101, 49, 142, 0.25);
+    }
+  }
+
+  .locked {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 40;
+    position: absolute;
+    background: rgb(33 19 44 / 73%);
+    width: 100%;
+    height: 100%;
+
+    .unlockText {
+      color: #896da0;
+    }
+
+    .lockIcon {
+      cursor: pointer;
+      font-size: 10em;
+      color: hsl(248deg 48% 69% / 53%);
+      transition: 0.4s;
+
+      &:hover {
+        color: #be6cff;
+      }
+    }
+  }
+}
+
+.unlockpopModal {
+  position: absolute;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 100vh;
+  width: 100vw;
+  background: rgba(178, 178, 178, 0.313);
+  z-index: 97;
+
+  .close {
+    cursor: pointer;
+    color: white;
+    height: 2em;
+    align-self: end;
+    margin: 1em;
+    transition: 0.3s;
+
+    &:hover {
+      color: #8d2add;
+    }
+  }
+
+  .formGroup {
+    background: rgba(139, 134, 134, 0.671);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 70vh;
+    width: 40vw;
+    max-height: 500px;
+    max-width: 600px;
+    border-radius: 1em;
+    padding: 1em;
+
+    h2 {
+      color: #8d2add;
+      font-size: 2em;
+      margin: 0;
+    }
+
+    .error {
+      color: rgb(255, 5, 5);
+    }
+
+    input {
+      width: 70%;
+      height: 3em;
+      margin: 1em;
+      border: none;
+      border-radius: 3px;
+    }
+
+    .btn {
+      cursor: pointer;
+      font-size: 1.1em;
+      font-weight: bolder;
+      color: white;
+      background: #d5a7fb;
+      width: 8em;
+      height: 2.5em;
+      margin-bottom: 2em;
+      border: none;
+      border-radius: 3em;
+      transition: 0.3s;
+
+      &:hover {
+        background-color: #be6cff;
+        color: #ffffff;
+      }
     }
   }
 }

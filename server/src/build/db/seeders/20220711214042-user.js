@@ -29,7 +29,7 @@ module.exports = {
                     updatedAt: new Date(),
                 },
                 {
-                    username: "Jane Donut",
+                    username: "Amy Heisenberg",
                     password: "$2a$10$68wXbfzS9LBLA8/XLs4V/OSz3bUitTp5wXpsfm802S0douO7Aqseu",
                     email: "b@b.com",
                     createdAt: new Date(),
