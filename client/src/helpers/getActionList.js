@@ -1,22 +1,21 @@
 export default function getActionList() {
-
+  const offset = 1;
   return (
     {
-      Angry: {name: 'Angry', duration: 38.33333206176758, loop: false, status: 'speakingGesture', sentiment: 'netural'},
-      StandingIdle: {name: 'StandingIdle', duration: 6,  loop: true, status: 'idle', sentiment: 'netural'},
-      PullingLever: {name: 'PullingLever', duration: 6.25, loop: false, status: 'idleGesture', sentiment: 'netural'},
-      HipHopDancing: {name: 'HipHopDancing', duration: 7.041666507720947, loop: false, status: 'idleGesture', sentiment: 'netural'},
-      ArmStretching: {name: 'ArmStretching', duration: 8.833333015441895, loop: false, status: 'idleGesture', sentiment: 'netural'},
-      LookAround: {name: 'LookAround', duration: 13.333333015441895, loop: false, status: 'idleGesture', sentiment: 'netural'},
-      NeckStretching: {name: 'NeckStretching', duration: 3.1666667461395264, loop: false, status: 'idleGesture', sentiment: 'netural'},
-      Yawn: {name: 'Yawn', duration: 8.333333015441895, loop: false, status: 'idleGesture', sentiment: 'netural'},
-      HeadGesture: {name: 'HeadGesture', duration: 3.125, loop: false, status: 'speakingGesture', sentiment: 'netural'},
-      HeadNodYes: {name: 'HeadNodYes', duration: 2.5833332538604736, loop: false, status: 'speakingGesture', sentiment: 'positive'},
-      ShakingHeadNo: {name: 'ShakingHeadNo', duration: 1.7916666269302368, loop: false, status: 'speakingGesture', sentiment: 'negative'},
-      ThoughtfulHeadNod: {name: 'ThoughtfulHeadNod', duration: 2.9166667461395264, loop: false, status: 'speakingGesture', sentiment: 'positive'},
-      ThoughtfulHeadShake: {name: 'ThoughtfulHeadShake', duration: 3.0416667461395264, loop: false, status: 'speakingGesture', sentiment: 'negative'},
-      StandingGreeting: {name: 'StandingGreeting', duration: 4.708333492279053, loop: false, status: 'greeting', sentiment: 'positive'},
-      Waving: {name: 'Waving', duration: 4.416666507720947, loop: false, status: 'greeting', sentiment: 'positive'}
+      Angry:               {duration: 38.33,          gender: 'neutral', status: 'speakingGesture', sentiment: 'negative' },
+      StandingIdle:        {duration: 6.00,           gender: 'female',  status: 'idle',            sentiment: 'neutral'  },
+      HipHopDancing:       {duration: 7.04,           gender: 'neutral', status: 'idleGesture',     sentiment: 'neutral'  },
+      ArmStretching:       {duration: 8.83  - offset, gender: 'male',    status: 'idleGesture',     sentiment: 'neutral'  },
+      LookAround:          {duration: 13.33 - offset, gender: 'male',    status: 'idleGesture',     sentiment: 'neutral'  },
+      NeckStretching:      {duration: 3.16,           gender: 'neutral', status: 'idleGesture',     sentiment: 'neutral'  },
+      Yawn:                {duration: 8.33,           gender: 'neutral', status: 'idleGesture',     sentiment: 'neutral'  },
+      HeadGesture:         {duration: 3.12,           gender: 'neutral', status: 'speakingGesture', sentiment: 'neutral'  },
+      HeadNodYes:          {duration: 2.58,           gender: 'neutral', status: 'speakingGesture', sentiment: 'positive' },
+      ShakingHeadNo:       {duration: 1.79,           gender: 'neutral', status: 'speakingGesture', sentiment: 'negative' },
+      ThoughtfulHeadNod:   {duration: 2.91,           gender: 'neutral', status: 'speakingGesture', sentiment: 'positive' },
+      ThoughtfulHeadShake: {duration: 3.04,           gender: 'neutral', status: 'speakingGesture', sentiment: 'negative' },
+      StandingGreeting:    {duration: 4.70,           gender: 'female',  status: 'greeting',        sentiment: 'positive' },
+      Waving:              {duration: 4.41,           gender: 'neutral', status: 'greeting',        sentiment: 'positive' }
     }
   );
 }

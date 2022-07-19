@@ -13,9 +13,10 @@ export default function ChatScene({ action, setStatus }) {
         <Suspense fallback={null}>
           <Character
             name={character.name}
+            position={{ x: 0, y: character.chatPageY, z: 0 }}
             action={action}
             setStatus={setStatus}
-            position={{ x: 0, y: character.chatPageY, z: 0 }}
+            initStatus={{ status: 'greeting', sentiment: 'positive' }}
             style={{ touchAction: 'none' }}
           />
         </Suspense>

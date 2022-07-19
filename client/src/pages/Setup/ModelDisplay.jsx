@@ -2,18 +2,15 @@ import React, { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { PresentationControls } from "@react-three/drei";
 import Character from "../../components/Character";
+import useAction from "../../hooks/useAction";
 
 export default function ModelDisplay({ character }) {
+  const { action, setStatus } = useAction();
+
   return (
     <Canvas
       className="chat-scene-canvas"
-      camera={{
-        fov: 100,
-        near: 0.01,
-        far: 1000,
-        position: [0, 0, 20],
-        zoom: 3,
-      }}
+      camera={{ fov: 100, near: 0.01, far: 1000, position: [0, 0, 20], zoom: 3, }}
       style={{ width: "60%", height: "100%" }}
     >
       <ambientLight intensity={1.25} />
@@ -23,7 +20,9 @@ export default function ModelDisplay({ character }) {
           <Character
             name={character.name}
             position={{ x: 0, y: character.setupPageY, z: 0 }}
-            action={character.greetingAction}
+            action={action}
+            setStatus={setStatus}
+            initStatus={{ status: 'thinking', sentiment: 'neutral' }}
           />
         </PresentationControls>
       </Suspense>

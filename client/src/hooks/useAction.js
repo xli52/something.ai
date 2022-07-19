@@ -63,13 +63,6 @@ export default function useAction() {
     timer.current = getTimer(actionList[gesture].duration * 1000, () => setStatus({ status: 'idle', sentiment: 'neutral' }));
   }
 
-  function handleSpeaking() {
-    clearTimeout(timer.current);
-    const gesture = getSpeakGesture(status.sentiment);
-    setAction(gesture);
-    timer.current = getTimer(actionList[gesture].duration * 1000, playSpeakingGesture);
-  }
-
   function handleThinking() {
     clearTimeout(timer.current);
     const gesture = getRandomGesture('idle');
@@ -83,11 +76,23 @@ export default function useAction() {
     timer.current = getTimer(actionList[gesture].duration * 1000, () => setStatus({ status: 'idle', sentiment: 'neutral' }));
   }
 
+  function handleSpeaking() {
+    clearTimeout(timer.current);
+    const gesture = getSpeakGesture(status.sentiment);
+    setAction(gesture);
+    timer.current = getTimer(actionList[gesture].duration * 1000, playSpeakingGesture);
+  }
+
+  function handlePureIdle() {
+    clearTimeout(timer.current);
+    setAction('StandingIdle');
+  }
+
   //  Play action functions
 
   function playSpeakingGesture() {
     clearTimeout(timer.current);
-    const num = getRandomNum(1, 3);
+    const num = getRandomNum(2, 3);
     timer.current = getTimer(num * 1000, handleSpeaking);
   }
 
@@ -115,10 +120,15 @@ export default function useAction() {
       case 'error':
         handleError();
         break;
+      case 'pureIdle':
+        handlePureIdle();
+        break;
       default:
         clearTimeout(timer.current);
         break;
     }
+
+    return () => clearTimeout(timer.current);
   }, [status]);
 
   return { action, setAction, setStatus };

@@ -2,44 +2,38 @@ import React, { useRef, useEffect } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import SkinMesh from './SkinMesh';
 import usePrevious from '../../hooks/usePrevious';
-import getActionList from '../../helpers/getActionList';
 const name = 'jane';
 
-export default function Jane({ position, action, setStatus }) {
+export default function Jane({ position, action, setStatus, initStatus }) {
   const group = useRef();
   const { nodes, materials, animations, scene } = useGLTF(`models/${name}.glb`);
   scene.traverse(obj => obj.frustumCulled = false); // Avoid partial model rendering
 
   const { actions } = useAnimations(animations, group);
-  const actionList = useRef(getActionList());
   const prevAction = usePrevious(action);
 
   // Change default animation loop setting
   useEffect(() => {
     // const list = {...actionList.current};
     // for (const index in actions) {
-    //   if (!actionList.current[index].loop) {
-    //     actions[index].setLoop(1, 1);
-    //   }
-    //   // list[index].duration = actions[index].getClip().duration;
+    //   list[index].duration = actions[index].getClip().duration;
     // }
     // console.log(list);
-
-    console.log('I got called')
-    setStatus({ status: 'greeting', sentiment: 'neutral' });
-
+    setStatus(initStatus);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Animation play control
   useEffect(() => {
     if (prevAction) {
-      actions[prevAction].fadeOut(1);
+      actions[prevAction].fadeOut(1.5);
       actions[action].stop();
+      actions[action].play();
+      actions[action].fadeIn(1.5);
+    } else {
+      actions[action].play();
+      actions[action].fadeIn(0);
     }
-    actions[action].play();
-    actions[action].fadeIn(1);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [action]);
 

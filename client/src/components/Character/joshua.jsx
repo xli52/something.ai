@@ -1,25 +1,41 @@
-import React, { useRef, useEffect } from "react";
-import { useGLTF, useAnimations } from "@react-three/drei";
-import SkinMesh from "./SkinMesh";
-import usePrevious from "../../hooks/usePrevious";
-const name = "joshua";
+import React, { useRef, useEffect } from 'react';
+import { useGLTF, useAnimations } from '@react-three/drei';
+import SkinMesh from './SkinMesh';
+import usePrevious from '../../hooks/usePrevious';
+const name = 'joshua';
 
-export default function Character({ action, position }) {
+export default function Joshua({ position, action, setStatus, initStatus }) {
   const group = useRef();
   const { nodes, materials, animations, scene } = useGLTF(`models/${name}.glb`);
+  scene.traverse(obj => obj.frustumCulled = false); // Avoid partial model rendering
+
   const { actions } = useAnimations(animations, group);
-  scene.traverse((obj) => (obj.frustumCulled = false)); // Avoid partial model rendering
   const prevAction = usePrevious(action);
 
-  // Body animation play control
+  // Change default animation loop setting
+  useEffect(() => {
+    // const list = {...actionList.current};
+    // for (const index in actions) {
+    //   list[index].duration = actions[index].getClip().duration;
+    // }
+    // console.log(list);
+    setStatus(initStatus);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Animation play control
   useEffect(() => {
     if (prevAction) {
-      actions[prevAction].fadeOut(0.5);
-      actions[prevAction].stop();
+      actions[prevAction].fadeOut(1.25);
+      actions[action].stop();
+      actions[action].play();
+      actions[action].fadeIn(1.25);
+    } else {
+      actions[action].play();
+      actions[action].fadeIn(0);
     }
-    actions[action].play();
-    actions[action].fadeIn(0.5);
-  }, [action, actions, prevAction]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [action]);
 
   return (
     <>
@@ -33,12 +49,16 @@ export default function Character({ action, position }) {
             rotation={[-Math.PI / 2, 0, 0]}
             scale={10}
           >
-            <SkinMesh character={name} nodes={nodes} materials={materials} />
+            <SkinMesh
+              character={name}
+              nodes={nodes}
+              materials={materials}
+            />
           </group>
         </group>
       </group>
     </>
-  );
+  )
 }
 
 useGLTF.preload(`models/${name}.glb`);

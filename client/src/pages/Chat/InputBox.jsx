@@ -117,6 +117,7 @@ export default function InputBox({ setUserText, setBotText, setBotTyping, setUse
       setUserText(message);
       setTimeout(() => setBotTyping(true), 300);
       sendMsgRequest(message);
+      setStatus({ status: 'thinking', sentiment: 'neutral' });
     }
   }
 
