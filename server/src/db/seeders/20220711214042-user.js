@@ -16,7 +16,7 @@ module.exports = {
       "users",
       [
         {
-          username: "Amy Donut",
+          username: "Amy Heisenberg",
           password:
             "$2a$10$XLdY7cRuH19aG3c9.NLvTuTYMxwv6y1dsJ2r9CqTfIbu6U.acSi8W", //123
           email: "a@a.com",

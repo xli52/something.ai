@@ -36,7 +36,8 @@ const characterRouter = (db) => {
                 db.sequelize
                     .query(`UPDATE users_characters
             SET unlocked = ?
-            WHERE id = ?`, {
+            WHERE id = ?
+            returning *`, {
                     replacements: [true, response[0].id],
                     type: sequelize_1.QueryTypes.UPDATE,
                     raw: true,
@@ -44,12 +45,24 @@ const characterRouter = (db) => {
                     .then((response) => {
                     console.log("upsert done, result is: ", response);
                     console.log("sending characters array back to front-end");
-                    req.session.userCharacters.push({
-                        name: req.body.character,
-                        price: req.body.price,
+                    let nameExists = false;
+                    req.session.userCharacters.forEach((character) => {
+                        if (character.name === req.body.character.toLowerCase().trim()) {
+                            nameExists = true;
+                        }
                     });
+                    if (!nameExists) {
+                        req.session.userCharacters.push({
+                            name: req.body.character.toLowerCase().trim(),
+                            price: req.body.price,
+                        });
+                    }
                     console.log("Now the character array is: ", req.session.userCharacters);
-                    return res.send(req.session.userCharacters);
+                    return res.status(200).json({
+                        userID: req.session.userID,
+                        username: req.session.username,
+                        characters: req.session.userCharacters,
+                    });
                 });
             });
         })

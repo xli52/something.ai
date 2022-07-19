@@ -4,6 +4,7 @@ import SetupBox from "./SetupBox";
 import "./styles.scss";
 import { characterContext } from "../../contexts/CharacterContext";
 import UnlockModal from "./UnlockModal";
+import { capFirstLetter } from "../../helpers/getHelperFunc";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
