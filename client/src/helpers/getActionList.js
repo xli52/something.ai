@@ -14,7 +14,7 @@ export default function getActionList() {
       ShakingHeadNo:       {duration: 1.79,           gender: 'neutral', status: 'speakingGesture', sentiment: 'negative' },
       ThoughtfulHeadNod:   {duration: 1,              gender: 'neutral', status: 'speakingGesture', sentiment: 'positive' },
       ThoughtfulHeadShake: {duration: 1,              gender: 'neutral', status: 'speakingGesture', sentiment: 'negative' },
-      StandingGreeting:    {duration: 4.70,           gender: 'female',  status: 'greeting',        sentiment: 'positive' },
+      StandingGreeting:    {duration: 4.70 - offset,  gender: 'female',  status: 'greeting',        sentiment: 'positive' },
       Waving:              {duration: 4.41 - offset,  gender: 'neutral', status: 'greeting',        sentiment: 'positive' }
     }
   );
