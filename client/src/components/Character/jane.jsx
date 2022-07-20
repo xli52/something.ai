@@ -22,14 +22,12 @@ export default function Jane({ position, action, setStatus, initStatus }) {
     //   list[index] = actions[index].getClip().duration;
     // }
     // console.log(list);
-
     setStatus(initStatus);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Animation play control
   useEffect(() => {
-    console.log(prevAction, action);
     if (prevAction && action) {
       actions[prevAction].fadeOut(1.5);
       actions[action].stop();

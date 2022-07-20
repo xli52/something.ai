@@ -85,7 +85,9 @@ export default function useAction() {
 
   function handlePureIdle() {
     clearTimeout(timer.current);
-    setAction('StandingIdle');
+    const options = ['Idle', 'StandingIdle']
+    const num = getRandomNum(0, 1);
+    setAction(options[num]);
   }
 
   function handleIntro() {
@@ -98,7 +100,6 @@ export default function useAction() {
   }
 
   //  Play action functions
-
   function playSpeakingGesture() {
     clearTimeout(timer.current);
     const num = getRandomNum(2, 3);

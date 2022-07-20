@@ -20,7 +20,6 @@ export default function Joshua({ position, action, setStatus, initStatus }) {
 
   // Animation play control
   useEffect(() => {
-    console.log(prevAction, action);
     if (prevAction && action) {
       actions[prevAction].fadeOut(1.5);
       actions[action].stop();
@@ -32,8 +31,6 @@ export default function Joshua({ position, action, setStatus, initStatus }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [action]);
-
-  console.log(position);
 
   return (
     <>

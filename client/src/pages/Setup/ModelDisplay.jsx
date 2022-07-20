@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { useEffect, Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { PresentationControls } from "@react-three/drei";
 import Character from "../../components/Character";
@@ -34,7 +34,7 @@ export default function ModelDisplay({ character, layer, setShowUnlock }) {
               position={{ x: 0, y: character.setupPageY, z: 0 }}
               action={action}
               setStatus={setStatus}
-              initStatus={{ status: 'intro', sentiment: 'positive' }}
+              initStatus={{ status: 'pureIdle', sentiment: 'neutral' }}
             />
           </PresentationControls>
         </Suspense>

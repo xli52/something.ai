@@ -10,14 +10,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
-export default function Setup({
-  unlocked,
-  loggedUser,
-  setShowLogin,
-  setUnlocked,
-}) {
+export default function Setup({ unlocked, loggedUser, setShowLogin, setUnlocked, }) {
   const { character, nextChar, lastChar, bgColor, setBgColor } = useContext(characterContext);
-
   const [layer, setLayer] = useState(false);
   const [showUnlock, setShowUnlock] = useState(false);
 
