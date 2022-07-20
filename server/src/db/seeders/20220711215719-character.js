@@ -28,6 +28,27 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          name: "elizabeth",
+          gender: "FEMALE",
+          price_cents: 599,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          name: "adam",
+          gender: "MALE",
+          price_cents: 599,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          name: "chris",
+          gender: "MALE",
+          price_cents: 599,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );
