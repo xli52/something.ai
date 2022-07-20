@@ -12,13 +12,11 @@ export default function Joshua({ position, action, setStatus, initStatus }) {
   const { actions } = useAnimations(animations, group);
   const prevAction = usePrevious(action);
 
-  // Change default animation loop setting
   useEffect(() => {
     setStatus(initStatus);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Animation play control
   useEffect(() => {
     if (prevAction && action) {
       actions[prevAction].fadeOut(1.5);

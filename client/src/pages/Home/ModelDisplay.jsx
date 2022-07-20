@@ -5,10 +5,9 @@ import Character from "../../components/Character";
 import getCharacterList from "../../helpers/getCharacterList";
 import useCharacter from "../../hooks/useCharacter";
 import useAction from "../../hooks/useAction";
-import { useEffect } from "react";
 
 export default function ModelDisplay() {
-  const { character } = useCharacter(getCharacterList().jane);
+  const { character } = useCharacter(getCharacterList().elizabeth);
   const { action, setStatus } = useAction();
 
   return (
