@@ -1,12 +1,11 @@
 main {
-
   .home-header {
-    height: 85vh;
+    height: 100vh;
     background-color: #dfb6ff;
     position: relative;
 
     &-image {
-      width:55%;
+      width: 60%;
       position: absolute;
       bottom: 0%;
       left: 0%;
@@ -14,14 +13,14 @@ main {
 
     .home-intro {
       height: 68%;
-      width: 45%;
+      width: 40%;
       position: absolute;
       right: 0%;
       bottom: 0%;
       // background-color: aquamarine;
 
       &-title {
-        width:70%;
+        width: 70%;
         font-family: Verdana, Geneva, Tahoma, sans-serif;
         font-size: 44px;
         font-weight: 700;
@@ -30,10 +29,10 @@ main {
       }
 
       &-subtitle {
-        width:70%;
+        width: 70%;
         margin: 27px;
         font-size: 20px;
-        font-family:Verdana, Geneva, Tahoma, sans-serif;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
         font-weight: 500;
       }
 
@@ -51,7 +50,7 @@ main {
         transition: 0.5s;
         background-color: #be6cff;
         color: #ffffff;
-        
+
         &:hover {
           background: white;
           color: #be6cff;
@@ -61,22 +60,22 @@ main {
     }
   }
 
-
   .mainBody {
     background: linear-gradient(104deg, #ffffff 28.72%, #daabff7d 101.32%);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    max-width: 1800px;
+
     height: 100vh;
     margin: auto;
 
     .introBody {
       display: flex;
       flex-direction: column;
-      margin: 2em;
-      margin-top: 9em;
+      // margin: 2em;
+      // margin-top: 9em;
+      margin: auto;
 
       h1 {
         margin: 2em;
