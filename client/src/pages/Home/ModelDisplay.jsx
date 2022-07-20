@@ -13,7 +13,7 @@ export default function ModelDisplay() {
   return (
     <Canvas
       className="chat-scene-canvas"
-      camera={{ fov: 100, near: 0.01, far: 1000, position: [5, 0, 30], zoom: 5 }}
+      camera={{ fov: 100, near: 0.01, far: 1000, position: [1.5, 0, 5], zoom: 5 }}
       style={{ width: "60%", margin: "auto" }}
     >
       <ambientLight intensity={1.25} />
@@ -22,7 +22,7 @@ export default function ModelDisplay() {
         <PresentationControls global snap >
           <Character
             name={character.name}
-            position={{ x: 1, y: -14, z: 0 }}
+            position={{ x: 0.2, y: -1.1, z: 0 }}
             action={action}
             setStatus={setStatus}
             initStatus={{ status: 'thinking', sentiment: 'neutral' }}

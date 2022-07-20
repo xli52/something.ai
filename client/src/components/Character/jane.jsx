@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import SkinMesh from './SkinMesh';
 import usePrevious from '../../hooks/usePrevious';
+// import getActionList from '../../helpers/getActionList';
 const name = 'jane';
 
 export default function Jane({ position, action, setStatus, initStatus }) {
@@ -12,25 +13,29 @@ export default function Jane({ position, action, setStatus, initStatus }) {
   const { actions } = useAnimations(animations, group);
   const prevAction = usePrevious(action);
 
+  // const actionList = getActionList();
+
   // Change default animation loop setting
   useEffect(() => {
-    // const list = {...actionList.current};
+    // const list = {};
     // for (const index in actions) {
-    //   list[index].duration = actions[index].getClip().duration;
+    //   list[index] = actions[index].getClip().duration;
     // }
     // console.log(list);
+
     setStatus(initStatus);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Animation play control
   useEffect(() => {
-    if (prevAction) {
+    console.log(prevAction, action);
+    if (prevAction && action) {
       actions[prevAction].fadeOut(1.5);
       actions[action].stop();
       actions[action].play();
       actions[action].fadeIn(1.5);
-    } else {
+    } else if (action) {
       actions[action].play();
       actions[action].fadeIn(0);
     }
@@ -40,15 +45,12 @@ export default function Jane({ position, action, setStatus, initStatus }) {
   return (
     <>
       <primitive object={scene} />
-      <group ref={group} dispose={null}>
-        <group name="Scene">
-          <group
-            name="Armature"
-            // Control camera defalt location x,y,z and rx, ry, rz
-            position={[position.x, position.y, position.z]}
-            rotation={[-Math.PI / 2, 0, 0]}
-            scale={10}
-          >
+      <group ref={group} dispose={null} >
+        <group
+          name="Scene"
+          position={[position.x, position.y, position.z]}
+        >
+          <group name="Armature" >
             <SkinMesh
               character={name}
               nodes={nodes}

@@ -22,7 +22,7 @@ export default function ModelDisplay({ character, layer, setShowUnlock }) {
       )}
       <Canvas
         className="chat-scene-canvas"
-        camera={{fov: 100,near: 0.01,far: 1000,position: [0, 0, 20],zoom: 3}}
+        camera={{ fov: 100, near: 0.01, far: 1000, position: [0, 0, 3], zoom: 5 }}
         style={{ width: "60%", height: "100%" }}
       >
         <ambientLight intensity={1} />
@@ -34,7 +34,7 @@ export default function ModelDisplay({ character, layer, setShowUnlock }) {
               position={{ x: 0, y: character.setupPageY, z: 0 }}
               action={action}
               setStatus={setStatus}
-              initStatus={{ status: 'thinking', sentiment: 'neutral' }}
+              initStatus={{ status: 'intro', sentiment: 'positive' }}
             />
           </PresentationControls>
         </Suspense>

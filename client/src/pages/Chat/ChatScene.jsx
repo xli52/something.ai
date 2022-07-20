@@ -8,7 +8,7 @@ export default function ChatScene({ action, setStatus }) {
 
   return (
     <Canvas
-      className='chat-scene-canvas' camera={{ fov: 100, near: 0.01, far: 1000, position: [0, 0, 20], zoom: 5 }}>
+      className='chat-scene-canvas' camera={{ fov: 100, near: 0.01, far: 1000, position: [0, 0, 4], zoom: 11 }}>
         <ambientLight intensity={1} />
         <directionalLight intensity={1} position={[2, 2, 0]} />
         <Suspense fallback={null}>

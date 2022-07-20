@@ -14,41 +14,36 @@ export default function Joshua({ position, action, setStatus, initStatus }) {
 
   // Change default animation loop setting
   useEffect(() => {
-    // const list = {...actionList.current};
-    // for (const index in actions) {
-    //   list[index].duration = actions[index].getClip().duration;
-    // }
-    // console.log(list);
     setStatus(initStatus);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Animation play control
   useEffect(() => {
-    if (prevAction) {
-      actions[prevAction].fadeOut(1.25);
+    console.log(prevAction, action);
+    if (prevAction && action) {
+      actions[prevAction].fadeOut(1.5);
       actions[action].stop();
       actions[action].play();
-      actions[action].fadeIn(1.25);
-    } else {
+      actions[action].fadeIn(1.5);
+    } else if (action) {
       actions[action].play();
       actions[action].fadeIn(0);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [action]);
 
+  console.log(position);
+
   return (
     <>
       <primitive object={scene} />
-      <group ref={group} dispose={null}>
-        <group name="Scene">
-          <group
-            name="Armature"
-            // Control camera defalt location x,y,z and rx, ry, rz
-            position={[position.x, position.y, position.z]}
-            rotation={[-Math.PI / 2, 0, 0]}
-            scale={10}
-          >
+      <group ref={group} dispose={null} >
+        <group
+          name="Scene"
+          position={[position.x, position.y, position.z]}
+        >
+          <group name="Armature001" >
             <SkinMesh
               character={name}
               nodes={nodes}

@@ -71,7 +71,10 @@ export default function Setup({
             onClick={nextChar}
           />
         </div>
-        <SetupBox setBgColor={setBgColor} layer={layer} />
+        <SetupBox
+          setBgColor={setBgColor}
+          layer={layer}
+        />
       </div>
     </main>
   );

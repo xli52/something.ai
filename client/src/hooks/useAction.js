@@ -7,7 +7,7 @@ const actionArray = Object.keys(actionList);
 
 export default function useAction() {
   const timer = useRef(null);
-  const [action, setAction] = useState('StandingIdle');
+  const [action, setAction] = useState();
   //  Sentiment: negative, positive, neutral 
   //  Status: idle, speaking, greeting, error
   const [status, setStatus] = useState({});
@@ -21,7 +21,7 @@ export default function useAction() {
 
   function getRandomGesture(status) {
     let noMatch = true;
-    let gesture = 'StandingIdle';
+    let gesture = '';
     while (noMatch) {
       const num = getRandomNum(0, actionArray.length - 1);
       if (actionList[actionArray[num]].status === status) {
@@ -34,7 +34,7 @@ export default function useAction() {
 
   function getSpeakGesture(sentiment) {
     let noMatch = true;
-    let gesture = 'StandingIdle';
+    let gesture = 'Idle';
     while (noMatch) {
       const num = getRandomNum(0, actionArray.length - 1);
       const action = actionList[actionArray[num]]
@@ -52,7 +52,7 @@ export default function useAction() {
     clearTimeout(timer.current);
     const gesture = getRandomGesture('idle');
     setAction(gesture);
-    const num = getRandomNum(10, 20);
+    const num = getRandomNum(7, 15);
     timer.current = getTimer(num * 1000, playIdleGesture);
   }
 
@@ -86,6 +86,15 @@ export default function useAction() {
   function handlePureIdle() {
     clearTimeout(timer.current);
     setAction('StandingIdle');
+  }
+
+  function handleIntro() {
+    clearTimeout(timer.current);
+    const options = ['greeting', 'greeting', 'greeting', 'intro']
+    const num = getRandomNum(0, 3);
+    const gesture = getRandomGesture(options[num]);
+    setAction(gesture);
+    timer.current = getTimer(actionList[gesture].duration * 1000, handleThinking);
   }
 
   //  Play action functions
@@ -122,6 +131,9 @@ export default function useAction() {
         break;
       case 'pureIdle':
         handlePureIdle();
+        break;
+      case 'intro':
+        handleIntro();
         break;
       default:
         clearTimeout(timer.current);
