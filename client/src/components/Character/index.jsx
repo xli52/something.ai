@@ -8,6 +8,9 @@ export default function Character({ name, position, action, setStatus, initStatu
     <>
       {name === "jane" && <Jane action={action} setStatus={setStatus} position={position} initStatus={initStatus} />}
       {name === "joshua" && <Joshua action={action} setStatus={setStatus} position={position} initStatus={initStatus} />}
+      {name === "adam" && <Joshua action={action} setStatus={setStatus} position={position} initStatus={initStatus} />}
+      {name === "chris" && <Joshua action={action} setStatus={setStatus} position={position} initStatus={initStatus} />}
+      {name === "elizabeth" && <Joshua action={action} setStatus={setStatus} position={position} initStatus={initStatus} />}
     </>
   );
 }

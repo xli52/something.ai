@@ -52,7 +52,7 @@ export default function useAction() {
     clearTimeout(timer.current);
     const gesture = getRandomGesture('idle');
     setAction(gesture);
-    const num = getRandomNum(7, 15);
+    const num = getRandomNum(3, 8);
     timer.current = getTimer(num * 1000, playIdleGesture);
   }
 
