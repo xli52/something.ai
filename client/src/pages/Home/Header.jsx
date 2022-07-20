@@ -11,7 +11,7 @@ export default function Header(props) {
       <div className="home-header">
         <img src={hero} className="home-header-image" />
         <div className="home-intro">
-          <div className="home-intro-title">GPT-3 Powered AI Chat Bot</div>
+          <div className="home-intro-title">GPT-3 Powered Animated AI Chat Bot</div>
           <div className="home-intro-subtitle">Powerful, knowledgeable and entertaining</div>
           <button className="home-intro-btn" onClick={setupPage}>
             Get Started
