@@ -85,7 +85,7 @@ export default function useAction() {
 
   function handlePureIdle() {
     clearTimeout(timer.current);
-    const options = ['Idle', 'StandingIdle']
+    const options = ['Idle', 'StandingIdle'];
     const num = getRandomNum(0, 1);
     setAction(options[num]);
   }

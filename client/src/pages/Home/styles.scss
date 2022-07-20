@@ -1,5 +1,67 @@
 main {
-  
+
+  .home-header {
+    height: 85vh;
+    background-color: #dfb6ff;
+    position: relative;
+
+    &-image {
+      width:55%;
+      position: absolute;
+      bottom: 0%;
+      left: 0%;
+    }
+
+    .home-intro {
+      height: 68%;
+      width: 45%;
+      position: absolute;
+      right: 0%;
+      bottom: 0%;
+      // background-color: aquamarine;
+
+      &-title {
+        width:70%;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-size: 44px;
+        font-weight: 700;
+        margin: 25px;
+        margin-top: 30px;
+      }
+
+      &-subtitle {
+        width:70%;
+        margin: 27px;
+        font-size: 20px;
+        font-family:Verdana, Geneva, Tahoma, sans-serif;
+        font-weight: 500;
+      }
+
+      &-btn {
+        position: absolute;
+        cursor: pointer;
+        font-size: 1.2em;
+        border: none;
+        // box-shadow: 12px 0px 41px 4px rgba(101, 49, 142, 0.25);
+        border-radius: 10px;
+        padding: 0.7em 1em;
+        margin-left: 25px;
+        margin-top: 50px;
+        width: 150px;
+        transition: 0.5s;
+        background-color: #be6cff;
+        color: #ffffff;
+        
+        &:hover {
+          background: white;
+          color: #be6cff;
+          box-shadow: 12px 0px 41px 4px rgba(101, 49, 142, 0.25);
+        }
+      }
+    }
+  }
+
+
   .mainBody {
     background: linear-gradient(104deg, #ffffff 28.72%, #daabff7d 101.32%);
     display: flex;
@@ -57,6 +119,7 @@ main {
         width: 70%;
         transition: 0.5s;
       }
+
       .btn:hover {
         background-color: #d5a7fb;
         box-shadow: 12px 0px 41px 4px rgba(101, 49, 142, 0.25);

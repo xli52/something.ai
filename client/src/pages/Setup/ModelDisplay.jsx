@@ -34,7 +34,7 @@ export default function ModelDisplay({ character, layer, setShowUnlock }) {
               position={{ x: 0, y: character.setupPageY, z: 0 }}
               action={action}
               setStatus={setStatus}
-              initStatus={{ status: 'pureIdle', sentiment: 'neutral' }}
+              initStatus={{ status: 'purlIdle', sentiment: 'neutral' }}
             />
           </PresentationControls>
         </Suspense>
