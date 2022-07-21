@@ -6,13 +6,13 @@ export default function Intro(props) {
 
   return (
     <div className="introBody">
-      <h1 className="center">What to chat ?</h1>
+      <h1 className="center">Want to chat ?</h1>
       <div className="line right"></div>
-      <h2 className="right">But all your friend busy ?</h2>
+      <h2 className="right">But all your friends are busy ?</h2>
       <div className="line left"></div>
-      <h2 className="left">You have a secert cannot tell anyone ?</h2>
-      <h2 className="right">or, you get no friend ....</h2>
-      <h2 className="center">No worry, We get it !</h2>
+      <h2 className="left">Do you have a secert but cannot tell anyone ?</h2>
+      <h2 className="right">or, you get no friends ....</h2>
+      <h2 className="center">No worries. We've got you !</h2>
       <button
         className="btn"
         onClick={setupPage}
