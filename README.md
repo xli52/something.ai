@@ -34,6 +34,14 @@ Try it now!
 
 !["Screenshot of chat page scene example 3"](https://github.com/xli52/final/blob/main/client/docs/images/chat_scene_3.png?raw=true)
 
+### Text Chat in action
+
+!["Chat Gif"](https://github.com/xli52/final/blob/main/client/docs/jane_chat.gif?raw=true)
+
+### Speech-to-Text Chat in action
+
+!["Chat Gif"](https://github.com/xli52/final/blob/main/client/docs/josh_chat.gif?raw=true)
+
 ## Tech Stack
 
 ### Front End
