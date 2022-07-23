@@ -27,14 +27,14 @@ Powerful AI chat application that enables human-like conversation with fully ani
 - Axios
 
 ### Back End
-- Node.js
+- NodeJS
 - Express
 - Postgresql
 - Sequelize
 
 ### APIs & Tools
-- GPT-3 (OPENAI)
-- Google Language API
+- GPT-3 (Google OpenAI)
+- Google Natural Language API
 - Blender
 
 ### Resources
