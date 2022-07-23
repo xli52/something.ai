@@ -51,12 +51,7 @@ Try it now!
 - Axios
 
 ### Back End
-<<<<<<< HEAD
-- NodeJS
-=======
-
 - Node.js
->>>>>>> f8a8c2d94b562107cc53a83947e7cea449dd09ae
 - Express
 - Postgresql
 - Sequelize
