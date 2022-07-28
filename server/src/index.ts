@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import express from "express";
+import express, { Request, Response } from "express";
 import morgan from "morgan";
 import cookieSession from "cookie-session";
 import db from "../src/db/models";
@@ -33,7 +33,7 @@ app.use(
 );
 app.use(express.json({ limit: "10mb" }));
 
-app.get("/", (req: any, res: any) => {
+app.get("/", (req: Request, res: Response) => {
   console.log("Checking user session", req.session);
   res.status(200).json(req.session);
 });

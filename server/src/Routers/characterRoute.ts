@@ -1,13 +1,13 @@
-import express from "express";
+import express, { IRouter, Request, Response } from "express";
 import { QueryTypes, Op } from "sequelize";
 
 const router = express.Router();
 
-const characterRouter = (db: any): any => {
-  router.post("/purchase", (req: any, res: any) => {
+const characterRouter = (db: any): IRouter => {
+  router.post("/purchase", (req: Request, res: Response) => {
     console.log("received unlock request, searching for character now");
 
-    if (!req.session.userID) res.status(500).send("Please log in to purchase");
+    if (!req.session!.userID) res.status(500).send("Please log in to purchase");
 
     db.character
       .findOne({
@@ -27,7 +27,7 @@ const characterRouter = (db: any): any => {
           .query(
             "SELECT id, user_id, character_id, unlocked FROM users_characters WHERE user_id = ? AND character_id = ?",
             {
-              replacements: [req.session.userID, response.id],
+              replacements: [req.session!.userID, response.id],
               type: QueryTypes.SELECT,
               raw: true,
             }
@@ -54,7 +54,7 @@ const characterRouter = (db: any): any => {
 
                 let nameExists = false;
 
-                req.session.userCharacters.forEach((character: any) => {
+                req.session!.userCharacters.forEach((character: any) => {
                   if (
                     character.name === req.body.character.toLowerCase().trim()
                   ) {
@@ -63,20 +63,20 @@ const characterRouter = (db: any): any => {
                 });
 
                 if (!nameExists) {
-                  req.session.userCharacters.push({
+                  req.session!.userCharacters.push({
                     name: req.body.character.toLowerCase().trim(),
                     price: req.body.price,
                   });
                 }
                 console.log(
                   "Now the character array is: ",
-                  req.session.userCharacters
+                  req.session!.userCharacters
                 );
 
                 return res.status(200).json({
-                  userID: req.session.userID,
-                  username: req.session.username,
-                  characters: req.session.userCharacters,
+                  userID: req.session!.userID,
+                  username: req.session!.username,
+                  characters: req.session!.userCharacters,
                 });
               });
           });

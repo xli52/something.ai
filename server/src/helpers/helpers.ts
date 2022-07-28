@@ -40,11 +40,11 @@ const deleteFiles = (dir: string): void => {
 
 // session clean up for each api request
 const cleanup = (session: any): void => {
-  session.audioID = null;
-  session.requestedSentiment = null;
-  session.requestedText = null;
-  session.respondedSentiment = null;
-  session.respondedText = null;
+  session.audioID = undefined;
+  session.requestedSentiment = undefined;
+  session.requestedText = undefined;
+  session.respondedSentiment = undefined;
+  session.respondedText = undefined;
   session.apiResponse;
 };
 

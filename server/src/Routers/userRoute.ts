@@ -1,11 +1,11 @@
-import express from "express";
+import express, { IRouter, Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import { QueryTypes } from "sequelize";
 
 const router = express.Router();
 
-const userRouter = (db: any): any => {
-  router.post("/login", (req: any, res: any) => {
+const userRouter = (db: any): IRouter => {
+  router.post("/login", (req: Request, res: Response) => {
     console.log("Received login request!", req.body);
 
     db.user
@@ -26,48 +26,50 @@ const userRouter = (db: any): any => {
           return res.send("Invalid email or password.");
         }
 
-        if (req.session.visitorID) {
+        // using the not-null assertion operator (!) here to suppress the type error from for req.session
+        if (req.session!.visitorID) {
           console.log("Login process: visitorID exists, deleting...");
-          delete req.session.visitorID;
-          console.log("visitorID deleted", req.session.visitorID);
+          delete req.session!.visitorID;
+          console.log("visitorID deleted", req.session!.visitorID);
         }
 
         console.log("ORM search found user email and password matched");
-        req.session.userID = response.id;
-        req.session.username = response.username;
+        req.session!.userID = response.id;
+        req.session!.username = response.username;
 
         return db.sequelize
           .query(
             "SELECT c.name, c.price_cents FROM characters c JOIN users_characters u ON c.id = u.character_id WHERE u.user_id = ? AND u.unlocked = ?;",
             {
-              replacements: [req.session.userID, "true"],
+              replacements: [req.session!.userID, "true"],
               type: QueryTypes.SELECT,
               raw: true,
             }
           )
           .then((response: any) => {
             console.log("search results? ", response);
-            req.session.userCharacters = response;
+            req.session!.userCharacters = response;
             res.status(200).json({
-              userID: req.session.userID,
-              username: req.session.username,
-              characters: req.session.userCharacters,
+              userID: req.session!.userID,
+              username: req.session!.username,
+              characters: req.session!.userCharacters,
             });
           });
       })
       .catch((err: any) => console.error(err));
   });
 
-  router.post("/logout", (req: any, res: any) => {
+  router.post("/logout", (req: Request, res: Response) => {
     console.log("Received logout request!");
-    console.log("Current user session: ", req.session);
+    console.log("Current user session: ", req.session!);
+    // when session is null, we don't need the ! operator
     req.session = null;
     console.log("Confirm user session is empty: ", req.session);
     // maybe can run a delete audio file command upon logout
     res.status(200).send("You have already logged out! See you!");
   });
 
-  router.post("/register", (req: any, res: any) => {
+  router.post("/register", (req: Request, res: Response) => {
     console.log("Received registration request!", req.body);
     const salt = bcrypt.genSaltSync(10);
     const password = bcrypt.hashSync(req.body.password, salt);
@@ -90,9 +92,9 @@ const userRouter = (db: any): any => {
           })
           .then((response: any) => {
             console.log("Created user: " + response.id);
-            req.session.userID = response.id;
+            req.session!.userID = response.id;
             res.json({
-              userID: req.session.userID,
+              userID: req.session!.userID,
               username: response.username,
             });
           });

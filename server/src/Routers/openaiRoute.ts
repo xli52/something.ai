@@ -1,5 +1,5 @@
 // router setup
-import express, { query } from "express";
+import express, { IRouter, Request, Response } from "express";
 const router = express.Router();
 
 // import node modules and helpers
@@ -17,11 +17,13 @@ import {
   standardPrompt,
 } from "../helpers/openai";
 
-const openaiRouter = (db: any): any => {
+// using the non-null operator ! for req.session, see reasoning in userRoute.ts
+
+const openaiRouter = (db: any): IRouter => {
   ////////////////////////////////
   // Speech to Text Route
   ////////////////////////////////
-  router.post("/speechToText", (req: any, res: any) => {
+  router.post("/speechToText", (req: Request, res: Response) => {
     console.log("SpeechToText endpoint received request");
 
     // frontend converted the audio blob into a base64 string, then we send it to Google STT api
@@ -47,7 +49,7 @@ const openaiRouter = (db: any): any => {
   ////////////////////////////////
   // Text to Speech Route
   ////////////////////////////////
-  router.post("/textToSpeech", (req: any, res: any) => {
+  router.post("/textToSpeech", (req: Request, res: Response) => {
     console.log("Session before clean up: ", req.session);
     cleanup(req.session);
     console.log("Session after clean up: ", req.session);
@@ -55,39 +57,41 @@ const openaiRouter = (db: any): any => {
     console.log("TextToSpeech endpoint received request");
     console.log(
       "Current user session: ",
-      req.session.userID,
-      req.session.visitorID
+      req.session!.userID,
+      req.session!.visitorID
     );
 
     // to deterentiate where the request was from speech or text
-    req.session.requestedText = req.body.message;
+    req.session!.requestedText = req.body.message;
 
     // to make sure if the text is from registered user or visitor. If it is a visitor, then provide a visitorID
-    if (!req.session.userID && !req.session.visitorID) {
+    if (!req.session!.userID && !req.session!.visitorID) {
       console.log("Initializing visitor ID...");
-      req.session.visitorID = randomID();
+      req.session!.visitorID = randomID();
     }
 
+    console.log("conversation id?", req.session!.convoID);
+
     // to check if this is a new conversation for a user. If so, write to db to create a new conversation
-    if (req.session.userID && !req.session.convoID) {
+    if (req.session!.userID && !req.session!.convoID) {
       console.log(
         "user session exists but does not have convoID. Creating conversation now."
       );
       db.conversation
         .create({
-          user_id: req.session.userID,
+          user_id: req.session!.userID,
           createdAt: new Date(),
           updatedAt: new Date(),
         })
         .then((response: any) => {
           console.log("convoID created: ", response.id);
-          req.session.convoID = response.id;
+          req.session!.convoID = response.id;
         })
         .then(() => {
           db.message
             .create({
-              content: req.session.requestedText,
-              conversation_id: req.session.convoID,
+              content: req.session!.requestedText,
+              conversation_id: req.session!.convoID,
               from_bot: false,
               createdAt: new Date(),
             })
@@ -99,14 +103,14 @@ const openaiRouter = (db: any): any => {
     }
 
     // when both userID and convoID exists, directly write to db.message
-    if (req.session.userID && req.session.convoID) {
+    if (req.session!.userID && req.session!.convoID) {
       console.log(
         "Both user session and convoID exist. Writing user input now."
       );
       db.message
         .create({
-          content: req.session.requestedText,
-          conversation_id: req.session.convoID,
+          content: req.session!.requestedText,
+          conversation_id: req.session!.convoID,
           from_bot: false,
           createdAt: new Date(),
         })
@@ -119,34 +123,34 @@ const openaiRouter = (db: any): any => {
     console.log("Proceeding to GoogleNLA...");
 
     // first send the text off to Google NLA
-    return GoogleNLA(req.session.requestedText)
+    return GoogleNLA(req.session!.requestedText)
       .then((response: any) => {
-        req.session.requestedSentiment = checkSentiment(
+        req.session!.requestedSentiment = checkSentiment(
           response[0].documentSentiment.score
         );
         console.log(
           "Google NLA says the speaker's sentiment is ",
-          req.session.requestedSentiment,
+          req.session!.requestedSentiment,
           response[0].documentSentiment.score
         );
 
         // assign gender
-        if (!req.session.gender) req.session.gender = req.body.gender;
+        if (!req.session!.gender) req.session!.gender = req.body.gender;
 
         // create a prompt content based based on gender
         const genderPromptContent = standardPrompt(
           req.body.gender,
-          req.session.username || "visitor"
+          req.session!.username || "visitor"
         );
 
         // create boiler plate prompt for 1st time user and visitor
         const boilerPlate = chatPrompt(
-          req.session.requestedText,
+          req.session!.requestedText,
           genderPromptContent
         );
 
         // visitor will get a none saved prompt every time
-        if (req.session.visitorID) {
+        if (req.session!.visitorID) {
           return openai.createCompletion(boilerPlate);
         }
 
@@ -154,8 +158,8 @@ const openaiRouter = (db: any): any => {
         return db.prompt
           .findOne({
             where: {
-              user_id: req.session.userID,
-              conversation_id: req.session.convoID,
+              user_id: req.session!.userID,
+              conversation_id: req.session!.convoID,
             },
           })
           .then((response: any) => {
@@ -166,26 +170,26 @@ const openaiRouter = (db: any): any => {
               );
 
               // assign promptID to session for later retrieval
-              req.session.promptID = response.id;
+              req.session!.promptID = response.id;
 
               // there was prompt history created, compare the gender inside of the prompt history, and update if necessary
-              console.log("req.session.gender: ", req.session.gender);
+              console.log("req.session.gender: ", req.session!.gender);
               console.log("req.body.gender: ", req.body.gender);
               console.log(
                 "Gender is the same? ",
-                req.session.gender === req.body.gender
+                req.session!.gender === req.body.gender
               );
 
-              if (req.session.gender === req.body.gender) {
+              if (req.session!.gender === req.body.gender) {
                 // same character gender, no need to update prompt history
                 console.log(
                   " Now we send this off to openai: ",
-                  chatPrompt(req.session.requestedText, response.prompt)
+                  chatPrompt(req.session!.requestedText, response.prompt)
                 );
 
                 return openai.createCompletion(
                   chatPrompt(
-                    req.session.requestedText,
+                    req.session!.requestedText,
 
                     response.prompt
                   )
@@ -203,9 +207,9 @@ const openaiRouter = (db: any): any => {
 
                 return db.prompt
                   .upsert({
-                    id: req.session.promptID,
-                    user_id: req.session.userID,
-                    conversation_id: req.session.convoID,
+                    id: req.session!.promptID,
+                    user_id: req.session!.userID,
+                    conversation_id: req.session!.convoID,
                     prompt: updatePromptGender(
                       response.prompt,
                       req.body.gender
@@ -224,7 +228,7 @@ const openaiRouter = (db: any): any => {
                     console.log(
                       "New chatPrompt: ",
                       chatPrompt(
-                        req.session.requestedText,
+                        req.session!.requestedText,
 
                         response[0].dataValues.prompt
                       )
@@ -232,7 +236,7 @@ const openaiRouter = (db: any): any => {
 
                     return openai.createCompletion(
                       chatPrompt(
-                        req.session.requestedText,
+                        req.session!.requestedText,
 
                         response[0].dataValues.prompt
                       )
@@ -250,14 +254,14 @@ const openaiRouter = (db: any): any => {
               // perform a database upsert first then proceed. This will save some time for later prompt update search
               return db.prompt
                 .upsert({
-                  user_id: req.session.userID,
-                  conversation_id: req.session.convoID,
+                  user_id: req.session!.userID,
+                  conversation_id: req.session!.convoID,
                   prompt: boilerPlate.prompt,
                 })
                 .then((response: any) => {
                   console.log("After boilerPlate upsert: ", response);
                   console.log("boilerPlate completed, proceeding...");
-                  req.session.promptID = response[0].id;
+                  req.session!.promptID = response[0].id;
                   return openai.createCompletion(boilerPlate);
                 });
             }
@@ -268,47 +272,47 @@ const openaiRouter = (db: any): any => {
         console.log("OPEN AI: ", response.data);
 
         // save the audioID for saving and retrieving the file. Based on different results, the prefix of audioID would be different
-        req.session.audioID = req.session.userID
-          ? `${req.session.userID}-${response.data.id}`
-          : `${req.session.visitorID}-${response.data.id}`;
+        req.session!.audioID = req.session!.userID
+          ? `${req.session!.userID}-${response.data.id}`
+          : `${req.session!.visitorID}-${response.data.id}`;
 
         // check if open returned an empty response, if so, we have to input our own responded text
-        req.session.respondedText =
+        req.session!.respondedText =
           response.data.choices[0].text.trim() ||
           "I am sorry, I didn't understand what you meant. Can you repaet that again?";
 
-        return GoogleNLA(req.session.respondedText);
+        return GoogleNLA(req.session!.respondedText);
       })
       .then((response: any) => {
-        req.session.respondedSentiment = checkSentiment(
+        req.session!.respondedSentiment = checkSentiment(
           response[0].documentSentiment.score
         );
         console.log(
           "responded sentiment is",
-          req.session.respondedSentiment,
+          req.session!.respondedSentiment,
           response[0].documentSentiment.score
         );
 
         // update promptHistory for users only when responded text is not empty, so that gpt-3 will have history and can recall if we ask the same question
-        if (req.session.userID) {
+        if (req.session!.userID) {
           db.prompt
             .findOne({
               where: {
-                user_id: req.session.userID,
-                conversation_id: req.session.convoID,
+                user_id: req.session!.userID,
+                conversation_id: req.session!.convoID,
               },
             })
             .then((response: any) => {
               db.prompt.upsert({
-                id: req.session.promptID,
+                id: req.session!.promptID,
                 prompt: updatePromptHistory(
                   response.prompt,
-                  req.session.requestedText,
+                  req.session!.requestedText,
 
-                  req.session.respondedText
+                  req.session!.respondedText
                 ),
-                user_id: req.session.userID,
-                conversation_id: req.session.convoID,
+                user_id: req.session!.userID,
+                conversation_id: req.session!.convoID,
               });
             })
             .then((response: any) => {
@@ -317,14 +321,14 @@ const openaiRouter = (db: any): any => {
         }
 
         // choose voice based on character gender. FEMALE voice is used by default.
-        return GoogleTTS(req.session.respondedText, req.body.gender);
+        return GoogleTTS(req.session!.respondedText, req.body.gender);
       })
       .then(([response]: any[]) => {
         // Base64 encoding is done, time to write file
         console.log("decoded stage finished: ", response.audioContent);
         // stretch: write a cron job script to periodically clean up the audio files
         return writeFile(
-          `./src/audio/${req.session.audioID}.mp3`,
+          `./src/audio/${req.session!.audioID}.mp3`,
           response.audioContent,
           "binary"
         );
@@ -334,17 +338,17 @@ const openaiRouter = (db: any): any => {
         console.log("preparing data for front-end");
         let apiResponse: object = {
           gender: req.body.gender,
-          userID: req.session.userID,
-          audioID: req.session.audioID,
-          requestedText: req.session.requestedText,
-          aiSentiment: req.session.respondedSentiment,
-          aiText: req.session.respondedText,
+          userID: req.session!.userID,
+          audioID: req.session!.audioID,
+          requestedText: req.session!.requestedText,
+          aiSentiment: req.session!.respondedSentiment,
+          aiText: req.session!.respondedText,
         };
 
         // after updateing db, need to update req.session.gender to reflect current gender selection
-        req.session.gender = req.body.gender;
+        req.session!.gender = req.body.gender;
         console.log("Now req.body.gender is " + req.body.gender);
-        console.log("Now req.session.gender is: ", req.session.gender);
+        console.log("Now req.session.gender is: ", req.session!.gender);
 
         console.log(
           "Session before sending off response to front-end: ",
@@ -352,14 +356,14 @@ const openaiRouter = (db: any): any => {
         );
 
         // if it is a visitor, no need to write to db. However, if it is a user, write to db
-        if (req.session.visitorID) {
+        if (req.session!.visitorID) {
           console.log("Supposedly visitor session here", req.session);
           res.status(200).json(apiResponse);
         } else {
           return db.message
             .create({
-              content: req.session.respondedText,
-              conversation_id: req.session.convoID,
+              content: req.session!.respondedText,
+              conversation_id: req.session!.convoID,
               from_bot: true,
               createdAt: new Date(),
             })
@@ -371,7 +375,7 @@ const openaiRouter = (db: any): any => {
                   include: [
                     {
                       model: db.conversation,
-                      where: { user_id: req.session.userID },
+                      where: { user_id: req.session!.userID },
                       required: true,
                     },
                   ],
@@ -379,7 +383,7 @@ const openaiRouter = (db: any): any => {
                 .then((response: any) => {
                   apiResponse = {
                     ...apiResponse,
-                    convoID: req.session.convoID,
+                    convoID: req.session!.convoID,
                     chatHistory: response,
                   };
 
